@@ -243,6 +243,7 @@
                            html += `<a href="#" data-action="edit-profile" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-user-edit w-5 text-blue-500"></i>Mon Profil</a>`;
                            html += `<a href="#" data-action="dashboard" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-chart-line w-5 text-green-500"></i>Mes candidatures</a>`;
                            html += `<a href="#" data-action="spontaneous-application" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-paper-plane w-5 text-indigo-500"></i>Candidature spontanée</a>`;
+                           html += `<a href="#" data-action="salary-insights" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-chart-bar w-5 text-teal-500"></i>Baromètre des salaires</a>`;
                            html += `<a href="#" data-action="job-alerts" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-bell w-5 text-yellow-500"></i>Alertes emploi</a>`;
                            html += `<a href="#" data-action="messages" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-envelope w-5 text-purple-500"></i>Messages</a>`;
                         }
@@ -1084,6 +1085,7 @@
                             case 'spontaneous-application': openModal('spontaneousApplication-modal'); break;
                             case 'messages': showMessages(); break;
                             case 'job-alerts': showJobAlerts(); break;
+                            case 'salary-insights': showSalaryInsights(); break;
                         }
                         return;
                     }
@@ -1189,6 +1191,100 @@
                     
                     document.getElementById('job-alerts-content').innerHTML = content;
                     openModal('jobAlerts-modal');
+                }
+                
+                function showSalaryInsights() {
+                    const jobs = data.filter(item => item.type === 'job' && item.salary);
+                    const industries = {};
+                    const experiences = { 'Junior': [], 'Confirmé': [], 'Senior': [] };
+                    
+                    jobs.forEach(job => {
+                        if (job.industry) {
+                            if (!industries[job.industry]) industries[job.industry] = [];
+                            industries[job.industry].push(job.salary);
+                        }
+                        if (job.experience && experiences[job.experience]) {
+                            experiences[job.experience].push(job.salary);
+                        }
+                    });
+                    
+                    const avgBySector = Object.keys(industries).map(sector => ({
+                        sector,
+                        avg: Math.round(industries[sector].reduce((a,b) => a+b, 0) / industries[sector].length),
+                        min: Math.min(...industries[sector]),
+                        max: Math.max(...industries[sector]),
+                        count: industries[sector].length
+                    })).sort((a,b) => b.avg - a.avg);
+                    
+                    const avgByExp = Object.keys(experiences).map(level => ({
+                        level,
+                        avg: experiences[level].length > 0 ? Math.round(experiences[level].reduce((a,b) => a+b, 0) / experiences[level].length) : 0,
+                        count: experiences[level].length
+                    })).filter(e => e.count > 0);
+                    
+                    const content = `<div class="space-y-6">
+                        <div class="bg-gradient-to-r from-teal-50 to-blue-50 dark:from-teal-900/20 dark:to-blue-900/20 p-6 rounded-lg">
+                            <h3 class="text-xl font-bold mb-2 dark:text-white"><i class="fas fa-chart-line mr-2"></i>Baromètre des Salaires 2024</h3>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">Données basées sur ${jobs.length} offres d'emploi récentes</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-bold text-lg mb-4 dark:text-white">Salaires moyens par expérience</h4>
+                            <div class="space-y-3">
+                                ${avgByExp.map(exp => {
+                                    const colors = { 'Junior': 'bg-green-100 dark:bg-green-900/40', 'Confirmé': 'bg-blue-100 dark:bg-blue-900/40', 'Senior': 'bg-purple-100 dark:bg-purple-900/40' };
+                                    const percentage = (exp.avg / Math.max(...avgByExp.map(e => e.avg))) * 100;
+                                    return `<div class="p-4 ${colors[exp.level]} rounded-lg">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <span class="font-semibold dark:text-white">${exp.level}</span>
+                                            <span class="text-xl font-bold text-blue-600 dark:text-blue-400">${exp.avg.toLocaleString('fr-FR')} €/an</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                            <div class="bg-blue-600 h-2 rounded-full" style="width: ${percentage}%"></div>
+                                        </div>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">${exp.count} offres analysées</p>
+                                    </div>`;
+                                }).join('')}
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-bold text-lg mb-4 dark:text-white">Salaires moyens par secteur</h4>
+                            <div class="space-y-3">
+                                ${avgBySector.map(sector => {
+                                    return `<div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                        <div class="flex justify-between items-center">
+                                            <div class="flex-1">
+                                                <h5 class="font-semibold dark:text-white">${sector.sector}</h5>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">Min: ${sector.min.toLocaleString('fr-FR')}€ • Max: ${sector.max.toLocaleString('fr-FR')}€</p>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-xl font-bold text-teal-600 dark:text-teal-400">${sector.avg.toLocaleString('fr-FR')}€</p>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">${sector.count} offres</p>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                                }).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
+                            <p class="text-sm text-gray-700 dark:text-gray-300"><i class="fas fa-lightbulb mr-2 text-yellow-500"></i><strong>Conseil:</strong> Ces données vous aident à négocier votre salaire et à évaluer la compétitivité des offres.</p>
+                        </div>
+                    </div>`;
+                    
+                    const modal = document.createElement('div');
+                    modal.id = 'salary-insights-modal';
+                    modal.className = 'modal-backdrop fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-70 z-[1050] flex items-center justify-center';
+                    modal.innerHTML = `<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-3xl m-4 transform max-h-[90vh] flex flex-col">
+                        <button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10"><i class="fas fa-times fa-2x"></i></button>
+                        <div class="overflow-y-auto p-8">
+                            <h2 class="text-2xl font-bold text-center mb-6 dark:text-white"><i class="fas fa-chart-bar mr-2"></i>Baromètre des Salaires</h2>
+                            ${content}
+                        </div>
+                    </div>`;
+                    ui.modalContainer.appendChild(modal);
+                    setTimeout(() => modal.querySelector('.modal-panel').classList.remove('hidden'), 10);
                 }
                 
                 
