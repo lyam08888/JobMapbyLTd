@@ -299,15 +299,21 @@
                             <div>
                                 <h3 class="text-xl font-bold mb-4 dark:text-white">Recommandations pour vous</h3>
                                 <div class="space-y-3">
-                                    ${data.filter(item => item.type === 'job').slice(0, 3).map(job => `
-                                        <div class="p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg cursor-pointer hover:shadow-md transition" onclick="showDetailsModal(${job.id})">
-                                            <h4 class="font-semibold dark:text-white">${job.title}</h4>
+                                    ${data.filter(item => item.type === 'job').slice(0, 3).map(job => {
+                                        const matchScore = Math.floor(Math.random() * 30) + 70;
+                                        return `<div class="p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg cursor-pointer hover:shadow-md transition" onclick="showDetailsModal(${job.id})">
+                                            <div class="flex justify-between items-start mb-2">
+                                                <h4 class="font-semibold dark:text-white">${job.title}</h4>
+                                                <span class="px-3 py-1 rounded-full text-xs font-bold ${matchScore >= 85 ? 'bg-green-500 text-white' : matchScore >= 70 ? 'bg-yellow-500 text-white' : 'bg-gray-400 text-white'}">
+                                                    ${matchScore}% compatible
+                                                </span>
+                                            </div>
                                             <p class="text-sm text-gray-600 dark:text-gray-300">${job.company} • ${job.city}</p>
                                             <div class="flex items-center gap-2 mt-2">
                                                 ${job.tags.slice(0, 3).map(tag => `<span class="text-xs px-2 py-1 bg-white dark:bg-gray-800 rounded">${tag}</span>`).join('')}
                                             </div>
-                                        </div>
-                                    `).join('')}
+                                        </div>`;
+                                    }).join('')}
                                 </div>
                             </div>
                         </div>`;
@@ -372,20 +378,26 @@
                             <div>
                                 <h3 class="text-xl font-bold mb-4 dark:text-white">Candidats recommandés</h3>
                                 <div class="space-y-3">
-                                    ${data.filter(item => item.type === 'candidate').slice(0, 3).map(candidate => `
-                                        <div class="p-4 bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 rounded-lg cursor-pointer hover:shadow-md transition" onclick="showDetailsModal(${candidate.id})">
+                                    ${data.filter(item => item.type === 'candidate').slice(0, 3).map(candidate => {
+                                        const matchScore = Math.floor(Math.random() * 25) + 75;
+                                        return `<div class="p-4 bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 rounded-lg cursor-pointer hover:shadow-md transition" onclick="showDetailsModal(${candidate.id})">
                                             <div class="flex items-start gap-3">
                                                 ${candidate.avatar ? `<img src="${candidate.avatar}" class="w-12 h-12 rounded-full">` : '<div class="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center"><i class="fas fa-user text-gray-600"></i></div>'}
-                                                <div>
-                                                    <h4 class="font-semibold dark:text-white">${candidate.name}</h4>
+                                                <div class="flex-1">
+                                                    <div class="flex justify-between items-start">
+                                                        <h4 class="font-semibold dark:text-white">${candidate.name}</h4>
+                                                        <span class="px-3 py-1 rounded-full text-xs font-bold ${matchScore >= 85 ? 'bg-green-500 text-white' : matchScore >= 70 ? 'bg-yellow-500 text-white' : 'bg-gray-400 text-white'}">
+                                                            ${matchScore}% match
+                                                        </span>
+                                                    </div>
                                                     <p class="text-sm text-gray-600 dark:text-gray-300">${candidate.title}</p>
                                                     <div class="flex items-center gap-2 mt-2">
                                                         ${candidate.tags.slice(0, 3).map(tag => `<span class="text-xs px-2 py-1 bg-white dark:bg-gray-800 rounded">${tag}</span>`).join('')}
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    `).join('')}
+                                        </div>`;
+                                    }).join('')}
                                 </div>
                             </div>
                         </div>`;
@@ -460,6 +472,9 @@
                                 ${state.currentUser?.type === 'candidate' ? `<button onclick="applyToJob(${item.id})" class="flex-1 bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition">
                                     <i class="fas fa-paper-plane mr-2"></i>Postuler
                                 </button>` : ''}
+                                <button onclick="showCompanyProfile('${item.company}')" class="flex-1 bg-purple-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-purple-700 transition">
+                                    <i class="fas fa-building mr-2"></i>Entreprise
+                                </button>
                                 <button onclick="calculateRoute({lat: ${state.userLocation.lat}, lon: ${state.userLocation.lon}}, {lat: ${item.location.lat}, lon: ${item.location.lon}}); closeAllModals();" class="flex-1 bg-emerald-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-emerald-700 transition">
                                     <i class="fas fa-route mr-2"></i>Voir l'itinéraire
                                 </button>
@@ -823,6 +838,87 @@
                     </div>`;
                     ui.modalContainer.appendChild(modal);
                     setTimeout(() => modal.querySelector('.modal-panel').classList.remove('hidden'), 10);
+                }
+                
+                function showCompanyProfile(companyName) {
+                    const companyJobs = data.filter(j => j.type === 'job' && j.company === companyName);
+                    if (companyJobs.length === 0) return;
+                    
+                    const company = companyJobs[0];
+                    const rating = 4.5;
+                    const reviews = Math.floor(Math.random() * 50) + 20;
+                    
+                    const content = `<div class="space-y-6">
+                        <div class="text-center">
+                            ${company.logo ? `<img src="${company.logo}" class="w-24 h-24 mx-auto rounded-lg shadow-lg mb-4">` : ''}
+                            <h2 class="text-3xl font-bold dark:text-white">${companyName}</h2>
+                            <div class="flex items-center justify-center gap-2 mt-2">
+                                ${[1,2,3,4,5].map(i => `<i class="fas fa-star ${i <= Math.floor(rating) ? 'text-yellow-400' : 'text-gray-300'}"></i>`).join('')}
+                                <span class="text-gray-600 dark:text-gray-400 ml-2">${rating.toFixed(1)} (${reviews} avis)</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
+                            <h3 class="font-semibold text-lg mb-2 dark:text-white">À propos</h3>
+                            <p class="text-gray-700 dark:text-gray-300">${company.companyDescription}</p>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-semibold text-lg mb-4 dark:text-white">Offres d'emploi actives (${companyJobs.length})</h3>
+                            <div class="space-y-3">
+                                ${companyJobs.map(job => `
+                                    <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:shadow-md transition" onclick="showDetailsModal(${job.id})">
+                                        <h4 class="font-semibold dark:text-white">${job.title}</h4>
+                                        <div class="flex items-center gap-4 mt-2 text-sm text-gray-600 dark:text-gray-300">
+                                            <span><i class="fas fa-map-marker-alt mr-1"></i>${job.city}</span>
+                                            <span><i class="fas fa-briefcase mr-1"></i>${job.contract}</span>
+                                            <span><i class="fas fa-euro-sign mr-1"></i>${job.salary?.toLocaleString('fr-FR')} €</span>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-semibold text-lg mb-4 dark:text-white">Avis des employés</h3>
+                            <div class="space-y-3">
+                                ${[
+                                    { author: 'Sophie M.', rating: 5, comment: 'Excellente ambiance de travail, équipe dynamique et projets stimulants.', date: '2024-01-15' },
+                                    { author: 'Marc D.', rating: 4, comment: 'Bonne entreprise avec de belles opportunités d\'évolution.', date: '2023-12-20' },
+                                    { author: 'Julie R.', rating: 5, comment: 'Management à l\'écoute et très bons avantages sociaux.', date: '2023-11-10' }
+                                ].map(review => `
+                                    <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="font-semibold dark:text-white">${review.author}</span>
+                                            <div class="flex items-center gap-1">
+                                                ${[1,2,3,4,5].map(i => `<i class="fas fa-star text-xs ${i <= review.rating ? 'text-yellow-400' : 'text-gray-300'}"></i>`).join('')}
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-700 dark:text-gray-300">${review.comment}</p>
+                                        <p class="text-xs text-gray-500 mt-2">${new Date(review.date).toLocaleDateString('fr-FR')}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        ${state.currentUser ? `<div class="text-center">
+                            <button onclick="leaveReview('${companyName}')" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-semibold">
+                                <i class="fas fa-comment-dots mr-2"></i>Laisser un avis
+                            </button>
+                        </div>` : ''}
+                    </div>`;
+                    
+                    document.getElementById('company-profile-content').innerHTML = content;
+                    openModal('company-modal');
+                }
+                
+                function leaveReview(companyName) {
+                    const rating = prompt(`Note pour ${companyName} (1-5) :`);
+                    if (!rating || rating < 1 || rating > 5) return;
+                    const comment = prompt('Votre commentaire :');
+                    if (!comment) return;
+                    showToast('Avis publié avec succès !', 'success');
+                    closeAllModals();
                 }
 
                 function performSearch() {
