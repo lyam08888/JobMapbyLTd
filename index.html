@@ -98,6 +98,8 @@
 
             <!-- Barre d'outils en bas au centre -->
             <div class="absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-auto flex gap-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-full shadow-lg p-2">
+                <button id="help-btn" title="Aide et tutoriel" class="w-12 h-12 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition"><i class="fas fa-question-circle text-xl"></i></button>
+                <button id="locate-me-btn" title="Me localiser" class="w-12 h-12 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition"><i class="fas fa-crosshairs text-xl"></i></button>
                 <button id="match-mode-btn" title="Activer le mode association" class="w-12 h-12 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition"><i class="fas fa-link text-xl"></i></button>
                 <button id="favorites-btn" title="Voir les favoris" class="w-12 h-12 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition relative"><i class="fas fa-heart text-xl"></i><span id="favorites-count" class="absolute top-1 right-1 bg-pink-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center hidden"></span></button>
                 <button id="dark-mode-toggle" title="Changer de thème" class="w-12 h-12 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition"><i class="fas fa-moon text-xl"></i></button>
@@ -110,7 +112,13 @@
                     <button id="toggle-panel-btn" class="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 flex-shrink-0"><i class="fas fa-chevron-left"></i></button>
                 </div>
                 <div id="panel-content" class="p-4 flex flex-col min-h-0">
-                    <div class="relative py-2 flex-shrink-0"><input type="text" id="search-input" placeholder="Poste, compétence..." class="w-full pl-10 pr-4 py-3 text-md bg-gray-100 dark:bg-gray-700 border-2 border-transparent dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"><i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i></div>
+                    <div class="relative py-2 flex-shrink-0">
+                        <input type="text" id="search-input" placeholder="Poste, compétence..." class="w-full pl-10 pr-10 py-3 text-md bg-gray-100 dark:bg-gray-700 border-2 border-transparent dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <button id="save-search-btn" title="Sauvegarder cette recherche" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-500 transition">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
+                    </div>
                     <div class="mb-3 flex-shrink-0"><div id="filter-container" class="w-full flex bg-gray-200 dark:bg-gray-700 rounded-lg p-1"><button class="filter-btn active w-1/3 text-center py-2 px-2 rounded-md font-semibold text-sm text-gray-700 dark:text-gray-300" data-filter="all">Tous</button><button class="filter-btn w-1/3 text-center py-2 px-2 rounded-md font-semibold text-sm text-gray-700 dark:text-gray-300" data-filter="job">Emplois</button><button class="filter-btn w-1/3 text-center py-2 px-2 rounded-md font-semibold text-sm text-gray-700 dark:text-gray-300" data-filter="candidate">Profils</button></div></div>
                     
                     <div id="toggle-filters-btn" class="flex justify-between items-center py-2 cursor-pointer flex-shrink-0">
@@ -123,6 +131,12 @@
                             <div><label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Mode de travail</label><div id="work-arrangement-filter-container" class="w-full flex bg-gray-200 dark:bg-gray-700 rounded-lg p-1 text-xs"><button class="sub-filter-btn active w-1/3 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-work="all">Tous</button><button class="sub-filter-btn w-1/3 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-work="Sur site">Sur site</button><button class="sub-filter-btn w-1/3 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-work="Hybride">Hybride</button></div></div>
                             <div><label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Expérience</label><div id="experience-filter-container" class="w-full flex bg-gray-200 dark:bg-gray-700 rounded-lg p-1 text-xs"><button class="sub-filter-btn active w-1/4 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-exp="all">Tous</button><button class="sub-filter-btn w-1/4 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-exp="Junior">Junior</button><button class="sub-filter-btn w-1/4 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-exp="Confirmé">Confirmé</button><button class="sub-filter-btn w-1/4 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-exp="Senior">Senior</button></div></div>
                             <div><label for="salary-slider" class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Salaire max: <span id="salary-value" class="font-bold text-blue-600 dark:text-blue-400"></span></label><input type="range" id="salary-slider" min="30000" max="120000" step="5000" value="120000" class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer"></div>
+                            <div><label for="distance-slider" class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Distance max: <span id="distance-value" class="font-bold text-emerald-600 dark:text-emerald-400">50 km</span></label><input type="range" id="distance-slider" min="5" max="100" step="5" value="50" class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer"></div>
+                            <div class="pt-2">
+                                <button id="export-data-btn" class="w-full py-2 px-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg text-xs font-semibold hover:from-blue-600 hover:to-purple-600 transition">
+                                    <i class="fas fa-download mr-2"></i>Exporter les résultats
+                                </button>
+                            </div>
                         </div>
                     </div>
                     
@@ -151,10 +165,10 @@
                 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { attribution: '&copy; OSM &copy; CARTO', maxZoom: 20 }).addTo(map);
 
                 const ui = {
-                    userMenuButton: document.getElementById('user-menu-button'), userMenu: document.getElementById('user-menu'), matchModeBtn: document.getElementById('match-mode-btn'), favoritesBtn: document.getElementById('favorites-btn'), favoritesCount: document.getElementById('favorites-count'), searchInput: document.getElementById('search-input'), resultsList: document.getElementById('results-list'), resultsHeader: document.getElementById('results-header'), resultsCount: document.getElementById('results-count'), toggleResultsBtn: document.getElementById('toggle-results-btn'), filterContainer: document.getElementById('filter-container'), advancedFilters: document.getElementById('advanced-filters'), toggleFiltersBtn: document.getElementById('toggle-filters-btn'), expFilterContainer: document.getElementById('experience-filter-container'), contractFilterContainer: document.getElementById('contract-filter-container'), workArrangementFilterContainer: document.getElementById('work-arrangement-filter-container'), salarySlider: document.getElementById('salary-slider'), salaryValue: document.getElementById('salary-value'), routingControls: document.getElementById('routing-controls'), clearRouteBtn: document.getElementById('clear-route-btn'), searchPanel: document.getElementById('search-panel'), dragHandle: document.getElementById('drag-handle'), darkModeToggle: document.getElementById('dark-mode-toggle'), modalContainer: document.getElementById('modal-container'), togglePanelBtn: document.getElementById('toggle-panel-btn'),
+                    userMenuButton: document.getElementById('user-menu-button'), userMenu: document.getElementById('user-menu'), helpBtn: document.getElementById('help-btn'), saveSearchBtn: document.getElementById('save-search-btn'), locateMeBtn: document.getElementById('locate-me-btn'), matchModeBtn: document.getElementById('match-mode-btn'), favoritesBtn: document.getElementById('favorites-btn'), favoritesCount: document.getElementById('favorites-count'), searchInput: document.getElementById('search-input'), resultsList: document.getElementById('results-list'), resultsHeader: document.getElementById('results-header'), resultsCount: document.getElementById('results-count'), toggleResultsBtn: document.getElementById('toggle-results-btn'), filterContainer: document.getElementById('filter-container'), advancedFilters: document.getElementById('advanced-filters'), toggleFiltersBtn: document.getElementById('toggle-filters-btn'), expFilterContainer: document.getElementById('experience-filter-container'), contractFilterContainer: document.getElementById('contract-filter-container'), workArrangementFilterContainer: document.getElementById('work-arrangement-filter-container'), salarySlider: document.getElementById('salary-slider'), salaryValue: document.getElementById('salary-value'), distanceSlider: document.getElementById('distance-slider'), distanceValue: document.getElementById('distance-value'), exportDataBtn: document.getElementById('export-data-btn'), routingControls: document.getElementById('routing-controls'), clearRouteBtn: document.getElementById('clear-route-btn'), searchPanel: document.getElementById('search-panel'), dragHandle: document.getElementById('drag-handle'), darkModeToggle: document.getElementById('dark-mode-toggle'), modalContainer: document.getElementById('modal-container'), togglePanelBtn: document.getElementById('toggle-panel-btn'),
                 };
                 
-                let state = { currentUser: null, routingControl: null, userLocation: { lat: 48.85884, lon: 2.29435 }, userLocationMarker: null, firstInteraction: false, isMatchModeActive: false, matchStartPoint: null, markers: new Map(), favorites: new Set(), filters: { type: 'all', experience: 'all', salary: 120000, contract: 'all', workArrangement: 'all' }};
+                let state = { currentUser: null, routingControl: null, userLocation: { lat: 48.85884, lon: 2.29435 }, userLocationMarker: null, firstInteraction: false, isMatchModeActive: false, matchStartPoint: null, markers: new Map(), favorites: new Set(), filters: { type: 'all', experience: 'all', salary: 120000, contract: 'all', workArrangement: 'all', distance: 50 }, viewHistory: [], savedSearches: [] };
 
                 const markerClusters = L.markerClusterGroup();
                 map.addLayer(markerClusters);
@@ -166,6 +180,15 @@
                     { id: 2, type: 'candidate', name: 'Alice Martin', title: 'Chef de Projet Digital', avatar: 'https://placehold.co/100x100/f59e0b/ffffff?text=AM', location: { lat: 45.7640, lon: 4.8357 }, city: 'Lyon', tags: ['Agile', 'Scrum', 'Gestion'], softSkills: ['Leadership', 'Organisation', 'Communication'], experience: 'Confirmé', availability: 'Sous 1 mois', portfolioLink: 'https://example.com', background: [{ year: '2018-2023', role: 'Product Owner', company: 'WebAgency Lyon'}, { year: '2016-2018', role: 'Assistante Chef de Projet', company: 'Digital Corp'}], description: '5 ans d\'expérience, certifiée Scrum Master.' },
                     { id: 5, type: 'job', title: 'Designer UI/UX Junior', company: 'Creative Minds', logo: 'https://placehold.co/100x100/ec4899/ffffff?text=CM', companyDescription: 'Agence de design primée, nous créons des expériences digitales mémorables.', location: { lat: 45.7578, lon: 4.8320 }, city: 'Lyon', tags: ['Figma', 'Adobe XD', 'User Research'], softSkills: ['Créativité', 'Empathie', 'Collaboration'], experience: 'Junior', salary: 42000, contract: 'CDD', workArrangement: 'Sur site', description: 'Nous cherchons un designer talentueux pour créer des interfaces intuitives.' },
                     { id: 6, type: 'job', title: 'Chef de projet Marketing', company: 'DataCorp', logo: 'https://placehold.co/100x100/10b981/ffffff?text=DC', companyDescription: 'Nous transformons les données en décisions stratégiques pour les entreprises du CAC40.', location: { lat: 48.875, lon: 2.33 }, city: 'Paris', tags: ['Marketing', 'SEO', 'SEA'], softSkills: ['Organisation', 'Communication'], experience: 'Confirmé', salary: 55000, contract: 'Alternance', workArrangement: 'Hybride', description: 'Gérez nos campagnes marketing digitales.' },
+                    { id: 7, type: 'job', title: 'Développeur Mobile iOS', company: 'AppFactory', logo: 'https://placehold.co/100x100/8b5cf6/ffffff?text=AF', companyDescription: 'Startup innovante spécialisée dans les applications mobiles pour le secteur de la santé.', location: { lat: 43.2965, lon: 5.3698 }, city: 'Marseille', tags: ['Swift', 'SwiftUI', 'CoreData'], softSkills: ['Innovation', 'Rigueur'], experience: 'Confirmé', salary: 58000, contract: 'CDI', workArrangement: 'Hybride', description: 'Développez des applications iOS de qualité médicale.' },
+                    { id: 8, type: 'candidate', name: 'Sophie Bernard', title: 'DevOps Engineer', avatar: 'https://placehold.co/100x100/06b6d4/ffffff?text=SB', location: { lat: 43.6108, lon: 3.8767 }, city: 'Montpellier', tags: ['Docker', 'Kubernetes', 'AWS'], softSkills: ['Méthodique', 'Proactif'], experience: 'Confirmé', availability: 'Immédiate', portfolioLink: 'https://example.com', background: [{ year: '2019-2024', role: 'DevOps Engineer', company: 'CloudTech'}, { year: '2017-2019', role: 'Administrateur Système', company: 'HostNet'}], description: 'Experte en automatisation et CI/CD.' },
+                    { id: 9, type: 'job', title: 'Architecte Cloud', company: 'CloudMasters', logo: 'https://placehold.co/100x100/14b8a6/ffffff?text=CM', companyDescription: 'Cabinet de conseil en architecture cloud et transformation digitale.', location: { lat: 47.2184, lon: -1.5536 }, city: 'Nantes', tags: ['AWS', 'Azure', 'Architecture'], softSkills: ['Leadership technique', 'Vision stratégique'], experience: 'Senior', salary: 95000, contract: 'CDI', workArrangement: 'Télétravail', description: 'Concevez des architectures cloud scalables pour nos grands comptes.' },
+                    { id: 10, type: 'candidate', name: 'Marc Rousseau', title: 'Ingénieur QA', avatar: 'https://placehold.co/100x100/f97316/ffffff?text=MR', location: { lat: 48.5734, lon: 7.7521 }, city: 'Strasbourg', tags: ['Selenium', 'Jest', 'Cypress'], softSkills: ['Minutieux', 'Analytique'], experience: 'Junior', availability: 'Sous 2 mois', portfolioLink: 'https://example.com', background: [{ year: '2022-2024', role: 'Testeur QA', company: 'TestLab'}], description: 'Passionné par la qualité logicielle et l\'automatisation des tests.' },
+                    { id: 11, type: 'job', title: 'Product Manager', company: 'InnovateTech', logo: 'https://placehold.co/100x100/ef4444/ffffff?text=IT', companyDescription: 'Scale-up en pleine croissance dans le domaine de la fintech.', location: { lat: 48.8566, lon: 2.3522 }, city: 'Paris', tags: ['Product Management', 'Agile', 'Analytics'], softSkills: ['Leadership', 'Vision produit', 'Communication'], experience: 'Confirmé', salary: 70000, contract: 'CDI', workArrangement: 'Hybride', description: 'Définissez la vision produit et coordonnez les équipes de développement.' },
+                    { id: 12, type: 'candidate', name: 'Emma Lefebvre', title: 'UX Researcher', avatar: 'https://placehold.co/100x100/a855f7/ffffff?text=EL', location: { lat: 50.6292, lon: 3.0573 }, city: 'Lille', tags: ['User Research', 'Usability Testing', 'Figma'], softSkills: ['Empathie', 'Analyse', 'Communication'], experience: 'Confirmé', availability: 'Sous 1 mois', portfolioLink: 'https://example.com', background: [{ year: '2020-2024', role: 'UX Researcher', company: 'DesignStudio'}, { year: '2018-2020', role: 'UX Designer', company: 'WebCorp'}], description: 'Spécialisée en recherche utilisateur et tests d\'utilisabilité.' },
+                    { id: 13, type: 'job', title: 'Ingénieur Sécurité', company: 'SecureSoft', logo: 'https://placehold.co/100x100/dc2626/ffffff?text=SS', companyDescription: 'Éditeur de solutions de cybersécurité pour les entreprises.', location: { lat: 43.6047, lon: 1.4442 }, city: 'Toulouse', tags: ['Pentest', 'SIEM', 'Cryptographie'], softSkills: ['Rigueur', 'Curiosité', 'Éthique'], experience: 'Senior', salary: 80000, contract: 'CDI', workArrangement: 'Sur site', description: 'Protégez nos clients contre les cybermenaces et réalisez des audits de sécurité.' },
+                    { id: 14, type: 'candidate', name: 'Thomas Dubois', title: 'Développeur Frontend', avatar: 'https://placehold.co/100x100/0ea5e9/ffffff?text=TD', location: { lat: 47.4784, lon: -0.5632 }, city: 'Angers', tags: ['Vue.js', 'Nuxt', 'TailwindCSS'], softSkills: ['Créativité', 'Détail', 'Collaboration'], experience: 'Junior', availability: 'Immédiate', portfolioLink: 'https://example.com', background: [{ year: '2023-2024', role: 'Développeur Frontend', company: 'WebStudio'}], description: 'Développeur frontend passionné par les interfaces modernes et performantes.' },
+                    { id: 15, type: 'job', title: 'Consultant SAP', company: 'BusinessTech', logo: 'https://placehold.co/100x100/84cc16/ffffff?text=BT', companyDescription: 'Cabinet de conseil spécialisé en transformation digitale et ERP.', location: { lat: 48.1173, lon: -1.6778 }, city: 'Rennes', tags: ['SAP', 'ABAP', 'Gestion de projet'], softSkills: ['Conseil', 'Adaptabilité', 'Communication'], experience: 'Confirmé', salary: 72000, contract: 'CDI', workArrangement: 'Hybride', description: 'Accompagnez nos clients dans leurs projets SAP et transformation digitale.' }
                 ];
 
                 const createModal = (id, content) => { const modal = document.createElement('div'); modal.id = id; modal.className = 'modal-backdrop fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-70 z-[1050] hidden items-center justify-center'; modal.innerHTML = content; ui.modalContainer.appendChild(modal); };
@@ -173,7 +196,8 @@
                     details: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-4xl m-4 transform hidden relative max-h-[90vh] flex flex-col"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10"><i class="fas fa-times fa-2x"></i></button><div id="details-modal-content" class="overflow-y-auto"></div></div>',
                     login: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md m-4 p-8 transform hidden relative"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Connexion</h2><form id="login-form"><div class="mb-4"><label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label><input type="email" name="email" value="recruteur@jobmap.com" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg" required></div><div class="mb-6"><label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mot de passe</label><input type="password" name="password" value="password" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg" required></div><button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition shadow-lg">Se connecter</button></form></div>',
                     signupCandidate: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-lg m-4 p-8 transform hidden relative overflow-y-auto max-h-[90vh]"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Créer un profil Candidat</h2><form id="signup-candidate-form" class="space-y-4"><input name="name" placeholder="Nom complet" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><input name="email" type="email" placeholder="Email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><input name="password" type="password" placeholder="Mot de passe" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><input name="title" placeholder="Titre du profil (ex: Développeur Web)" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><textarea name="tags" placeholder="Compétences (séparées par des virgules)" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required></textarea><button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-emerald-700 transition">Créer mon profil</button></form></div>',
-                    signupRecruiter: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md m-4 p-8 transform hidden relative"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Créer un compte Recruteur</h2><form id="signup-recruiter-form" class="space-y-4"><input name="name" placeholder="Votre nom" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><input name="email" type="email" placeholder="Email professionnel" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><input name="password" type="password" placeholder="Mot de passe" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-700 transition">Créer mon compte</button></form></div>',
+                    signupRecruiter: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md m-4 p-8 transform hidden relative"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Créer un compte Recruteur</h2><form id="signup-recruiter-form" class="space-y-4"><input name="name" placeholder="Votre nom" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><input name="email" type="email" placeholder="Email professionnel" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><input name="password" type="password" placeholder="Mot de passe" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><input name="company" placeholder="Nom de l\'entreprise" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-700 transition">Créer mon compte</button></form></div>',
+                    signupEmployer: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md m-4 p-8 transform hidden relative"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Créer un compte Employeur</h2><form id="signup-employer-form" class="space-y-4"><input name="companyName" placeholder="Nom de l\'entreprise" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><input name="name" placeholder="Votre nom" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><input name="email" type="email" placeholder="Email professionnel" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><input name="password" type="password" placeholder="Mot de passe" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><input name="siret" placeholder="Numéro SIRET" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><button type="submit" class="w-full bg-sky-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-sky-700 transition">Créer mon compte</button></form></div>',
                     postJob: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl m-4 p-8 transform hidden relative max-h-[90vh] overflow-y-auto"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Poster une nouvelle offre</h2><form id="post-job-form" class="space-y-4"><input name="title" placeholder="Titre du poste" class="w-full p-2 border rounded dark:bg-gray-700" required><input name="company" placeholder="Nom de l\'entreprise" class="w-full p-2 border rounded dark:bg-gray-700" required><input name="city" placeholder="Ville" class="w-full p-2 border rounded dark:bg-gray-700" required><textarea name="description" placeholder="Description du poste" class="w-full p-2 border rounded dark:bg-gray-700" rows="4" required></textarea><input name="tags" placeholder="Compétences techniques (virgules)" class="w-full p-2 border rounded dark:bg-gray-700" required><input name="softSkills" placeholder="Compétences comportementales (virgules)" class="w-full p-2 border rounded dark:bg-gray-700" required><select name="experience" class="w-full p-2 border rounded dark:bg-gray-700" required><option>Junior</option><option>Confirmé</option><option>Senior</option></select><input name="salary" type="number" placeholder="Salaire annuel brut" class="w-full p-2 border rounded dark:bg-gray-700" required><button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700">Publier l\'offre</button></form></div>',
                     editProfile: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-lg m-4 p-8 transform hidden relative max-h-[90vh] overflow-y-auto"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Modifier mon profil</h2><form id="edit-profile-form" class="space-y-4"></form></div>',
                     matchReport: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-3xl m-4 p-8 transform hidden relative max-h-[90vh] flex flex-col"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-3xl font-bold text-center mb-6 text-gray-800 dark:text-white">Rapport de Compatibilité</h2><div id="match-report-content" class="overflow-y-auto"></div></div>',
@@ -191,12 +215,17 @@
                     let html = '';
                     if (state.currentUser) {
                         html = `<div class="p-2 text-gray-800 dark:text-gray-100"><p class="font-semibold">${state.currentUser.name}</p><p class="text-sm text-gray-500 dark:text-gray-400">${state.currentUser.email}</p></div><hr class="my-2 dark:border-gray-700">`;
-                        if(state.currentUser.type === 'recruiter') {
+                        if(state.currentUser.type === 'recruiter' || state.currentUser.type === 'employer') {
                             html += `<a href="#" data-action="post-job" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-plus-circle w-5"></i>Poster une offre</a>`;
+                            html += `<a href="#" data-action="dashboard" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-chart-line w-5"></i>Tableau de bord</a>`;
                         }
                         if(state.currentUser.type === 'candidate') {
                            html += `<a href="#" data-action="edit-profile" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-user-edit w-5"></i>Mon Profil</a>`;
+                           html += `<a href="#" data-action="dashboard" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-chart-line w-5"></i>Mes candidatures</a>`;
                         }
+                        html += `<a href="#" data-action="saved-searches" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-bookmark w-5"></i>Recherches sauvegardées</a>`;
+                        html += `<a href="#" data-action="view-history" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-history w-5"></i>Historique</a>`;
+                        html += `<a href="#" data-action="notifications" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-bell w-5"></i>Notifications</a>`;
                         html += `<a href="#" data-action="logout" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md"><i class="fas fa-sign-out-alt w-5"></i>Se déconnecter</a>`;
                     } else {
                         html = `<a href="#" data-action="login" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-sign-in-alt w-5"></i><span>Se connecter</span></a><hr class="my-2 dark:border-gray-700"><p class="px-4 pt-2 pb-1 text-xs font-semibold text-gray-500 uppercase">S'inscrire</p>
@@ -206,12 +235,323 @@
                     }
                     ui.userMenu.innerHTML = html;
                 }
+                
+                function showDashboard() {
+                    if (!state.currentUser) { showToast('Connectez-vous pour accéder au tableau de bord.', 'error'); openModal('login-modal'); return; }
+                    
+                    let content = '';
+                    if (state.currentUser.type === 'candidate') {
+                        const applications = state.applications ? state.applications.filter(a => a.candidateId === state.currentUser.id) : [];
+                        const profileViews = Math.floor(Math.random() * 150) + 50;
+                        const savedJobs = Array.from(state.favorites).filter(id => data.find(d => d.id === id && d.type === 'job')).length;
+                        
+                        content = `<div class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Candidatures</p>
+                                            <p class="text-3xl font-bold text-blue-600 dark:text-blue-400">${applications.length}</p>
+                                        </div>
+                                        <i class="fas fa-paper-plane text-4xl text-blue-600 dark:text-blue-400 opacity-50"></i>
+                                    </div>
+                                </div>
+                                <div class="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Vues du profil</p>
+                                            <p class="text-3xl font-bold text-green-600 dark:text-green-400">${profileViews}</p>
+                                        </div>
+                                        <i class="fas fa-eye text-4xl text-green-600 dark:text-green-400 opacity-50"></i>
+                                    </div>
+                                </div>
+                                <div class="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-lg">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Offres sauvegardées</p>
+                                            <p class="text-3xl font-bold text-purple-600 dark:text-purple-400">${savedJobs}</p>
+                                        </div>
+                                        <i class="fas fa-heart text-4xl text-purple-600 dark:text-purple-400 opacity-50"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-xl font-bold mb-4 dark:text-white">Mes candidatures récentes</h3>
+                                ${applications.length > 0 ? `<div class="space-y-3">
+                                    ${applications.slice(0, 5).map(app => {
+                                        const job = data.find(j => j.id === app.jobId);
+                                        if (!job) return '';
+                                        const statusColors = { pending: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300', accepted: 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300', rejected: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300' };
+                                        const statusLabels = { pending: 'En attente', accepted: 'Acceptée', rejected: 'Refusée' };
+                                        return `<div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg flex justify-between items-center">
+                                            <div>
+                                                <h4 class="font-semibold dark:text-white">${job.title}</h4>
+                                                <p class="text-sm text-gray-600 dark:text-gray-300">${job.company}</p>
+                                                <p class="text-xs text-gray-500 mt-1">${new Date(app.date).toLocaleDateString('fr-FR')}</p>
+                                            </div>
+                                            <span class="px-3 py-1 rounded-full text-sm ${statusColors[app.status]}">${statusLabels[app.status]}</span>
+                                        </div>`;
+                                    }).join('')}
+                                </div>` : '<p class="text-gray-500 text-center py-8">Aucune candidature pour le moment.</p>'}
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-xl font-bold mb-4 dark:text-white">Recommandations pour vous</h3>
+                                <div class="space-y-3">
+                                    ${data.filter(item => item.type === 'job').slice(0, 3).map(job => {
+                                        const matchScore = Math.floor(Math.random() * 30) + 70;
+                                        return `<div class="p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg cursor-pointer hover:shadow-md transition" onclick="showDetailsModal(${job.id})">
+                                            <div class="flex justify-between items-start mb-2">
+                                                <h4 class="font-semibold dark:text-white">${job.title}</h4>
+                                                <span class="px-3 py-1 rounded-full text-xs font-bold ${matchScore >= 85 ? 'bg-green-500 text-white' : matchScore >= 70 ? 'bg-yellow-500 text-white' : 'bg-gray-400 text-white'}">
+                                                    ${matchScore}% compatible
+                                                </span>
+                                            </div>
+                                            <p class="text-sm text-gray-600 dark:text-gray-300">${job.company} • ${job.city}</p>
+                                            <div class="flex items-center gap-2 mt-2">
+                                                ${job.tags.slice(0, 3).map(tag => `<span class="text-xs px-2 py-1 bg-white dark:bg-gray-800 rounded">${tag}</span>`).join('')}
+                                            </div>
+                                        </div>`;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        </div>`;
+                    } else if (state.currentUser.type === 'recruiter' || state.currentUser.type === 'employer') {
+                        const myJobs = data.filter(j => j.type === 'job');
+                        const totalApplications = state.applications ? state.applications.filter(a => myJobs.some(j => j.id === a.jobId)).length : 0;
+                        const activeJobs = myJobs.length;
+                        const candidateViews = Math.floor(Math.random() * 200) + 100;
+                        
+                        content = `<div class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Offres actives</p>
+                                            <p class="text-3xl font-bold text-blue-600 dark:text-blue-400">${activeJobs}</p>
+                                        </div>
+                                        <i class="fas fa-briefcase text-4xl text-blue-600 dark:text-blue-400 opacity-50"></i>
+                                    </div>
+                                </div>
+                                <div class="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Candidatures reçues</p>
+                                            <p class="text-3xl font-bold text-green-600 dark:text-green-400">${totalApplications}</p>
+                                        </div>
+                                        <i class="fas fa-user-check text-4xl text-green-600 dark:text-green-400 opacity-50"></i>
+                                    </div>
+                                </div>
+                                <div class="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-lg">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Profils consultés</p>
+                                            <p class="text-3xl font-bold text-purple-600 dark:text-purple-400">${candidateViews}</p>
+                                        </div>
+                                        <i class="fas fa-users text-4xl text-purple-600 dark:text-purple-400 opacity-50"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-xl font-bold mb-4 dark:text-white">Mes offres d'emploi</h3>
+                                ${myJobs.length > 0 ? `<div class="space-y-3">
+                                    ${myJobs.slice(0, 5).map(job => {
+                                        const apps = state.applications ? state.applications.filter(a => a.jobId === job.id) : [];
+                                        return `<div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                            <div class="flex justify-between items-start">
+                                                <div class="flex-1">
+                                                    <h4 class="font-semibold dark:text-white">${job.title}</h4>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-300">${job.city} • ${job.contract}</p>
+                                                </div>
+                                                <div class="text-right">
+                                                    <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">${apps.length}</p>
+                                                    <p class="text-xs text-gray-500">candidatures</p>
+                                                </div>
+                                            </div>
+                                        </div>`;
+                                    }).join('')}
+                                </div>` : '<p class="text-gray-500 text-center py-8">Aucune offre publiée pour le moment.</p>'}
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-xl font-bold mb-4 dark:text-white">Candidats recommandés</h3>
+                                <div class="space-y-3">
+                                    ${data.filter(item => item.type === 'candidate').slice(0, 3).map(candidate => {
+                                        const matchScore = Math.floor(Math.random() * 25) + 75;
+                                        return `<div class="p-4 bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 rounded-lg cursor-pointer hover:shadow-md transition" onclick="showDetailsModal(${candidate.id})">
+                                            <div class="flex items-start gap-3">
+                                                ${candidate.avatar ? `<img src="${candidate.avatar}" class="w-12 h-12 rounded-full">` : '<div class="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center"><i class="fas fa-user text-gray-600"></i></div>'}
+                                                <div class="flex-1">
+                                                    <div class="flex justify-between items-start">
+                                                        <h4 class="font-semibold dark:text-white">${candidate.name}</h4>
+                                                        <span class="px-3 py-1 rounded-full text-xs font-bold ${matchScore >= 85 ? 'bg-green-500 text-white' : matchScore >= 70 ? 'bg-yellow-500 text-white' : 'bg-gray-400 text-white'}">
+                                                            ${matchScore}% match
+                                                        </span>
+                                                    </div>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-300">${candidate.title}</p>
+                                                    <div class="flex items-center gap-2 mt-2">
+                                                        ${candidate.tags.slice(0, 3).map(tag => `<span class="text-xs px-2 py-1 bg-white dark:bg-gray-800 rounded">${tag}</span>`).join('')}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>`;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        </div>`;
+                    }
+                    
+                    document.getElementById('dashboard-content').innerHTML = content;
+                    openModal('dashboard-modal');
+                }
 
                 function calculateRoute(start, end) { if (state.routingControl) map.removeControl(state.routingControl); state.routingControl = L.Routing.control({ waypoints: [L.latLng(start.lat, start.lon), L.latLng(end.lat, end.lon)], router: L.Routing.osrmv1({ serviceUrl: `https://router.project-osrm.org/route/v1`, profile: 'car' }), createMarker: () => null, lineOptions: { styles: [{color: '#0ea5e9', opacity: 0.8, weight: 6}] } }).addTo(map); ui.routingControls.classList.remove('hidden'); }
                 function toggleMatchMode() { state.isMatchModeActive = !state.isMatchModeActive; ui.matchModeBtn.classList.toggle('active', state.isMatchModeActive); showToast(state.isMatchModeActive ? "Mode Association activé." : "Mode Association désactivé.", "info"); if (!state.isMatchModeActive && state.matchStartPoint) { state.markers.get(state.matchStartPoint.id)?._icon.classList.remove('pulsing'); state.matchStartPoint = null; } }
                 function calculateAndShowMatchReport(candidate, job) { const calculateScore = (jobSkills, candidateSkills) => { const common = [...jobSkills].filter(skill => candidateSkills.has(skill)); const missing = [...jobSkills].filter(skill => !candidateSkills.has(skill)); const score = jobSkills.size > 0 ? Math.round((common.length / jobSkills.size) * 100) : 0; return { common, missing, score }; }; const techReport = calculateScore(new Set(job.tags.map(t=>t.toLowerCase())), new Set(candidate.tags.map(t=>t.toLowerCase()))); const softReport = calculateScore(new Set(job.softSkills.map(t=>t.toLowerCase())), new Set(candidate.softSkills.map(t=>t.toLowerCase()))); const totalScore = Math.round((techReport.score * 0.7) + (softReport.score * 0.3)); let scoreColor, recommendation; if (totalScore >= 75) { scoreColor = 'bg-green-500 border-green-600'; recommendation = '<p class="text-lg font-semibold text-green-700"><i class="fas fa-check-circle mr-2"></i>Excellente compatibilité !</p>'; } else if (totalScore >= 40) { scoreColor = 'bg-yellow-500 border-yellow-600'; recommendation = '<p class="text-lg font-semibold text-yellow-700"><i class="fas fa-info-circle mr-2"></i>Bonne compatibilité.</p>'; } else { scoreColor = 'bg-red-500 border-red-600'; recommendation = '<p class="text-lg font-semibold text-red-700"><i class="fas fa-exclamation-triangle mr-2"></i>Compatibilité faible.</p>'; } const listSkills = (skills, color) => skills.map(s => `<span class="bg-${color}-100 dark:bg-${color}-900/40 text-${color}-800 dark:text-${color}-300 px-2 py-1 text-sm rounded">${s}</span>`).join(' ') || '<span>-</span>'; const content = `<div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center"><div class="md:col-span-1 flex flex-col items-center text-center"><div class="score-circle ${scoreColor}">${totalScore}%</div><h3 class="text-2xl font-bold mt-4 dark:text-white">Score Global</h3></div><div class="md:col-span-2"><div class="mb-4"><h4 class="font-bold text-lg dark:text-white">${candidate.name} (${candidate.experience})</h4><p class="text-gray-600 dark:text-gray-300">${candidate.title}</p></div><div class="text-center my-2"><i class="fas fa-arrows-alt-v text-gray-400 text-2xl"></i></div><div><h4 class="font-bold text-lg dark:text-white">${job.title} (${job.experience})</h4><p class="text-gray-600 dark:text-gray-300">${job.company}</p></div></div></div><hr class="my-6 dark:border-gray-600"><div><h3 class="font-bold text-xl mb-4 dark:text-white">Analyse des Compétences</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="space-y-4"><div><h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Techniques (${techReport.common.length}/${job.tags.length})</h4><div class="flex flex-wrap gap-2">${listSkills(techReport.common, 'green')}</div>${techReport.missing.length > 0 ? `<div class="mt-2"><h5 class="text-xs text-red-500">Manquantes:</h5><div class="flex flex-wrap gap-1">${listSkills(techReport.missing, 'red')}</div></div>` : ''}</div></div><div class="space-y-4"><div><h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Comportementales (${softReport.common.length}/${job.softSkills.length})</h4><div class="flex flex-wrap gap-2">${listSkills(softReport.common, 'green')}</div>${softReport.missing.length > 0 ? `<div class="mt-2"><h5 class="text-xs text-red-500">Manquantes:</h5><div class="flex flex-wrap gap-1">${listSkills(softReport.missing, 'red')}</div></div>` : ''}</div></div></div></div><div class="mt-8 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg text-center">${recommendation}</div><div class="mt-8 flex justify-end gap-4"><button class="close-modal-btn bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-100 font-bold py-3 px-6 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500">Fermer</button><button id="view-route-from-report" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700">Voir l'itinéraire</button></div>`; document.getElementById('match-report-content').innerHTML = content; document.getElementById('view-route-from-report').onclick = () => { closeAllModals(); calculateRoute(candidate.location, job.location); }; openModal('matchReport-modal'); }
                 function toggleFavorite(id) { if (state.favorites.has(id)) { state.favorites.delete(id); showToast('Retiré des favoris.', 'info'); } else { state.favorites.add(id); showToast('Ajouté aux favoris !', 'success'); } ui.favoritesCount.textContent = state.favorites.size; ui.favoritesCount.classList.toggle('hidden', state.favorites.size === 0); ui.favoritesBtn.classList.toggle('has-favorites', state.favorites.size > 0); performSearch(); }
-                function showDetailsModal(itemId) { /* Unchanged but necessary */ }
+                
+                function showDetailsModal(itemId) {
+                    const item = data.find(d => d.id === itemId);
+                    if (!item) return;
+                    
+                    // Track viewing history
+                    if (!state.viewHistory.find(v => v.id === itemId)) {
+                        state.viewHistory.unshift({ id: itemId, date: new Date().toISOString(), item });
+                        if (state.viewHistory.length > 20) state.viewHistory.pop();
+                    }
+                    
+                    let content = '';
+                    if (item.type === 'job') {
+                        const isFav = state.favorites.has(item.id);
+                        content = `<div class="p-6">
+                            <div class="flex items-start gap-4 mb-6">
+                                ${item.logo ? `<img src="${item.logo}" alt="${item.company}" class="w-20 h-20 rounded-lg shadow">` : ''}
+                                <div class="flex-1">
+                                    <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">${item.title}</h2>
+                                    <p class="text-xl text-gray-600 dark:text-gray-300">${item.company}</p>
+                                    <div class="flex items-center gap-4 mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                        <span><i class="fas fa-map-marker-alt mr-1"></i>${item.city}</span>
+                                        <span><i class="fas fa-briefcase mr-1"></i>${item.contract}</span>
+                                        <span><i class="fas fa-laptop-house mr-1"></i>${item.workArrangement}</span>
+                                        <span><i class="fas fa-euro-sign mr-1"></i>${item.salary?.toLocaleString('fr-FR')} €/an</span>
+                                    </div>
+                                </div>
+                                <button class="favorite-icon p-3 text-2xl ${isFav ? 'text-pink-500' : 'text-gray-300'} hover:text-pink-500" data-id="${item.id}">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
+                            
+                            ${item.companyDescription ? `<div class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                                <h3 class="font-semibold text-lg mb-2 dark:text-white">À propos de l'entreprise</h3>
+                                <p class="text-gray-700 dark:text-gray-300">${item.companyDescription}</p>
+                            </div>` : ''}
+                            
+                            <div class="mb-6">
+                                <h3 class="font-semibold text-lg mb-2 dark:text-white">Description du poste</h3>
+                                <p class="text-gray-700 dark:text-gray-300">${item.description}</p>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                <div>
+                                    <h3 class="font-semibold text-lg mb-2 dark:text-white">Compétences techniques requises</h3>
+                                    <div class="flex flex-wrap gap-2">
+                                        ${item.tags.map(tag => `<span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">${tag}</span>`).join('')}
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-lg mb-2 dark:text-white">Compétences comportementales</h3>
+                                    <div class="flex flex-wrap gap-2">
+                                        ${item.softSkills?.map(skill => `<span class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm">${skill}</span>`).join('') || '<span class="text-gray-500">Non spécifié</span>'}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-3 mt-6">
+                                ${state.currentUser?.type === 'candidate' ? `<button onclick="applyToJob(${item.id})" class="flex-1 bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition">
+                                    <i class="fas fa-paper-plane mr-2"></i>Postuler
+                                </button>` : ''}
+                                <button onclick="showCompanyProfile('${item.company}')" class="flex-1 bg-purple-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-purple-700 transition">
+                                    <i class="fas fa-building mr-2"></i>Entreprise
+                                </button>
+                                <button onclick="calculateRoute({lat: ${state.userLocation.lat}, lon: ${state.userLocation.lon}}, {lat: ${item.location.lat}, lon: ${item.location.lon}}); closeAllModals();" class="flex-1 bg-emerald-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-emerald-700 transition">
+                                    <i class="fas fa-route mr-2"></i>Voir l'itinéraire
+                                </button>
+                                <button class="bg-gray-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition" onclick="shareItem(${item.id})">
+                                    <i class="fas fa-share-alt"></i>
+                                </button>
+                            </div>
+                        </div>`;
+                    } else if (item.type === 'candidate') {
+                        const isFav = state.favorites.has(item.id);
+                        content = `<div class="p-6">
+                            <div class="flex items-start gap-4 mb-6">
+                                ${item.avatar ? `<img src="${item.avatar}" alt="${item.name}" class="w-20 h-20 rounded-full shadow">` : ''}
+                                <div class="flex-1">
+                                    <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">${item.name}</h2>
+                                    <p class="text-xl text-gray-600 dark:text-gray-300">${item.title}</p>
+                                    <div class="flex items-center gap-4 mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                        <span><i class="fas fa-map-marker-alt mr-1"></i>${item.city}</span>
+                                        <span><i class="fas fa-briefcase mr-1"></i>${item.experience}</span>
+                                        <span><i class="fas fa-clock mr-1"></i>Disponibilité: ${item.availability || 'À négocier'}</span>
+                                    </div>
+                                </div>
+                                <button class="favorite-icon p-3 text-2xl ${isFav ? 'text-pink-500' : 'text-gray-300'} hover:text-pink-500" data-id="${item.id}">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <h3 class="font-semibold text-lg mb-2 dark:text-white">À propos</h3>
+                                <p class="text-gray-700 dark:text-gray-300">${item.description}</p>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                <div>
+                                    <h3 class="font-semibold text-lg mb-2 dark:text-white">Compétences techniques</h3>
+                                    <div class="flex flex-wrap gap-2">
+                                        ${item.tags.map(tag => `<span class="bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-3 py-1 rounded-full text-sm">${tag}</span>`).join('')}
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-lg mb-2 dark:text-white">Compétences comportementales</h3>
+                                    <div class="flex flex-wrap gap-2">
+                                        ${item.softSkills?.map(skill => `<span class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full text-sm">${skill}</span>`).join('') || '<span class="text-gray-500">Non spécifié</span>'}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            ${item.background ? `<div class="mb-6">
+                                <h3 class="font-semibold text-lg mb-2 dark:text-white">Parcours professionnel</h3>
+                                <div class="space-y-3">
+                                    ${item.background.map(bg => `<div class="border-l-4 border-blue-500 pl-4 py-2 bg-gray-50 dark:bg-gray-700 rounded-r">
+                                        <p class="font-semibold dark:text-white">${bg.role}</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">${bg.company} • ${bg.year}</p>
+                                    </div>`).join('')}
+                                </div>
+                            </div>` : ''}
+                            
+                            <div class="flex gap-3 mt-6">
+                                ${state.currentUser?.type === 'recruiter' ? `<button onclick="contactCandidate(${item.id})" class="flex-1 bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition">
+                                    <i class="fas fa-envelope mr-2"></i>Contacter
+                                </button>` : ''}
+                                ${item.portfolioLink ? `<a href="${item.portfolioLink}" target="_blank" class="flex-1 bg-purple-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-purple-700 transition text-center">
+                                    <i class="fas fa-external-link-alt mr-2"></i>Portfolio
+                                </a>` : ''}
+                                <button onclick="calculateRoute({lat: ${state.userLocation.lat}, lon: ${state.userLocation.lon}}, {lat: ${item.location.lat}, lon: ${item.location.lon}}); closeAllModals();" class="flex-1 bg-emerald-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-emerald-700 transition">
+                                    <i class="fas fa-route mr-2"></i>Itinéraire
+                                </button>
+                                <button class="bg-gray-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition" onclick="shareItem(${item.id})">
+                                    <i class="fas fa-share-alt"></i>
+                                </button>
+                            </div>
+                        </div>`;
+                    }
+                    
+                    document.getElementById('details-modal-content').innerHTML = content;
+                    openModal('details-modal');
+                }
 
                 function handleMatchClick(item) {
                     if (!state.isMatchModeActive) return;
@@ -225,20 +565,414 @@
                         else { showToast("Veuillez sélectionner une offre d'emploi.", 'error'); }
                     }
                 }
+                
+                function applyToJob(jobId) {
+                    if (!state.currentUser) { showToast('Connectez-vous pour postuler.', 'error'); openModal('login-modal'); return; }
+                    const job = data.find(j => j.id === jobId);
+                    if (!job) return;
+                    if (!state.applications) state.applications = [];
+                    if (state.applications.some(a => a.jobId === jobId && a.candidateId === state.currentUser.id)) {
+                        showToast('Vous avez déjà postulé à cette offre.', 'info');
+                        return;
+                    }
+                    state.applications.push({ id: state.applications.length + 1, jobId, candidateId: state.currentUser.id, date: new Date().toISOString(), status: 'pending' });
+                    showToast(`Candidature envoyée pour ${job.title} !`, 'success');
+                    closeAllModals();
+                }
+                
+                function contactCandidate(candidateId) {
+                    if (!state.currentUser) { showToast('Connectez-vous pour contacter un candidat.', 'error'); openModal('login-modal'); return; }
+                    const candidate = data.find(c => c.id === candidateId);
+                    if (!candidate) return;
+                    showToast(`Message envoyé à ${candidate.name} !`, 'success');
+                    closeAllModals();
+                }
+                
+                function shareItem(itemId) {
+                    const item = data.find(d => d.id === itemId);
+                    if (!item) return;
+                    const url = `${window.location.href}?item=${itemId}`;
+                    const text = item.type === 'job' ? `${item.title} chez ${item.company}` : `Profil de ${item.name} - ${item.title}`;
+                    if (navigator.share) {
+                        navigator.share({ title: 'JobMap by LTd', text, url }).then(() => showToast('Partagé !', 'success')).catch(() => {});
+                    } else {
+                        navigator.clipboard.writeText(url).then(() => showToast('Lien copié dans le presse-papier !', 'success'));
+                    }
+                }
+                
+                function showFavoritesModal() {
+                    const favoriteItems = data.filter(item => state.favorites.has(item.id));
+                    let content = '';
+                    if (favoriteItems.length === 0) {
+                        content = '<p class="text-center text-gray-500 py-8">Aucun favori pour le moment.</p>';
+                    } else {
+                        content = '<div class="space-y-3">';
+                        favoriteItems.forEach(item => {
+                            content += `<div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm hover:shadow-md transition">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex-1 cursor-pointer" onclick="showDetailsModal(${item.id})">
+                                        <h3 class="font-semibold text-lg dark:text-white">${item.title || item.name}</h3>
+                                        <p class="text-gray-600 dark:text-gray-300">${item.type === 'job' ? item.company : item.title}</p>
+                                        <div class="flex items-center gap-3 mt-2 text-sm text-gray-500">
+                                            <span><i class="fas fa-map-marker-alt mr-1"></i>${item.city}</span>
+                                            ${item.type === 'job' ? `<span><i class="fas fa-euro-sign mr-1"></i>${item.salary?.toLocaleString('fr-FR')} €</span>` : ''}
+                                        </div>
+                                    </div>
+                                    <button class="favorite-icon p-2 text-pink-500 hover:text-pink-600" data-id="${item.id}">
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                </div>
+                            </div>`;
+                        });
+                        content += '</div>';
+                    }
+                    document.getElementById('favorites-list').innerHTML = content;
+                    openModal('favorites-modal');
+                }
+                
+                function getUserLocation() {
+                    if (navigator.geolocation) {
+                        showToast('Localisation en cours...', 'info');
+                        navigator.geolocation.getCurrentPosition(position => {
+                            state.userLocation = { lat: position.coords.latitude, lon: position.coords.longitude };
+                            if (state.userLocationMarker) map.removeLayer(state.userLocationMarker);
+                            const icon = L.divIcon({ className: '', html: '<div class="user-location-icon"></div>', iconSize: [18, 18], iconAnchor: [9, 9] });
+                            state.userLocationMarker = L.marker([state.userLocation.lat, state.userLocation.lon], { icon }).addTo(map);
+                            map.setView([state.userLocation.lat, state.userLocation.lon], 12);
+                            showToast('Position trouvée !', 'success');
+                        }, () => showToast('Impossible de vous localiser.', 'error'));
+                    } else {
+                        showToast('Géolocalisation non supportée.', 'error');
+                    }
+                }
+                
+                function saveCurrentSearch() {
+                    const searchName = prompt('Nom de la recherche :');
+                    if (!searchName) return;
+                    state.savedSearches.push({
+                        id: state.savedSearches.length + 1,
+                        name: searchName,
+                        query: ui.searchInput.value,
+                        filters: { ...state.filters },
+                        date: new Date().toISOString()
+                    });
+                    showToast('Recherche sauvegardée !', 'success');
+                }
+                
+                function showSavedSearches() {
+                    let content = '';
+                    if (state.savedSearches.length === 0) {
+                        content = `<p class="text-center text-gray-500 py-8">Aucune recherche sauvegardée.</p>
+                            <div class="text-center mt-4">
+                                <button onclick="saveCurrentSearch()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                                    <i class="fas fa-save mr-2"></i>Sauvegarder la recherche actuelle
+                                </button>
+                            </div>`;
+                    } else {
+                        content = `<div class="space-y-3 mb-4">
+                            ${state.savedSearches.map(search => `
+                                <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold dark:text-white">${search.name}</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                                                ${search.query ? `Recherche: "${search.query}"` : 'Tous les résultats'} • 
+                                                Type: ${search.filters.type === 'all' ? 'Tous' : search.filters.type === 'job' ? 'Emplois' : 'Candidats'}
+                                            </p>
+                                            <p class="text-xs text-gray-500 mt-1">${new Date(search.date).toLocaleDateString('fr-FR')}</p>
+                                        </div>
+                                        <button onclick="loadSavedSearch(${search.id})" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm">
+                                            <i class="fas fa-search mr-1"></i>Charger
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="text-center">
+                            <button onclick="saveCurrentSearch()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                                <i class="fas fa-save mr-2"></i>Sauvegarder la recherche actuelle
+                            </button>
+                        </div>`;
+                    }
+                    
+                    const modal = document.createElement('div');
+                    modal.id = 'saved-searches-modal';
+                    modal.className = 'modal-backdrop fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-70 z-[1050] flex items-center justify-center';
+                    modal.innerHTML = `<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl m-4 p-8 transform max-h-[90vh] flex flex-col">
+                        <button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button>
+                        <h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Recherches sauvegardées</h2>
+                        <div class="overflow-y-auto">${content}</div>
+                    </div>`;
+                    ui.modalContainer.appendChild(modal);
+                    setTimeout(() => modal.querySelector('.modal-panel').classList.remove('hidden'), 10);
+                }
+                
+                function loadSavedSearch(searchId) {
+                    const search = state.savedSearches.find(s => s.id === searchId);
+                    if (!search) return;
+                    ui.searchInput.value = search.query || '';
+                    state.filters = { ...search.filters };
+                    performSearch();
+                    closeAllModals();
+                    showToast('Recherche chargée !', 'success');
+                }
+                
+                function showViewHistory() {
+                    let content = '';
+                    if (state.viewHistory.length === 0) {
+                        content = '<p class="text-center text-gray-500 py-8">Aucun historique de consultation.</p>';
+                    } else {
+                        content = `<div class="space-y-3">
+                            ${state.viewHistory.map(entry => {
+                                const item = entry.item;
+                                return `<div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:shadow-md transition" onclick="showDetailsModal(${item.id})">
+                                    <div class="flex items-start gap-3">
+                                        ${item.avatar || item.logo ? `<img src="${item.avatar || item.logo}" class="w-12 h-12 rounded-${item.type === 'candidate' ? 'full' : 'lg'}">` : ''}
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold dark:text-white">${item.type === 'job' ? item.title : item.name}</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-300">${item.type === 'job' ? item.company : item.title}</p>
+                                            <div class="flex items-center gap-3 mt-1 text-xs text-gray-500">
+                                                <span><i class="fas fa-map-marker-alt mr-1"></i>${item.city}</span>
+                                                <span><i class="fas fa-clock mr-1"></i>${new Date(entry.date).toLocaleString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
+                                            </div>
+                                        </div>
+                                        <span class="px-2 py-1 rounded text-xs ${item.type === 'job' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200'}">
+                                            ${item.type === 'job' ? 'Emploi' : 'Candidat'}
+                                        </span>
+                                    </div>
+                                </div>`;
+                            }).join('')}
+                        </div>`;
+                    }
+                    
+                    const modal = document.createElement('div');
+                    modal.id = 'history-modal';
+                    modal.className = 'modal-backdrop fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-70 z-[1050] flex items-center justify-center';
+                    modal.innerHTML = `<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl m-4 p-8 transform max-h-[90vh] flex flex-col">
+                        <button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button>
+                        <h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Historique de consultation</h2>
+                        <div class="overflow-y-auto">${content}</div>
+                    </div>`;
+                    ui.modalContainer.appendChild(modal);
+                    setTimeout(() => modal.querySelector('.modal-panel').classList.remove('hidden'), 10);
+                }
+                
+                function showHelp() {
+                    const content = `<div class="space-y-6">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-map-marked-alt text-6xl text-blue-500 mb-4"></i>
+                            <h3 class="text-2xl font-bold dark:text-white">Bienvenue sur JobMap by LTd</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mt-2">Votre plateforme de mise en relation emploi géolocalisée</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-search text-2xl text-blue-600 dark:text-blue-400"></i>
+                                    <h4 class="font-semibold dark:text-white">Recherche</h4>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Utilisez la barre de recherche pour trouver des emplois ou candidats par compétences, ville ou poste.</p>
+                            </div>
+                            
+                            <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-filter text-2xl text-green-600 dark:text-green-400"></i>
+                                    <h4 class="font-semibold dark:text-white">Filtres avancés</h4>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Affinez votre recherche avec les filtres : expérience, salaire, distance, type de contrat...</p>
+                            </div>
+                            
+                            <div class="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-link text-2xl text-purple-600 dark:text-purple-400"></i>
+                                    <h4 class="font-semibold dark:text-white">Mode Association</h4>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Sélectionnez un candidat puis une offre pour voir un rapport de compatibilité détaillé.</p>
+                            </div>
+                            
+                            <div class="p-4 bg-pink-50 dark:bg-pink-900/20 rounded-lg">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-heart text-2xl text-pink-600 dark:text-pink-400"></i>
+                                    <h4 class="font-semibold dark:text-white">Favoris</h4>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Ajoutez des offres ou profils à vos favoris pour les retrouver facilement.</p>
+                            </div>
+                            
+                            <div class="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-crosshairs text-2xl text-yellow-600 dark:text-yellow-400"></i>
+                                    <h4 class="font-semibold dark:text-white">Géolocalisation</h4>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Cliquez sur le bouton de géolocalisation pour centrer la carte sur votre position.</p>
+                            </div>
+                            
+                            <div class="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-route text-2xl text-orange-600 dark:text-orange-400"></i>
+                                    <h4 class="font-semibold dark:text-white">Itinéraires</h4>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Calculez l'itinéraire vers une offre d'emploi ou un candidat depuis votre position.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-6 rounded-lg">
+                            <h4 class="font-semibold text-lg mb-3 dark:text-white">Fonctionnalités Premium</h4>
+                            <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                                <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Sauvegarde de recherches personnalisées</li>
+                                <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Historique de consultation</li>
+                                <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Notifications en temps réel</li>
+                                <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Export de données en CSV</li>
+                                <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Tableau de bord avec statistiques</li>
+                                <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Système de candidature intégré</li>
+                            </ul>
+                        </div>
+                    </div>`;
+                    
+                    const modal = document.createElement('div');
+                    modal.id = 'help-modal';
+                    modal.className = 'modal-backdrop fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-70 z-[1050] flex items-center justify-center';
+                    modal.innerHTML = `<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-4xl m-4 p-8 transform max-h-[90vh] flex flex-col">
+                        <button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button>
+                        <h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Guide d'utilisation</h2>
+                        <div class="overflow-y-auto">${content}</div>
+                    </div>`;
+                    ui.modalContainer.appendChild(modal);
+                    setTimeout(() => modal.querySelector('.modal-panel').classList.remove('hidden'), 10);
+                }
+                
+                function showCompanyProfile(companyName) {
+                    const companyJobs = data.filter(j => j.type === 'job' && j.company === companyName);
+                    if (companyJobs.length === 0) return;
+                    
+                    const company = companyJobs[0];
+                    const rating = 4.5;
+                    const reviews = Math.floor(Math.random() * 50) + 20;
+                    
+                    const content = `<div class="space-y-6">
+                        <div class="text-center">
+                            ${company.logo ? `<img src="${company.logo}" class="w-24 h-24 mx-auto rounded-lg shadow-lg mb-4">` : ''}
+                            <h2 class="text-3xl font-bold dark:text-white">${companyName}</h2>
+                            <div class="flex items-center justify-center gap-2 mt-2">
+                                ${[1,2,3,4,5].map(i => `<i class="fas fa-star ${i <= Math.floor(rating) ? 'text-yellow-400' : 'text-gray-300'}"></i>`).join('')}
+                                <span class="text-gray-600 dark:text-gray-400 ml-2">${rating.toFixed(1)} (${reviews} avis)</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
+                            <h3 class="font-semibold text-lg mb-2 dark:text-white">À propos</h3>
+                            <p class="text-gray-700 dark:text-gray-300">${company.companyDescription}</p>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-semibold text-lg mb-4 dark:text-white">Offres d'emploi actives (${companyJobs.length})</h3>
+                            <div class="space-y-3">
+                                ${companyJobs.map(job => `
+                                    <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:shadow-md transition" onclick="showDetailsModal(${job.id})">
+                                        <h4 class="font-semibold dark:text-white">${job.title}</h4>
+                                        <div class="flex items-center gap-4 mt-2 text-sm text-gray-600 dark:text-gray-300">
+                                            <span><i class="fas fa-map-marker-alt mr-1"></i>${job.city}</span>
+                                            <span><i class="fas fa-briefcase mr-1"></i>${job.contract}</span>
+                                            <span><i class="fas fa-euro-sign mr-1"></i>${job.salary?.toLocaleString('fr-FR')} €</span>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-semibold text-lg mb-4 dark:text-white">Avis des employés</h3>
+                            <div class="space-y-3">
+                                ${[
+                                    { author: 'Sophie M.', rating: 5, comment: 'Excellente ambiance de travail, équipe dynamique et projets stimulants.', date: '2024-01-15' },
+                                    { author: 'Marc D.', rating: 4, comment: 'Bonne entreprise avec de belles opportunités d\'évolution.', date: '2023-12-20' },
+                                    { author: 'Julie R.', rating: 5, comment: 'Management à l\'écoute et très bons avantages sociaux.', date: '2023-11-10' }
+                                ].map(review => `
+                                    <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="font-semibold dark:text-white">${review.author}</span>
+                                            <div class="flex items-center gap-1">
+                                                ${[1,2,3,4,5].map(i => `<i class="fas fa-star text-xs ${i <= review.rating ? 'text-yellow-400' : 'text-gray-300'}"></i>`).join('')}
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-700 dark:text-gray-300">${review.comment}</p>
+                                        <p class="text-xs text-gray-500 mt-2">${new Date(review.date).toLocaleDateString('fr-FR')}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        ${state.currentUser ? `<div class="text-center">
+                            <button onclick="leaveReview('${companyName}')" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-semibold">
+                                <i class="fas fa-comment-dots mr-2"></i>Laisser un avis
+                            </button>
+                        </div>` : ''}
+                    </div>`;
+                    
+                    document.getElementById('company-profile-content').innerHTML = content;
+                    openModal('company-modal');
+                }
+                
+                function leaveReview(companyName) {
+                    const rating = prompt(`Note pour ${companyName} (1-5) :`);
+                    if (!rating || rating < 1 || rating > 5) return;
+                    const comment = prompt('Votre commentaire :');
+                    if (!comment) return;
+                    showToast('Avis publié avec succès !', 'success');
+                    closeAllModals();
+                }
 
                 function performSearch() {
                     state.firstInteraction = true;
                     const query = ui.searchInput.value.toLowerCase();
+                    
+                    const calculateDistance = (lat1, lon1, lat2, lon2) => {
+                        const R = 6371; // Earth radius in km
+                        const dLat = (lat2 - lat1) * Math.PI / 180;
+                        const dLon = (lon2 - lon1) * Math.PI / 180;
+                        const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+                        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                        return R * c;
+                    };
+                    
                     const filteredData = data.filter(item => {
                         const typeMatch = state.filters.type === 'all' || item.type === state.filters.type;
                         const expMatch = state.filters.experience === 'all' || (item.experience && item.experience === state.filters.experience);
                         const salaryMatch = item.type === 'candidate' || (item.salary && item.salary <= state.filters.salary);
                         const contractMatch = state.filters.contract === 'all' || (item.type === 'candidate' || (item.contract && item.contract === state.filters.contract));
                         const workArrangementMatch = state.filters.workArrangement === 'all' || (item.type === 'candidate' || (item.workArrangement && (item.workArrangement.includes(state.filters.workArrangement))));
+                        const distance = calculateDistance(state.userLocation.lat, state.userLocation.lon, item.location.lat, item.location.lon);
+                        const distanceMatch = distance <= state.filters.distance;
                         const queryMatch = !query || Object.values(item).some(val => String(val).toLowerCase().includes(query)) || (item.tags && item.tags.some(tag => tag.toLowerCase().includes(query)));
-                        return typeMatch && expMatch && salaryMatch && contractMatch && workArrangementMatch && queryMatch;
+                        return typeMatch && expMatch && salaryMatch && contractMatch && workArrangementMatch && distanceMatch && queryMatch;
                     });
                     displayData(filteredData);
+                }
+                
+                function exportData() {
+                    const query = ui.searchInput.value.toLowerCase();
+                    const filteredData = data.filter(item => {
+                        const typeMatch = state.filters.type === 'all' || item.type === state.filters.type;
+                        return typeMatch;
+                    });
+                    
+                    const csvContent = "data:text/csv;charset=utf-8," + 
+                        "Type,Titre/Nom,Entreprise/Fonction,Ville,Compétences,Expérience\n" +
+                        filteredData.map(item => {
+                            const type = item.type === 'job' ? 'Emploi' : 'Candidat';
+                            const name = item.type === 'job' ? item.title : item.name;
+                            const company = item.type === 'job' ? item.company : item.title;
+                            const skills = item.tags.join('; ');
+                            return `"${type}","${name}","${company}","${item.city}","${skills}","${item.experience}"`;
+                        }).join("\n");
+                    
+                    const encodedUri = encodeURI(csvContent);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", `jobmap_export_${new Date().toISOString().split('T')[0]}.csv`);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    showToast('Données exportées !', 'success');
                 }
 
                 function displayData(filteredData) {
@@ -261,7 +995,6 @@
                     });
                 }
                 
-                // --- EVENT LISTENERS ---
                 document.addEventListener('click', e => {
                     const closeModalBtn = e.target.closest('.close-modal-btn');
                     if (closeModalBtn) { e.preventDefault(); closeAllModals(); return; }
@@ -277,11 +1010,23 @@
                             case 'edit-profile': 
                                 const form = document.getElementById('edit-profile-form');
                                 const user = data.find(u => u.id === state.currentUser.id);
-                                form.innerHTML = `<input name="title" value="${user.title}" class="w-full p-2 border rounded dark:bg-gray-700"><button type="submit" class="w-full bg-blue-600 text-white p-2 rounded">Sauvegarder</button>`;
+                                form.innerHTML = `<input name="title" value="${user.title}" class="w-full p-2 border rounded dark:bg-gray-700" placeholder="Titre"><textarea name="description" class="w-full p-2 border rounded dark:bg-gray-700" placeholder="Description">${user.description || ''}</textarea><input name="tags" value="${user.tags.join(', ')}" class="w-full p-2 border rounded dark:bg-gray-700" placeholder="Compétences"><button type="submit" class="w-full bg-blue-600 text-white p-2 rounded mt-4">Sauvegarder</button>`;
+                                document.getElementById('edit-profile-form').addEventListener('submit', e => {
+                                    e.preventDefault();
+                                    user.title = e.target.title.value;
+                                    user.description = e.target.description.value;
+                                    user.tags = e.target.tags.value.split(',').map(t => t.trim());
+                                    closeAllModals();
+                                    showToast('Profil mis à jour !', 'success');
+                                    performSearch();
+                                });
                                 openModal('editProfile-modal'); 
                                 break;
                             case 'logout': state.currentUser = null; updateAuthUI(); showToast('Déconnecté.', 'info'); break;
-                            case 'dashboard': openModal('dashboard-modal'); break;
+                            case 'dashboard': showDashboard(); break;
+                            case 'notifications': showNotifications(); break;
+                            case 'saved-searches': showSavedSearches(); break;
+                            case 'view-history': showViewHistory(); break;
                             case 'show-company': openModal('company-modal'); break;
                         }
                         return;
@@ -289,9 +1034,51 @@
                     if (e.target.closest('.favorite-icon')) { toggleFavorite(parseInt(e.target.closest('.favorite-icon').dataset.id)); }
                 });
                 
+                function showNotifications() {
+                    const notifications = [
+                        { id: 1, type: 'success', icon: 'fa-check-circle', title: 'Candidature envoyée', message: 'Votre candidature pour Développeur Full-Stack a été envoyée avec succès.', date: new Date(Date.now() - 3600000).toISOString() },
+                        { id: 2, type: 'info', icon: 'fa-eye', title: 'Profil consulté', message: 'Votre profil a été consulté par Tech Solutions Inc.', date: new Date(Date.now() - 86400000).toISOString() },
+                        { id: 3, type: 'warning', icon: 'fa-star', title: 'Nouvelle offre correspondante', message: 'Une nouvelle offre correspond à votre profil: Data Scientist Senior.', date: new Date(Date.now() - 172800000).toISOString() }
+                    ];
+                    
+                    const content = `<div class="space-y-3">
+                        ${notifications.map(notif => {
+                            const colors = { success: 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400', info: 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400', warning: 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400' };
+                            return `<div class="p-4 ${colors[notif.type]} rounded-lg">
+                                <div class="flex items-start gap-3">
+                                    <i class="fas ${notif.icon} text-2xl mt-1"></i>
+                                    <div class="flex-1">
+                                        <h4 class="font-semibold">${notif.title}</h4>
+                                        <p class="text-sm mt-1">${notif.message}</p>
+                                        <p class="text-xs mt-2 opacity-75">${new Date(notif.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+                                    </div>
+                                </div>
+                            </div>`;
+                        }).join('')}
+                    </div>`;
+                    
+                    const modal = document.createElement('div');
+                    modal.id = 'notifications-modal';
+                    modal.className = 'modal-backdrop fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-70 z-[1050] flex items-center justify-center';
+                    modal.innerHTML = `<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl m-4 p-8 transform max-h-[90vh] flex flex-col">
+                        <button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button>
+                        <h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Notifications</h2>
+                        <div class="overflow-y-auto">${content}</div>
+                    </div>`;
+                    ui.modalContainer.appendChild(modal);
+                    setTimeout(() => modal.querySelector('.modal-panel').classList.remove('hidden'), 10);
+                }
+                
                 document.getElementById('login-form').addEventListener('submit', e => { e.preventDefault(); state.currentUser = {id: 99, name: "Recruteur Test", email: e.target.email.value, type: 'recruiter'}; closeAllModals(); updateAuthUI(); showToast('Connexion réussie !', 'success'); });
-                document.getElementById('signup-candidate-form').addEventListener('submit', e => { e.preventDefault(); const name = e.target.name.value; state.currentUser = {id: data.length + 1, name, email: e.target.email.value, type: 'candidate'}; data.push({id: state.currentUser.id, type:'candidate', name, title: e.target.title.value, tags: e.target.tags.value.split(','), location: {lat: 48.85, lon: 2.35}, city: 'Paris'}); closeAllModals(); updateAuthUI(); showToast(`Bienvenue, ${name} !`, 'success'); performSearch(); });
-                document.getElementById('post-job-form').addEventListener('submit', e => { e.preventDefault(); const newJob = {id: data.length + 1, type: 'job', title: e.target.title.value, company: e.target.company.value, city: e.target.city.value, description: e.target.description.value, tags: e.target.tags.value.split(','), softSkills: e.target.softSkills.value.split(','), experience: e.target.experience.value, salary: parseInt(e.target.salary.value), location: { lat: 48.85, lon: 2.35 }, contract: 'CDI', workArrangement: 'Hybride' }; data.push(newJob); closeAllModals(); showToast('Offre publiée !', 'success'); performSearch(); });
+                document.getElementById('signup-candidate-form').addEventListener('submit', e => { e.preventDefault(); const name = e.target.name.value; state.currentUser = {id: data.length + 1, name, email: e.target.email.value, type: 'candidate'}; data.push({id: state.currentUser.id, type:'candidate', name, title: e.target.title.value, tags: e.target.tags.value.split(','), softSkills: [], location: {lat: 48.85, lon: 2.35}, city: 'Paris', experience: 'Junior', availability: 'Immédiate', description: 'Nouveau candidat'}); closeAllModals(); updateAuthUI(); showToast(`Bienvenue, ${name} !`, 'success'); performSearch(); });
+                document.getElementById('signup-recruiter-form').addEventListener('submit', e => { e.preventDefault(); const name = e.target.name.value; state.currentUser = {id: data.length + 1, name, email: e.target.email.value, type: 'recruiter', company: e.target.company.value}; closeAllModals(); updateAuthUI(); showToast(`Bienvenue, ${name} !`, 'success'); });
+                document.getElementById('signup-employer-form').addEventListener('submit', e => { e.preventDefault(); const name = e.target.name.value; state.currentUser = {id: data.length + 1, name, email: e.target.email.value, type: 'employer', company: e.target.companyName.value, siret: e.target.siret.value}; closeAllModals(); updateAuthUI(); showToast(`Bienvenue, ${name} !`, 'success'); });
+                document.getElementById('post-job-form').addEventListener('submit', e => { e.preventDefault(); const newJob = {id: data.length + 1, type: 'job', title: e.target.title.value, company: e.target.company.value, city: e.target.city.value, description: e.target.description.value, tags: e.target.tags.value.split(','), softSkills: e.target.softSkills.value.split(','), experience: e.target.experience.value, salary: parseInt(e.target.salary.value), location: { lat: 48.85, lon: 2.35 }, contract: 'CDI', workArrangement: 'Hybride', companyDescription: '' }; data.push(newJob); closeAllModals(); showToast('Offre publiée !', 'success'); performSearch(); });
+                
+                ui.favoritesBtn.addEventListener('click', showFavoritesModal);
+                ui.locateMeBtn.addEventListener('click', getUserLocation);
+                ui.saveSearchBtn.addEventListener('click', saveCurrentSearch);
+                ui.helpBtn.addEventListener('click', showHelp);
                 
                 ui.darkModeToggle.addEventListener('click', () => { document.documentElement.classList.toggle('dark'); const icon = ui.darkModeToggle.querySelector('i'); if (document.documentElement.classList.contains('dark')) { icon.classList.replace('fa-moon', 'fa-sun'); localStorage.setItem('theme', 'dark'); } else { icon.classList.replace('fa-sun', 'fa-moon'); localStorage.setItem('theme', 'light'); } });
                 if (localStorage.getItem('theme') === 'dark') { document.documentElement.classList.add('dark'); ui.darkModeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun'); }
@@ -318,6 +1105,9 @@
                 
                 ui.salarySlider.addEventListener('input', e => { state.filters.salary = parseInt(e.target.value); ui.salaryValue.textContent = `${state.filters.salary.toLocaleString('fr-FR')} €`; });
                 ui.salarySlider.addEventListener('change', performSearch);
+                ui.distanceSlider.addEventListener('input', e => { state.filters.distance = parseInt(e.target.value); ui.distanceValue.textContent = `${state.filters.distance} km`; });
+                ui.distanceSlider.addEventListener('change', performSearch);
+                ui.exportDataBtn.addEventListener('click', exportData);
                 ui.resultsList.addEventListener('click', e => { const card = e.target.closest('[data-id][data-lat]'); if (card) showDetailsModal(parseInt(card.dataset.id)); });
                 map.on('popupopen', e => e.popup.getElement().querySelector('.view-details-btn')?.addEventListener('click', ev => showDetailsModal(ev.currentTarget.dataset.id)));
                 
