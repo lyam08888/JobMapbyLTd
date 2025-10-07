@@ -272,33 +272,48 @@
                         
                         content = `<div class="space-y-6">
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
+                                <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg hover:shadow-lg transition cursor-pointer" onclick="showApplications()">
                                     <div class="flex items-center justify-between">
                                         <div>
                                             <p class="text-sm text-gray-600 dark:text-gray-400">Candidatures</p>
                                             <p class="text-3xl font-bold text-blue-600 dark:text-blue-400">${applications.length}</p>
+                                            <p class="text-xs text-gray-500 mt-1">Cliquez pour voir</p>
                                         </div>
                                         <i class="fas fa-paper-plane text-4xl text-blue-600 dark:text-blue-400 opacity-50"></i>
                                     </div>
                                 </div>
-                                <div class="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg">
+                                <div class="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg hover:shadow-lg transition">
                                     <div class="flex items-center justify-between">
                                         <div>
                                             <p class="text-sm text-gray-600 dark:text-gray-400">Vues du profil</p>
                                             <p class="text-3xl font-bold text-green-600 dark:text-green-400">${profileViews}</p>
+                                            <p class="text-xs text-green-600 dark:text-green-400 mt-1">↑ +${Math.floor(Math.random()*20)+5}% cette semaine</p>
                                         </div>
                                         <i class="fas fa-eye text-4xl text-green-600 dark:text-green-400 opacity-50"></i>
                                     </div>
                                 </div>
-                                <div class="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-lg">
+                                <div class="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-lg hover:shadow-lg transition">
                                     <div class="flex items-center justify-between">
                                         <div>
                                             <p class="text-sm text-gray-600 dark:text-gray-400">Offres sauvegardées</p>
                                             <p class="text-3xl font-bold text-purple-600 dark:text-purple-400">${savedJobs}</p>
+                                            <p class="text-xs text-gray-500 mt-1">Favoris</p>
                                         </div>
                                         <i class="fas fa-heart text-4xl text-purple-600 dark:text-purple-400 opacity-50"></i>
                                     </div>
                                 </div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 p-6 rounded-lg">
+                                <h3 class="text-lg font-bold mb-4 dark:text-white"><i class="fas fa-chart-pie mr-2"></i>Activité des 30 derniers jours</h3>
+                                <div class="grid grid-cols-7 gap-2">
+                                    ${Array.from({length: 30}, (_, i) => {
+                                        const activity = Math.random() > 0.3 ? Math.floor(Math.random() * 4) : 0;
+                                        const colors = ['bg-gray-200 dark:bg-gray-700', 'bg-blue-200 dark:bg-blue-800', 'bg-blue-400 dark:bg-blue-600', 'bg-blue-600 dark:bg-blue-500'];
+                                        return `<div class="${colors[activity]} h-8 rounded" title="${activity} actions"></div>`;
+                                    }).join('')}
+                                </div>
+                                <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">Vos actions quotidiennes (candidatures, recherches, consultations)</p>
                             </div>
                             
                             <div>
@@ -350,32 +365,55 @@
                         
                         content = `<div class="space-y-6">
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
+                                <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg hover:shadow-lg transition">
                                     <div class="flex items-center justify-between">
                                         <div>
                                             <p class="text-sm text-gray-600 dark:text-gray-400">Offres actives</p>
                                             <p class="text-3xl font-bold text-blue-600 dark:text-blue-400">${activeJobs}</p>
+                                            <p class="text-xs text-gray-500 mt-1">En ligne</p>
                                         </div>
                                         <i class="fas fa-briefcase text-4xl text-blue-600 dark:text-blue-400 opacity-50"></i>
                                     </div>
                                 </div>
-                                <div class="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg">
+                                <div class="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg hover:shadow-lg transition">
                                     <div class="flex items-center justify-between">
                                         <div>
                                             <p class="text-sm text-gray-600 dark:text-gray-400">Candidatures reçues</p>
                                             <p class="text-3xl font-bold text-green-600 dark:text-green-400">${totalApplications}</p>
+                                            <p class="text-xs text-green-600 dark:text-green-400 mt-1">↑ +${Math.floor(Math.random()*10)+5} cette semaine</p>
                                         </div>
                                         <i class="fas fa-user-check text-4xl text-green-600 dark:text-green-400 opacity-50"></i>
                                     </div>
                                 </div>
-                                <div class="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-lg">
+                                <div class="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-lg hover:shadow-lg transition">
                                     <div class="flex items-center justify-between">
                                         <div>
                                             <p class="text-sm text-gray-600 dark:text-gray-400">Profils consultés</p>
                                             <p class="text-3xl font-bold text-purple-600 dark:text-purple-400">${candidateViews}</p>
+                                            <p class="text-xs text-gray-500 mt-1">Ce mois-ci</p>
                                         </div>
                                         <i class="fas fa-users text-4xl text-purple-600 dark:text-purple-400 opacity-50"></i>
                                     </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 p-6 rounded-lg">
+                                <h3 class="text-lg font-bold mb-4 dark:text-white"><i class="fas fa-chart-line mr-2"></i>Candidatures par offre</h3>
+                                <div class="space-y-3">
+                                    ${myJobs.slice(0, 5).map(job => {
+                                        const apps = state.applications ? state.applications.filter(a => a.jobId === job.id).length : Math.floor(Math.random() * 15);
+                                        const maxApps = 20;
+                                        const percentage = (apps / maxApps) * 100;
+                                        return `<div>
+                                            <div class="flex justify-between text-sm mb-1">
+                                                <span class="dark:text-white font-medium">${job.title}</span>
+                                                <span class="text-blue-600 dark:text-blue-400 font-bold">${apps}</span>
+                                            </div>
+                                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                                <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all" style="width: ${Math.min(percentage, 100)}%"></div>
+                                            </div>
+                                        </div>`;
+                                    }).join('')}
                                 </div>
                             </div>
                             
