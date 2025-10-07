@@ -98,6 +98,7 @@
 
             <!-- Barre d'outils en bas au centre -->
             <div class="absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-auto flex gap-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-full shadow-lg p-2">
+                <button id="help-btn" title="Aide et tutoriel" class="w-12 h-12 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition"><i class="fas fa-question-circle text-xl"></i></button>
                 <button id="locate-me-btn" title="Me localiser" class="w-12 h-12 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition"><i class="fas fa-crosshairs text-xl"></i></button>
                 <button id="match-mode-btn" title="Activer le mode association" class="w-12 h-12 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition"><i class="fas fa-link text-xl"></i></button>
                 <button id="favorites-btn" title="Voir les favoris" class="w-12 h-12 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition relative"><i class="fas fa-heart text-xl"></i><span id="favorites-count" class="absolute top-1 right-1 bg-pink-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center hidden"></span></button>
@@ -111,7 +112,13 @@
                     <button id="toggle-panel-btn" class="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 flex-shrink-0"><i class="fas fa-chevron-left"></i></button>
                 </div>
                 <div id="panel-content" class="p-4 flex flex-col min-h-0">
-                    <div class="relative py-2 flex-shrink-0"><input type="text" id="search-input" placeholder="Poste, compétence..." class="w-full pl-10 pr-4 py-3 text-md bg-gray-100 dark:bg-gray-700 border-2 border-transparent dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"><i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i></div>
+                    <div class="relative py-2 flex-shrink-0">
+                        <input type="text" id="search-input" placeholder="Poste, compétence..." class="w-full pl-10 pr-10 py-3 text-md bg-gray-100 dark:bg-gray-700 border-2 border-transparent dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <button id="save-search-btn" title="Sauvegarder cette recherche" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-500 transition">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
+                    </div>
                     <div class="mb-3 flex-shrink-0"><div id="filter-container" class="w-full flex bg-gray-200 dark:bg-gray-700 rounded-lg p-1"><button class="filter-btn active w-1/3 text-center py-2 px-2 rounded-md font-semibold text-sm text-gray-700 dark:text-gray-300" data-filter="all">Tous</button><button class="filter-btn w-1/3 text-center py-2 px-2 rounded-md font-semibold text-sm text-gray-700 dark:text-gray-300" data-filter="job">Emplois</button><button class="filter-btn w-1/3 text-center py-2 px-2 rounded-md font-semibold text-sm text-gray-700 dark:text-gray-300" data-filter="candidate">Profils</button></div></div>
                     
                     <div id="toggle-filters-btn" class="flex justify-between items-center py-2 cursor-pointer flex-shrink-0">
@@ -158,10 +165,10 @@
                 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { attribution: '&copy; OSM &copy; CARTO', maxZoom: 20 }).addTo(map);
 
                 const ui = {
-                    userMenuButton: document.getElementById('user-menu-button'), userMenu: document.getElementById('user-menu'), locateMeBtn: document.getElementById('locate-me-btn'), matchModeBtn: document.getElementById('match-mode-btn'), favoritesBtn: document.getElementById('favorites-btn'), favoritesCount: document.getElementById('favorites-count'), searchInput: document.getElementById('search-input'), resultsList: document.getElementById('results-list'), resultsHeader: document.getElementById('results-header'), resultsCount: document.getElementById('results-count'), toggleResultsBtn: document.getElementById('toggle-results-btn'), filterContainer: document.getElementById('filter-container'), advancedFilters: document.getElementById('advanced-filters'), toggleFiltersBtn: document.getElementById('toggle-filters-btn'), expFilterContainer: document.getElementById('experience-filter-container'), contractFilterContainer: document.getElementById('contract-filter-container'), workArrangementFilterContainer: document.getElementById('work-arrangement-filter-container'), salarySlider: document.getElementById('salary-slider'), salaryValue: document.getElementById('salary-value'), distanceSlider: document.getElementById('distance-slider'), distanceValue: document.getElementById('distance-value'), exportDataBtn: document.getElementById('export-data-btn'), routingControls: document.getElementById('routing-controls'), clearRouteBtn: document.getElementById('clear-route-btn'), searchPanel: document.getElementById('search-panel'), dragHandle: document.getElementById('drag-handle'), darkModeToggle: document.getElementById('dark-mode-toggle'), modalContainer: document.getElementById('modal-container'), togglePanelBtn: document.getElementById('toggle-panel-btn'),
+                    userMenuButton: document.getElementById('user-menu-button'), userMenu: document.getElementById('user-menu'), helpBtn: document.getElementById('help-btn'), saveSearchBtn: document.getElementById('save-search-btn'), locateMeBtn: document.getElementById('locate-me-btn'), matchModeBtn: document.getElementById('match-mode-btn'), favoritesBtn: document.getElementById('favorites-btn'), favoritesCount: document.getElementById('favorites-count'), searchInput: document.getElementById('search-input'), resultsList: document.getElementById('results-list'), resultsHeader: document.getElementById('results-header'), resultsCount: document.getElementById('results-count'), toggleResultsBtn: document.getElementById('toggle-results-btn'), filterContainer: document.getElementById('filter-container'), advancedFilters: document.getElementById('advanced-filters'), toggleFiltersBtn: document.getElementById('toggle-filters-btn'), expFilterContainer: document.getElementById('experience-filter-container'), contractFilterContainer: document.getElementById('contract-filter-container'), workArrangementFilterContainer: document.getElementById('work-arrangement-filter-container'), salarySlider: document.getElementById('salary-slider'), salaryValue: document.getElementById('salary-value'), distanceSlider: document.getElementById('distance-slider'), distanceValue: document.getElementById('distance-value'), exportDataBtn: document.getElementById('export-data-btn'), routingControls: document.getElementById('routing-controls'), clearRouteBtn: document.getElementById('clear-route-btn'), searchPanel: document.getElementById('search-panel'), dragHandle: document.getElementById('drag-handle'), darkModeToggle: document.getElementById('dark-mode-toggle'), modalContainer: document.getElementById('modal-container'), togglePanelBtn: document.getElementById('toggle-panel-btn'),
                 };
                 
-                let state = { currentUser: null, routingControl: null, userLocation: { lat: 48.85884, lon: 2.29435 }, userLocationMarker: null, firstInteraction: false, isMatchModeActive: false, matchStartPoint: null, markers: new Map(), favorites: new Set(), filters: { type: 'all', experience: 'all', salary: 120000, contract: 'all', workArrangement: 'all', distance: 50 }};
+                let state = { currentUser: null, routingControl: null, userLocation: { lat: 48.85884, lon: 2.29435 }, userLocationMarker: null, firstInteraction: false, isMatchModeActive: false, matchStartPoint: null, markers: new Map(), favorites: new Set(), filters: { type: 'all', experience: 'all', salary: 120000, contract: 'all', workArrangement: 'all', distance: 50 }, viewHistory: [], savedSearches: [] };
 
                 const markerClusters = L.markerClusterGroup();
                 map.addLayer(markerClusters);
@@ -173,6 +180,15 @@
                     { id: 2, type: 'candidate', name: 'Alice Martin', title: 'Chef de Projet Digital', avatar: 'https://placehold.co/100x100/f59e0b/ffffff?text=AM', location: { lat: 45.7640, lon: 4.8357 }, city: 'Lyon', tags: ['Agile', 'Scrum', 'Gestion'], softSkills: ['Leadership', 'Organisation', 'Communication'], experience: 'Confirmé', availability: 'Sous 1 mois', portfolioLink: 'https://example.com', background: [{ year: '2018-2023', role: 'Product Owner', company: 'WebAgency Lyon'}, { year: '2016-2018', role: 'Assistante Chef de Projet', company: 'Digital Corp'}], description: '5 ans d\'expérience, certifiée Scrum Master.' },
                     { id: 5, type: 'job', title: 'Designer UI/UX Junior', company: 'Creative Minds', logo: 'https://placehold.co/100x100/ec4899/ffffff?text=CM', companyDescription: 'Agence de design primée, nous créons des expériences digitales mémorables.', location: { lat: 45.7578, lon: 4.8320 }, city: 'Lyon', tags: ['Figma', 'Adobe XD', 'User Research'], softSkills: ['Créativité', 'Empathie', 'Collaboration'], experience: 'Junior', salary: 42000, contract: 'CDD', workArrangement: 'Sur site', description: 'Nous cherchons un designer talentueux pour créer des interfaces intuitives.' },
                     { id: 6, type: 'job', title: 'Chef de projet Marketing', company: 'DataCorp', logo: 'https://placehold.co/100x100/10b981/ffffff?text=DC', companyDescription: 'Nous transformons les données en décisions stratégiques pour les entreprises du CAC40.', location: { lat: 48.875, lon: 2.33 }, city: 'Paris', tags: ['Marketing', 'SEO', 'SEA'], softSkills: ['Organisation', 'Communication'], experience: 'Confirmé', salary: 55000, contract: 'Alternance', workArrangement: 'Hybride', description: 'Gérez nos campagnes marketing digitales.' },
+                    { id: 7, type: 'job', title: 'Développeur Mobile iOS', company: 'AppFactory', logo: 'https://placehold.co/100x100/8b5cf6/ffffff?text=AF', companyDescription: 'Startup innovante spécialisée dans les applications mobiles pour le secteur de la santé.', location: { lat: 43.2965, lon: 5.3698 }, city: 'Marseille', tags: ['Swift', 'SwiftUI', 'CoreData'], softSkills: ['Innovation', 'Rigueur'], experience: 'Confirmé', salary: 58000, contract: 'CDI', workArrangement: 'Hybride', description: 'Développez des applications iOS de qualité médicale.' },
+                    { id: 8, type: 'candidate', name: 'Sophie Bernard', title: 'DevOps Engineer', avatar: 'https://placehold.co/100x100/06b6d4/ffffff?text=SB', location: { lat: 43.6108, lon: 3.8767 }, city: 'Montpellier', tags: ['Docker', 'Kubernetes', 'AWS'], softSkills: ['Méthodique', 'Proactif'], experience: 'Confirmé', availability: 'Immédiate', portfolioLink: 'https://example.com', background: [{ year: '2019-2024', role: 'DevOps Engineer', company: 'CloudTech'}, { year: '2017-2019', role: 'Administrateur Système', company: 'HostNet'}], description: 'Experte en automatisation et CI/CD.' },
+                    { id: 9, type: 'job', title: 'Architecte Cloud', company: 'CloudMasters', logo: 'https://placehold.co/100x100/14b8a6/ffffff?text=CM', companyDescription: 'Cabinet de conseil en architecture cloud et transformation digitale.', location: { lat: 47.2184, lon: -1.5536 }, city: 'Nantes', tags: ['AWS', 'Azure', 'Architecture'], softSkills: ['Leadership technique', 'Vision stratégique'], experience: 'Senior', salary: 95000, contract: 'CDI', workArrangement: 'Télétravail', description: 'Concevez des architectures cloud scalables pour nos grands comptes.' },
+                    { id: 10, type: 'candidate', name: 'Marc Rousseau', title: 'Ingénieur QA', avatar: 'https://placehold.co/100x100/f97316/ffffff?text=MR', location: { lat: 48.5734, lon: 7.7521 }, city: 'Strasbourg', tags: ['Selenium', 'Jest', 'Cypress'], softSkills: ['Minutieux', 'Analytique'], experience: 'Junior', availability: 'Sous 2 mois', portfolioLink: 'https://example.com', background: [{ year: '2022-2024', role: 'Testeur QA', company: 'TestLab'}], description: 'Passionné par la qualité logicielle et l\'automatisation des tests.' },
+                    { id: 11, type: 'job', title: 'Product Manager', company: 'InnovateTech', logo: 'https://placehold.co/100x100/ef4444/ffffff?text=IT', companyDescription: 'Scale-up en pleine croissance dans le domaine de la fintech.', location: { lat: 48.8566, lon: 2.3522 }, city: 'Paris', tags: ['Product Management', 'Agile', 'Analytics'], softSkills: ['Leadership', 'Vision produit', 'Communication'], experience: 'Confirmé', salary: 70000, contract: 'CDI', workArrangement: 'Hybride', description: 'Définissez la vision produit et coordonnez les équipes de développement.' },
+                    { id: 12, type: 'candidate', name: 'Emma Lefebvre', title: 'UX Researcher', avatar: 'https://placehold.co/100x100/a855f7/ffffff?text=EL', location: { lat: 50.6292, lon: 3.0573 }, city: 'Lille', tags: ['User Research', 'Usability Testing', 'Figma'], softSkills: ['Empathie', 'Analyse', 'Communication'], experience: 'Confirmé', availability: 'Sous 1 mois', portfolioLink: 'https://example.com', background: [{ year: '2020-2024', role: 'UX Researcher', company: 'DesignStudio'}, { year: '2018-2020', role: 'UX Designer', company: 'WebCorp'}], description: 'Spécialisée en recherche utilisateur et tests d\'utilisabilité.' },
+                    { id: 13, type: 'job', title: 'Ingénieur Sécurité', company: 'SecureSoft', logo: 'https://placehold.co/100x100/dc2626/ffffff?text=SS', companyDescription: 'Éditeur de solutions de cybersécurité pour les entreprises.', location: { lat: 43.6047, lon: 1.4442 }, city: 'Toulouse', tags: ['Pentest', 'SIEM', 'Cryptographie'], softSkills: ['Rigueur', 'Curiosité', 'Éthique'], experience: 'Senior', salary: 80000, contract: 'CDI', workArrangement: 'Sur site', description: 'Protégez nos clients contre les cybermenaces et réalisez des audits de sécurité.' },
+                    { id: 14, type: 'candidate', name: 'Thomas Dubois', title: 'Développeur Frontend', avatar: 'https://placehold.co/100x100/0ea5e9/ffffff?text=TD', location: { lat: 47.4784, lon: -0.5632 }, city: 'Angers', tags: ['Vue.js', 'Nuxt', 'TailwindCSS'], softSkills: ['Créativité', 'Détail', 'Collaboration'], experience: 'Junior', availability: 'Immédiate', portfolioLink: 'https://example.com', background: [{ year: '2023-2024', role: 'Développeur Frontend', company: 'WebStudio'}], description: 'Développeur frontend passionné par les interfaces modernes et performantes.' },
+                    { id: 15, type: 'job', title: 'Consultant SAP', company: 'BusinessTech', logo: 'https://placehold.co/100x100/84cc16/ffffff?text=BT', companyDescription: 'Cabinet de conseil spécialisé en transformation digitale et ERP.', location: { lat: 48.1173, lon: -1.6778 }, city: 'Rennes', tags: ['SAP', 'ABAP', 'Gestion de projet'], softSkills: ['Conseil', 'Adaptabilité', 'Communication'], experience: 'Confirmé', salary: 72000, contract: 'CDI', workArrangement: 'Hybride', description: 'Accompagnez nos clients dans leurs projets SAP et transformation digitale.' }
                 ];
 
                 const createModal = (id, content) => { const modal = document.createElement('div'); modal.id = id; modal.className = 'modal-backdrop fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-70 z-[1050] hidden items-center justify-center'; modal.innerHTML = content; ui.modalContainer.appendChild(modal); };
@@ -207,6 +223,8 @@
                            html += `<a href="#" data-action="edit-profile" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-user-edit w-5"></i>Mon Profil</a>`;
                            html += `<a href="#" data-action="dashboard" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-chart-line w-5"></i>Mes candidatures</a>`;
                         }
+                        html += `<a href="#" data-action="saved-searches" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-bookmark w-5"></i>Recherches sauvegardées</a>`;
+                        html += `<a href="#" data-action="view-history" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-history w-5"></i>Historique</a>`;
                         html += `<a href="#" data-action="notifications" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-bell w-5"></i>Notifications</a>`;
                         html += `<a href="#" data-action="logout" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md"><i class="fas fa-sign-out-alt w-5"></i>Se déconnecter</a>`;
                     } else {
@@ -385,6 +403,12 @@
                 function showDetailsModal(itemId) {
                     const item = data.find(d => d.id === itemId);
                     if (!item) return;
+                    
+                    // Track viewing history
+                    if (!state.viewHistory.find(v => v.id === itemId)) {
+                        state.viewHistory.unshift({ id: itemId, date: new Date().toISOString(), item });
+                        if (state.viewHistory.length > 20) state.viewHistory.pop();
+                    }
                     
                     let content = '';
                     if (item.type === 'job') {
@@ -606,6 +630,200 @@
                         showToast('Géolocalisation non supportée.', 'error');
                     }
                 }
+                
+                function saveCurrentSearch() {
+                    const searchName = prompt('Nom de la recherche :');
+                    if (!searchName) return;
+                    state.savedSearches.push({
+                        id: state.savedSearches.length + 1,
+                        name: searchName,
+                        query: ui.searchInput.value,
+                        filters: { ...state.filters },
+                        date: new Date().toISOString()
+                    });
+                    showToast('Recherche sauvegardée !', 'success');
+                }
+                
+                function showSavedSearches() {
+                    let content = '';
+                    if (state.savedSearches.length === 0) {
+                        content = `<p class="text-center text-gray-500 py-8">Aucune recherche sauvegardée.</p>
+                            <div class="text-center mt-4">
+                                <button onclick="saveCurrentSearch()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                                    <i class="fas fa-save mr-2"></i>Sauvegarder la recherche actuelle
+                                </button>
+                            </div>`;
+                    } else {
+                        content = `<div class="space-y-3 mb-4">
+                            ${state.savedSearches.map(search => `
+                                <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold dark:text-white">${search.name}</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                                                ${search.query ? `Recherche: "${search.query}"` : 'Tous les résultats'} • 
+                                                Type: ${search.filters.type === 'all' ? 'Tous' : search.filters.type === 'job' ? 'Emplois' : 'Candidats'}
+                                            </p>
+                                            <p class="text-xs text-gray-500 mt-1">${new Date(search.date).toLocaleDateString('fr-FR')}</p>
+                                        </div>
+                                        <button onclick="loadSavedSearch(${search.id})" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm">
+                                            <i class="fas fa-search mr-1"></i>Charger
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="text-center">
+                            <button onclick="saveCurrentSearch()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                                <i class="fas fa-save mr-2"></i>Sauvegarder la recherche actuelle
+                            </button>
+                        </div>`;
+                    }
+                    
+                    const modal = document.createElement('div');
+                    modal.id = 'saved-searches-modal';
+                    modal.className = 'modal-backdrop fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-70 z-[1050] flex items-center justify-center';
+                    modal.innerHTML = `<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl m-4 p-8 transform max-h-[90vh] flex flex-col">
+                        <button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button>
+                        <h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Recherches sauvegardées</h2>
+                        <div class="overflow-y-auto">${content}</div>
+                    </div>`;
+                    ui.modalContainer.appendChild(modal);
+                    setTimeout(() => modal.querySelector('.modal-panel').classList.remove('hidden'), 10);
+                }
+                
+                function loadSavedSearch(searchId) {
+                    const search = state.savedSearches.find(s => s.id === searchId);
+                    if (!search) return;
+                    ui.searchInput.value = search.query || '';
+                    state.filters = { ...search.filters };
+                    performSearch();
+                    closeAllModals();
+                    showToast('Recherche chargée !', 'success');
+                }
+                
+                function showViewHistory() {
+                    let content = '';
+                    if (state.viewHistory.length === 0) {
+                        content = '<p class="text-center text-gray-500 py-8">Aucun historique de consultation.</p>';
+                    } else {
+                        content = `<div class="space-y-3">
+                            ${state.viewHistory.map(entry => {
+                                const item = entry.item;
+                                return `<div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:shadow-md transition" onclick="showDetailsModal(${item.id})">
+                                    <div class="flex items-start gap-3">
+                                        ${item.avatar || item.logo ? `<img src="${item.avatar || item.logo}" class="w-12 h-12 rounded-${item.type === 'candidate' ? 'full' : 'lg'}">` : ''}
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold dark:text-white">${item.type === 'job' ? item.title : item.name}</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-300">${item.type === 'job' ? item.company : item.title}</p>
+                                            <div class="flex items-center gap-3 mt-1 text-xs text-gray-500">
+                                                <span><i class="fas fa-map-marker-alt mr-1"></i>${item.city}</span>
+                                                <span><i class="fas fa-clock mr-1"></i>${new Date(entry.date).toLocaleString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
+                                            </div>
+                                        </div>
+                                        <span class="px-2 py-1 rounded text-xs ${item.type === 'job' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200'}">
+                                            ${item.type === 'job' ? 'Emploi' : 'Candidat'}
+                                        </span>
+                                    </div>
+                                </div>`;
+                            }).join('')}
+                        </div>`;
+                    }
+                    
+                    const modal = document.createElement('div');
+                    modal.id = 'history-modal';
+                    modal.className = 'modal-backdrop fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-70 z-[1050] flex items-center justify-center';
+                    modal.innerHTML = `<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl m-4 p-8 transform max-h-[90vh] flex flex-col">
+                        <button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button>
+                        <h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Historique de consultation</h2>
+                        <div class="overflow-y-auto">${content}</div>
+                    </div>`;
+                    ui.modalContainer.appendChild(modal);
+                    setTimeout(() => modal.querySelector('.modal-panel').classList.remove('hidden'), 10);
+                }
+                
+                function showHelp() {
+                    const content = `<div class="space-y-6">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-map-marked-alt text-6xl text-blue-500 mb-4"></i>
+                            <h3 class="text-2xl font-bold dark:text-white">Bienvenue sur JobMap by LTd</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mt-2">Votre plateforme de mise en relation emploi géolocalisée</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-search text-2xl text-blue-600 dark:text-blue-400"></i>
+                                    <h4 class="font-semibold dark:text-white">Recherche</h4>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Utilisez la barre de recherche pour trouver des emplois ou candidats par compétences, ville ou poste.</p>
+                            </div>
+                            
+                            <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-filter text-2xl text-green-600 dark:text-green-400"></i>
+                                    <h4 class="font-semibold dark:text-white">Filtres avancés</h4>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Affinez votre recherche avec les filtres : expérience, salaire, distance, type de contrat...</p>
+                            </div>
+                            
+                            <div class="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-link text-2xl text-purple-600 dark:text-purple-400"></i>
+                                    <h4 class="font-semibold dark:text-white">Mode Association</h4>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Sélectionnez un candidat puis une offre pour voir un rapport de compatibilité détaillé.</p>
+                            </div>
+                            
+                            <div class="p-4 bg-pink-50 dark:bg-pink-900/20 rounded-lg">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-heart text-2xl text-pink-600 dark:text-pink-400"></i>
+                                    <h4 class="font-semibold dark:text-white">Favoris</h4>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Ajoutez des offres ou profils à vos favoris pour les retrouver facilement.</p>
+                            </div>
+                            
+                            <div class="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-crosshairs text-2xl text-yellow-600 dark:text-yellow-400"></i>
+                                    <h4 class="font-semibold dark:text-white">Géolocalisation</h4>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Cliquez sur le bouton de géolocalisation pour centrer la carte sur votre position.</p>
+                            </div>
+                            
+                            <div class="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-route text-2xl text-orange-600 dark:text-orange-400"></i>
+                                    <h4 class="font-semibold dark:text-white">Itinéraires</h4>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Calculez l'itinéraire vers une offre d'emploi ou un candidat depuis votre position.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-6 rounded-lg">
+                            <h4 class="font-semibold text-lg mb-3 dark:text-white">Fonctionnalités Premium</h4>
+                            <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                                <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Sauvegarde de recherches personnalisées</li>
+                                <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Historique de consultation</li>
+                                <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Notifications en temps réel</li>
+                                <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Export de données en CSV</li>
+                                <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Tableau de bord avec statistiques</li>
+                                <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Système de candidature intégré</li>
+                            </ul>
+                        </div>
+                    </div>`;
+                    
+                    const modal = document.createElement('div');
+                    modal.id = 'help-modal';
+                    modal.className = 'modal-backdrop fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-70 z-[1050] flex items-center justify-center';
+                    modal.innerHTML = `<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-4xl m-4 p-8 transform max-h-[90vh] flex flex-col">
+                        <button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button>
+                        <h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Guide d'utilisation</h2>
+                        <div class="overflow-y-auto">${content}</div>
+                    </div>`;
+                    ui.modalContainer.appendChild(modal);
+                    setTimeout(() => modal.querySelector('.modal-panel').classList.remove('hidden'), 10);
+                }
 
                 function performSearch() {
                     state.firstInteraction = true;
@@ -711,6 +929,8 @@
                             case 'logout': state.currentUser = null; updateAuthUI(); showToast('Déconnecté.', 'info'); break;
                             case 'dashboard': showDashboard(); break;
                             case 'notifications': showNotifications(); break;
+                            case 'saved-searches': showSavedSearches(); break;
+                            case 'view-history': showViewHistory(); break;
                             case 'show-company': openModal('company-modal'); break;
                         }
                         return;
@@ -761,6 +981,8 @@
                 
                 ui.favoritesBtn.addEventListener('click', showFavoritesModal);
                 ui.locateMeBtn.addEventListener('click', getUserLocation);
+                ui.saveSearchBtn.addEventListener('click', saveCurrentSearch);
+                ui.helpBtn.addEventListener('click', showHelp);
                 
                 ui.darkModeToggle.addEventListener('click', () => { document.documentElement.classList.toggle('dark'); const icon = ui.darkModeToggle.querySelector('i'); if (document.documentElement.classList.contains('dark')) { icon.classList.replace('fa-moon', 'fa-sun'); localStorage.setItem('theme', 'dark'); } else { icon.classList.replace('fa-sun', 'fa-moon'); localStorage.setItem('theme', 'light'); } });
                 if (localStorage.getItem('theme') === 'dark') { document.documentElement.classList.add('dark'); ui.darkModeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun'); }
