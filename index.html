@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobMap by LTd - Trouvez des Emplois et Candidats</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha26-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; overflow: hidden; user-select: none; }
+        .dark body { background-color: #111827; }
+        #map { height: 100vh; width: 100%; z-index: 0; }
+        .leaflet-tile-pane { filter: brightness(1); transition: filter 0.3s ease-in-out; }
+        .dark .leaflet-tile-pane { filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7); }
+        #ui-overlay { z-index: 1001; }
+        .leaflet-popup-content-wrapper { border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .dark .leaflet-popup-content-wrapper { background: #1f2937; color: #d1d5db; }
+        .leaflet-popup-content { margin: 15px; font-size: 14px; line-height: 1.5; }
+        .popup-title { font-weight: 700; font-size: 16px; margin-bottom: 5px; color: #1a202c; }
+        .dark .popup-title, .dark .popup-company { color: #f9fafb; }
+        .popup-company { font-weight: 500; color: #4a5568; margin-bottom: 10px; }
+        .search-container { transition: all 0.3s ease-in-out; overflow: hidden; }
+        #drag-handle { cursor: move; }
+        .search-container.collapsed { width: 60px !important; height: 60px !important; padding: 0; }
+        .search-container.collapsed #panel-content, .search-container.collapsed #drag-handle { display: none; }
+        .search-container.collapsed #panel-header { padding: 0; height: 100%; border-bottom: none; display:flex; align-items:center; justify-content:center; }
+        #toggle-panel-btn i { transition: transform 0.3s ease; }
+        .search-container.collapsed #toggle-panel-btn i { transform: rotate(180deg); }
+        .custom-marker-icon { display: flex; align-items: center; justify-content: center; color: white; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: transform 0.2s ease; }
+        .custom-marker-icon:hover { transform: scale(1.2); }
+        .user-location-icon { background-color: #f59e0b; border: 3px solid white; border-radius: 50%; width: 18px !important; height: 18px !important; box-shadow: 0 0 10px #f59e0b; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 50% { transform: scale(1.2); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } }
+        .pulsing { animation: pulse 1.5s infinite; }
+        .modal-backdrop.hidden { display: none; }
+        .modal-panel.hidden { transform: scale(0.95); opacity: 0; }
+        .modal-panel { transition: all 0.2s ease-out; }
+        .filter-btn, .sub-filter-btn { transition: all 0.2s ease-in-out; }
+        .filter-btn.active, .sub-filter-btn.active { background-color: #3b82f6; color: white; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); }
+        .dark .filter-btn.active, .dark .sub-filter-btn.active { background-color: #2563eb; }
+        #startup-overlay.fade-out { opacity: 0; }
+        #progress-bar { animation: progressBar 1.5s ease-in-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeOut { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.95); } }
+        @keyframes progressBar { from { width: 0%; } to { width: 100%; } }
+        #user-menu { transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out; }
+        .routing-mode-btn.active { background-color: #3b82f6; color: white; }
+        .leaflet-routing-container { display: none; }
+        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 9999; }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        #match-mode-btn.active, #favorites-btn.has-favorites, #dark-mode-toggle.dark-on { color: #ec4899; box-shadow: 0 0 10px #ec489950; }
+        #match-mode-btn.active { color: #a855f7; box-shadow: 0 0 10px #a855f750; }
+        .score-circle { width: 120px; height: 120px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; color: white; border: 6px solid; }
+        .favorite-icon.is-favorite { color: #ec4899; }
+        .result-card { padding: 0.75rem; margin-bottom: 0.5rem; }
+        .result-card h3 { font-size: 0.95rem; font-weight: 600; }
+        .result-card p { font-size: 0.8rem; }
+        #results-list { transition: max-height 0.3s ease-in-out; max-height: 200px; /* Hauteur réduite par défaut */ overflow-y: auto; }
+        #results-list.expanded { max-height: 45vh; /* Hauteur étendue */ }
+        #advanced-filters { transition: all 0.3s ease-in-out; max-height: 500px; overflow: hidden; }
+        #advanced-filters.collapsed { max-height: 0; padding-top: 0; padding-bottom: 0; margin-bottom: 0; }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900">
+
+    <div id="startup-overlay" class="fixed inset-0 bg-gray-900 z-[9999] flex flex-col items-center justify-center text-white transition-opacity duration-1000 ease-in-out">
+        <div id="logo-container" class="text-center opacity-0" style="animation: fadeIn 1s ease-in forwards;"><i class="fas fa-map-marked-alt text-8xl text-blue-400"></i><h1 class="text-5xl font-bold mt-4">JobMap <span class="font-light">by LTd</span></h1></div>
+        <div id="loader-container" class="hidden w-1/3 max-w-sm mt-8"><div class="w-full bg-gray-700 rounded-full h-2.5"><div id="progress-bar" class="bg-blue-500 h-2.5 rounded-full"></div></div><p id="loading-text" class="text-center text-gray-300 mt-2 text-sm"></p></div>
+    </div>
+    
+    <div id="toast-container"></div>
+
+    <div id="app" class="relative w-screen h-screen">
+        <div id="map"></div>
+        <div id="ui-overlay" class="absolute top-0 left-0 w-full h-full p-4 md:p-6 pointer-events-none">
+            
+            <!-- Menu Utilisateur en haut à gauche -->
+            <div class="absolute top-6 left-6 pointer-events-auto">
+                <button id="user-menu-button" title="Menu utilisateur" class="w-14 h-14 bg-white dark:bg-gray-800 rounded-full shadow-lg flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-blue-500 transition"><i class="fas fa-user-circle text-4xl"></i></button>
+                <div id="user-menu" class="absolute bottom-full mb-2 left-0 bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-64 p-2 origin-bottom-left transform scale-95 opacity-0 hidden"></div>
+            </div>
+
+            <!-- Barre d'outils en bas au centre -->
+            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-auto flex gap-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-full shadow-lg p-2">
+                <button id="match-mode-btn" title="Activer le mode association" class="w-12 h-12 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition"><i class="fas fa-link text-xl"></i></button>
+                <button id="favorites-btn" title="Voir les favoris" class="w-12 h-12 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition relative"><i class="fas fa-heart text-xl"></i><span id="favorites-count" class="absolute top-1 right-1 bg-pink-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center hidden"></span></button>
+                <button id="dark-mode-toggle" title="Changer de thème" class="w-12 h-12 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition"><i class="fas fa-moon text-xl"></i></button>
+            </div>
+
+
+            <div id="search-panel" class="search-container absolute top-6 right-6 w-full max-w-sm md:max-w-xs lg:max-w-sm bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-xl shadow-2xl flex flex-col pointer-events-auto max-h-[90vh]">
+                <div id="panel-header" class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
+                    <div id="drag-handle" class="flex items-center gap-3 flex-grow"><i class="fas fa-map-marked-alt text-3xl text-blue-500"></i><div><h1 class="text-xl font-bold text-gray-800 dark:text-gray-100">JobMap</h1><p class="text-sm text-gray-500 dark:text-gray-400">by LTd</p></div></div>
+                    <button id="toggle-panel-btn" class="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 flex-shrink-0"><i class="fas fa-chevron-left"></i></button>
+                </div>
+                <div id="panel-content" class="p-4 flex flex-col min-h-0">
+                    <div class="relative py-2 flex-shrink-0"><input type="text" id="search-input" placeholder="Poste, compétence..." class="w-full pl-10 pr-4 py-3 text-md bg-gray-100 dark:bg-gray-700 border-2 border-transparent dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"><i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i></div>
+                    <div class="mb-3 flex-shrink-0"><div id="filter-container" class="w-full flex bg-gray-200 dark:bg-gray-700 rounded-lg p-1"><button class="filter-btn active w-1/3 text-center py-2 px-2 rounded-md font-semibold text-sm text-gray-700 dark:text-gray-300" data-filter="all">Tous</button><button class="filter-btn w-1/3 text-center py-2 px-2 rounded-md font-semibold text-sm text-gray-700 dark:text-gray-300" data-filter="job">Emplois</button><button class="filter-btn w-1/3 text-center py-2 px-2 rounded-md font-semibold text-sm text-gray-700 dark:text-gray-300" data-filter="candidate">Profils</button></div></div>
+                    
+                    <div id="toggle-filters-btn" class="flex justify-between items-center py-2 cursor-pointer flex-shrink-0">
+                         <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-300">Filtres avancés</h4>
+                         <i class="fas fa-chevron-up text-gray-500 dark:text-gray-400 transition-transform"></i>
+                    </div>
+                    <div id="advanced-filters" class="flex-shrink-0">
+                        <div class="space-y-3 pt-2 mb-3">
+                            <div><label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Type de contrat</label><div id="contract-filter-container" class="w-full flex bg-gray-200 dark:bg-gray-700 rounded-lg p-1 text-xs"><button class="sub-filter-btn active w-1/4 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-contract="all">Tous</button><button class="sub-filter-btn w-1/4 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-contract="CDI">CDI</button><button class="sub-filter-btn w-1/4 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-contract="CDD">CDD</button><button class="sub-filter-btn w-1/4 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-contract="Alternance">Alternance</button></div></div>
+                            <div><label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Mode de travail</label><div id="work-arrangement-filter-container" class="w-full flex bg-gray-200 dark:bg-gray-700 rounded-lg p-1 text-xs"><button class="sub-filter-btn active w-1/3 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-work="all">Tous</button><button class="sub-filter-btn w-1/3 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-work="Sur site">Sur site</button><button class="sub-filter-btn w-1/3 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-work="Hybride">Hybride</button></div></div>
+                            <div><label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Expérience</label><div id="experience-filter-container" class="w-full flex bg-gray-200 dark:bg-gray-700 rounded-lg p-1 text-xs"><button class="sub-filter-btn active w-1/4 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-exp="all">Tous</button><button class="sub-filter-btn w-1/4 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-exp="Junior">Junior</button><button class="sub-filter-btn w-1/4 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-exp="Confirmé">Confirmé</button><button class="sub-filter-btn w-1/4 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-exp="Senior">Senior</button></div></div>
+                            <div><label for="salary-slider" class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Salaire max: <span id="salary-value" class="font-bold text-blue-600 dark:text-blue-400"></span></label><input type="range" id="salary-slider" min="30000" max="120000" step="5000" value="120000" class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="results-header" class="flex justify-between items-center text-sm font-medium text-gray-500 dark:text-gray-400 mb-2 flex-shrink-0 hidden">
+                        <span id="results-count"></span>
+                        <button id="toggle-results-btn" title="Agrandir/Réduire" class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600"><i class="fas fa-chevron-up"></i></button>
+                    </div>
+                    <div id="results-list" class="flex-1 min-h-0 hidden pr-2"></div>
+                </div>
+            </div>
+            <div id="routing-controls" class="absolute top-[100px] right-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-1 flex gap-1 pointer-events-auto hidden"><button data-mode="car" class="routing-mode-btn w-10 h-10 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition active"><i class="fas fa-car"></i></button><button data-mode="bicycle" class="routing-mode-btn w-10 h-10 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"><i class="fas fa-bicycle"></i></button><button data-mode="foot" class="routing-mode-btn w-10 h-10 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"><i class="fas fa-walking"></i></button><div class="border-l dark:border-gray-600 mx-1"></div><button id="clear-route-btn" class="w-10 h-10 rounded-md text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition"><i class="fas fa-times"></i></button></div>
+        </div>
+    </div>
+    
+    <div id="modal-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const startupOverlay = document.getElementById('startup-overlay'), logoContainer = document.getElementById('logo-container'), loaderContainer = document.getElementById('loader-container');
+            setTimeout(() => { logoContainer.style.animation = 'fadeOut 1s ease-out forwards'; }, 1500);
+            setTimeout(() => { logoContainer.classList.add('hidden'); loaderContainer.classList.remove('hidden'); loaderContainer.style.animation = 'fadeIn 1s ease-in forwards'; }, 2500);
+            setTimeout(() => { startupOverlay.classList.add('fade-out'); startupOverlay.addEventListener('transitionend', () => startupOverlay.remove()); initializeApp(); }, 4200);
+
+            function initializeApp() {
+                const map = L.map('map').setView([46.603354, 1.888334], 6);
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { attribution: '&copy; OSM &copy; CARTO', maxZoom: 20 }).addTo(map);
+
+                const ui = {
+                    userMenuButton: document.getElementById('user-menu-button'), userMenu: document.getElementById('user-menu'), matchModeBtn: document.getElementById('match-mode-btn'), favoritesBtn: document.getElementById('favorites-btn'), favoritesCount: document.getElementById('favorites-count'), searchInput: document.getElementById('search-input'), resultsList: document.getElementById('results-list'), resultsHeader: document.getElementById('results-header'), resultsCount: document.getElementById('results-count'), toggleResultsBtn: document.getElementById('toggle-results-btn'), filterContainer: document.getElementById('filter-container'), advancedFilters: document.getElementById('advanced-filters'), toggleFiltersBtn: document.getElementById('toggle-filters-btn'), expFilterContainer: document.getElementById('experience-filter-container'), contractFilterContainer: document.getElementById('contract-filter-container'), workArrangementFilterContainer: document.getElementById('work-arrangement-filter-container'), salarySlider: document.getElementById('salary-slider'), salaryValue: document.getElementById('salary-value'), routingControls: document.getElementById('routing-controls'), clearRouteBtn: document.getElementById('clear-route-btn'), searchPanel: document.getElementById('search-panel'), dragHandle: document.getElementById('drag-handle'), darkModeToggle: document.getElementById('dark-mode-toggle'), modalContainer: document.getElementById('modal-container'), togglePanelBtn: document.getElementById('toggle-panel-btn'),
+                };
+                
+                let state = { currentUser: null, routingControl: null, userLocation: { lat: 48.85884, lon: 2.29435 }, userLocationMarker: null, firstInteraction: false, isMatchModeActive: false, matchStartPoint: null, markers: new Map(), favorites: new Set(), filters: { type: 'all', experience: 'all', salary: 120000, contract: 'all', workArrangement: 'all' }};
+
+                const markerClusters = L.markerClusterGroup();
+                map.addLayer(markerClusters);
+
+                let data = [
+                    { id: 1, type: 'job', title: 'Développeur Full-Stack', company: 'Tech Solutions Inc.', logo: 'https://placehold.co/100x100/3b82f6/ffffff?text=TSI', companyDescription: 'Leader en solutions logicielles B2B, nous innovons constamment pour nos clients.', location: { lat: 48.8566, lon: 2.3522 }, city: 'Paris', tags: ['React', 'Node.js', 'TypeScript', 'SQL'], softSkills: ['Travail d\'équipe', 'Communication', 'Créativité'], experience: 'Confirmé', salary: 65000, contract: 'CDI', workArrangement: 'Hybride', description: 'Rejoignez notre équipe agile pour construire des applications web innovantes.' },
+                    { id: 3, type: 'job', title: 'Data Scientist Senior', company: 'DataCorp', logo: 'https://placehold.co/100x100/10b981/ffffff?text=DC', companyDescription: 'Nous transformons les données en décisions stratégiques pour les entreprises du CAC40.', location: { lat: 48.8698, lon: 2.3344 }, city: 'Paris', tags: ['Python', 'Machine Learning', 'TensorFlow'], softSkills: ['Analyse critique', 'Résolution de problèmes'], experience: 'Senior', salary: 85000, contract: 'CDI', workArrangement: 'Télétravail', description: 'Expert en Machine Learning pour développer des modèles prédictifs.' },
+                    { id: 4, type: 'candidate', name: 'Jean Dupont', title: 'Développeur Backend', avatar: 'https://placehold.co/100x100/7c3aed/ffffff?text=JD', location: { lat: 48.8534, lon: 2.3488 }, city: 'Paris', tags: ['Java', 'Spring', 'SQL'], softSkills: ['Autonomie', 'Rigueur', 'Communication'], experience: 'Senior', availability: 'Immédiate', portfolioLink: 'https://example.com', background: [{ year: '2015-2023', role: 'Développeur Senior', company: 'Banque Générale'}, { year: '2012-2015', role: 'Développeur Java', company: 'Soft Services'}], description: '8 ans d\'expérience dans le secteur financier.' },
+                    { id: 2, type: 'candidate', name: 'Alice Martin', title: 'Chef de Projet Digital', avatar: 'https://placehold.co/100x100/f59e0b/ffffff?text=AM', location: { lat: 45.7640, lon: 4.8357 }, city: 'Lyon', tags: ['Agile', 'Scrum', 'Gestion'], softSkills: ['Leadership', 'Organisation', 'Communication'], experience: 'Confirmé', availability: 'Sous 1 mois', portfolioLink: 'https://example.com', background: [{ year: '2018-2023', role: 'Product Owner', company: 'WebAgency Lyon'}, { year: '2016-2018', role: 'Assistante Chef de Projet', company: 'Digital Corp'}], description: '5 ans d\'expérience, certifiée Scrum Master.' },
+                    { id: 5, type: 'job', title: 'Designer UI/UX Junior', company: 'Creative Minds', logo: 'https://placehold.co/100x100/ec4899/ffffff?text=CM', companyDescription: 'Agence de design primée, nous créons des expériences digitales mémorables.', location: { lat: 45.7578, lon: 4.8320 }, city: 'Lyon', tags: ['Figma', 'Adobe XD', 'User Research'], softSkills: ['Créativité', 'Empathie', 'Collaboration'], experience: 'Junior', salary: 42000, contract: 'CDD', workArrangement: 'Sur site', description: 'Nous cherchons un designer talentueux pour créer des interfaces intuitives.' },
+                    { id: 6, type: 'job', title: 'Chef de projet Marketing', company: 'DataCorp', logo: 'https://placehold.co/100x100/10b981/ffffff?text=DC', companyDescription: 'Nous transformons les données en décisions stratégiques pour les entreprises du CAC40.', location: { lat: 48.875, lon: 2.33 }, city: 'Paris', tags: ['Marketing', 'SEO', 'SEA'], softSkills: ['Organisation', 'Communication'], experience: 'Confirmé', salary: 55000, contract: 'Alternance', workArrangement: 'Hybride', description: 'Gérez nos campagnes marketing digitales.' },
+                ];
+
+                const createModal = (id, content) => { const modal = document.createElement('div'); modal.id = id; modal.className = 'modal-backdrop fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-70 z-[1050] hidden items-center justify-center'; modal.innerHTML = content; ui.modalContainer.appendChild(modal); };
+                const modals = {
+                    details: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-4xl m-4 transform hidden relative max-h-[90vh] flex flex-col"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10"><i class="fas fa-times fa-2x"></i></button><div id="details-modal-content" class="overflow-y-auto"></div></div>',
+                    login: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md m-4 p-8 transform hidden relative"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Connexion</h2><form id="login-form"><div class="mb-4"><label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label><input type="email" name="email" value="recruteur@jobmap.com" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg" required></div><div class="mb-6"><label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mot de passe</label><input type="password" name="password" value="password" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg" required></div><button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition shadow-lg">Se connecter</button></form></div>',
+                    signupCandidate: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-lg m-4 p-8 transform hidden relative overflow-y-auto max-h-[90vh]"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Créer un profil Candidat</h2><form id="signup-candidate-form" class="space-y-4"><input name="name" placeholder="Nom complet" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><input name="email" type="email" placeholder="Email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><input name="password" type="password" placeholder="Mot de passe" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><input name="title" placeholder="Titre du profil (ex: Développeur Web)" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><textarea name="tags" placeholder="Compétences (séparées par des virgules)" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required></textarea><button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-emerald-700 transition">Créer mon profil</button></form></div>',
+                    signupRecruiter: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md m-4 p-8 transform hidden relative"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Créer un compte Recruteur</h2><form id="signup-recruiter-form" class="space-y-4"><input name="name" placeholder="Votre nom" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><input name="email" type="email" placeholder="Email professionnel" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><input name="password" type="password" placeholder="Mot de passe" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-700 transition">Créer mon compte</button></form></div>',
+                    postJob: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl m-4 p-8 transform hidden relative max-h-[90vh] overflow-y-auto"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Poster une nouvelle offre</h2><form id="post-job-form" class="space-y-4"><input name="title" placeholder="Titre du poste" class="w-full p-2 border rounded dark:bg-gray-700" required><input name="company" placeholder="Nom de l\'entreprise" class="w-full p-2 border rounded dark:bg-gray-700" required><input name="city" placeholder="Ville" class="w-full p-2 border rounded dark:bg-gray-700" required><textarea name="description" placeholder="Description du poste" class="w-full p-2 border rounded dark:bg-gray-700" rows="4" required></textarea><input name="tags" placeholder="Compétences techniques (virgules)" class="w-full p-2 border rounded dark:bg-gray-700" required><input name="softSkills" placeholder="Compétences comportementales (virgules)" class="w-full p-2 border rounded dark:bg-gray-700" required><select name="experience" class="w-full p-2 border rounded dark:bg-gray-700" required><option>Junior</option><option>Confirmé</option><option>Senior</option></select><input name="salary" type="number" placeholder="Salaire annuel brut" class="w-full p-2 border rounded dark:bg-gray-700" required><button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700">Publier l\'offre</button></form></div>',
+                    editProfile: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-lg m-4 p-8 transform hidden relative max-h-[90vh] overflow-y-auto"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Modifier mon profil</h2><form id="edit-profile-form" class="space-y-4"></form></div>',
+                    matchReport: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-3xl m-4 p-8 transform hidden relative max-h-[90vh] flex flex-col"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-3xl font-bold text-center mb-6 text-gray-800 dark:text-white">Rapport de Compatibilité</h2><div id="match-report-content" class="overflow-y-auto"></div></div>',
+                    favorites: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl m-4 p-8 transform hidden relative max-h-[90vh] flex flex-col"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Mes Favoris</h2><div id="favorites-list" class="overflow-y-auto"></div></div>',
+                    dashboard: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-3xl m-4 p-8 transform hidden relative max-h-[90vh] flex flex-col"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-2xl font-bold text-center mb-6 dark:text-white">Tableau de Bord</h2><div id="dashboard-content" class="overflow-y-auto"></div></div>',
+                    company: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-3xl m-4 p-8 transform hidden relative max-h-[90vh] flex flex-col"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><div id="company-profile-content" class="overflow-y-auto"></div></div>'
+                };
+                for(const [key, value] of Object.entries(modals)) { createModal(key + '-modal', value); }
+
+                function showToast(message, type = 'info') { const el = document.createElement('div'); el.className = `toast p-4 text-white rounded-lg shadow-lg flex items-center gap-3 ${type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500'}`; el.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i><span>${message}</span>`; document.getElementById('toast-container').appendChild(el); setTimeout(() => el.classList.add('show'), 10); setTimeout(() => { el.classList.remove('show'); el.addEventListener('transitionend', () => el.remove()); }, 3000); }
+                function openModal(modalId) { closeAllModals(); const modal = document.getElementById(modalId); if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); setTimeout(() => modal.querySelector('.modal-panel').classList.remove('hidden'), 10); } }
+                function closeAllModals() { ui.modalContainer.querySelectorAll('.modal-backdrop').forEach(modal => { modal.querySelector('.modal-panel')?.classList.add('hidden'); modal.classList.add('hidden'); modal.classList.remove('flex'); }); }
+                
+                function updateAuthUI() { 
+                    let html = '';
+                    if (state.currentUser) {
+                        html = `<div class="p-2 text-gray-800 dark:text-gray-100"><p class="font-semibold">${state.currentUser.name}</p><p class="text-sm text-gray-500 dark:text-gray-400">${state.currentUser.email}</p></div><hr class="my-2 dark:border-gray-700">`;
+                        if(state.currentUser.type === 'recruiter') {
+                            html += `<a href="#" data-action="post-job" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-plus-circle w-5"></i>Poster une offre</a>`;
+                        }
+                        if(state.currentUser.type === 'candidate') {
+                           html += `<a href="#" data-action="edit-profile" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-user-edit w-5"></i>Mon Profil</a>`;
+                        }
+                        html += `<a href="#" data-action="logout" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md"><i class="fas fa-sign-out-alt w-5"></i>Se déconnecter</a>`;
+                    } else {
+                        html = `<a href="#" data-action="login" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-sign-in-alt w-5"></i><span>Se connecter</span></a><hr class="my-2 dark:border-gray-700"><p class="px-4 pt-2 pb-1 text-xs font-semibold text-gray-500 uppercase">S'inscrire</p>
+                            <a href="#" data-action="signup-candidate" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-user-graduate w-5 text-emerald-500"></i><span>Je suis candidat</span></a>
+                            <a href="#" data-action="signup-recruiter" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-user-tie w-5 text-indigo-500"></i><span>Je suis recruteur</span></a>
+                            <a href="#" data-action="signup-employer" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-building w-5 text-sky-500"></i><span>Je suis employeur</span></a>`;
+                    }
+                    ui.userMenu.innerHTML = html;
+                }
+
+                function calculateRoute(start, end) { if (state.routingControl) map.removeControl(state.routingControl); state.routingControl = L.Routing.control({ waypoints: [L.latLng(start.lat, start.lon), L.latLng(end.lat, end.lon)], router: L.Routing.osrmv1({ serviceUrl: `https://router.project-osrm.org/route/v1`, profile: 'car' }), createMarker: () => null, lineOptions: { styles: [{color: '#0ea5e9', opacity: 0.8, weight: 6}] } }).addTo(map); ui.routingControls.classList.remove('hidden'); }
+                function toggleMatchMode() { state.isMatchModeActive = !state.isMatchModeActive; ui.matchModeBtn.classList.toggle('active', state.isMatchModeActive); showToast(state.isMatchModeActive ? "Mode Association activé." : "Mode Association désactivé.", "info"); if (!state.isMatchModeActive && state.matchStartPoint) { state.markers.get(state.matchStartPoint.id)?._icon.classList.remove('pulsing'); state.matchStartPoint = null; } }
+                function calculateAndShowMatchReport(candidate, job) { const calculateScore = (jobSkills, candidateSkills) => { const common = [...jobSkills].filter(skill => candidateSkills.has(skill)); const missing = [...jobSkills].filter(skill => !candidateSkills.has(skill)); const score = jobSkills.size > 0 ? Math.round((common.length / jobSkills.size) * 100) : 0; return { common, missing, score }; }; const techReport = calculateScore(new Set(job.tags.map(t=>t.toLowerCase())), new Set(candidate.tags.map(t=>t.toLowerCase()))); const softReport = calculateScore(new Set(job.softSkills.map(t=>t.toLowerCase())), new Set(candidate.softSkills.map(t=>t.toLowerCase()))); const totalScore = Math.round((techReport.score * 0.7) + (softReport.score * 0.3)); let scoreColor, recommendation; if (totalScore >= 75) { scoreColor = 'bg-green-500 border-green-600'; recommendation = '<p class="text-lg font-semibold text-green-700"><i class="fas fa-check-circle mr-2"></i>Excellente compatibilité !</p>'; } else if (totalScore >= 40) { scoreColor = 'bg-yellow-500 border-yellow-600'; recommendation = '<p class="text-lg font-semibold text-yellow-700"><i class="fas fa-info-circle mr-2"></i>Bonne compatibilité.</p>'; } else { scoreColor = 'bg-red-500 border-red-600'; recommendation = '<p class="text-lg font-semibold text-red-700"><i class="fas fa-exclamation-triangle mr-2"></i>Compatibilité faible.</p>'; } const listSkills = (skills, color) => skills.map(s => `<span class="bg-${color}-100 dark:bg-${color}-900/40 text-${color}-800 dark:text-${color}-300 px-2 py-1 text-sm rounded">${s}</span>`).join(' ') || '<span>-</span>'; const content = `<div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center"><div class="md:col-span-1 flex flex-col items-center text-center"><div class="score-circle ${scoreColor}">${totalScore}%</div><h3 class="text-2xl font-bold mt-4 dark:text-white">Score Global</h3></div><div class="md:col-span-2"><div class="mb-4"><h4 class="font-bold text-lg dark:text-white">${candidate.name} (${candidate.experience})</h4><p class="text-gray-600 dark:text-gray-300">${candidate.title}</p></div><div class="text-center my-2"><i class="fas fa-arrows-alt-v text-gray-400 text-2xl"></i></div><div><h4 class="font-bold text-lg dark:text-white">${job.title} (${job.experience})</h4><p class="text-gray-600 dark:text-gray-300">${job.company}</p></div></div></div><hr class="my-6 dark:border-gray-600"><div><h3 class="font-bold text-xl mb-4 dark:text-white">Analyse des Compétences</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="space-y-4"><div><h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Techniques (${techReport.common.length}/${job.tags.length})</h4><div class="flex flex-wrap gap-2">${listSkills(techReport.common, 'green')}</div>${techReport.missing.length > 0 ? `<div class="mt-2"><h5 class="text-xs text-red-500">Manquantes:</h5><div class="flex flex-wrap gap-1">${listSkills(techReport.missing, 'red')}</div></div>` : ''}</div></div><div class="space-y-4"><div><h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Comportementales (${softReport.common.length}/${job.softSkills.length})</h4><div class="flex flex-wrap gap-2">${listSkills(softReport.common, 'green')}</div>${softReport.missing.length > 0 ? `<div class="mt-2"><h5 class="text-xs text-red-500">Manquantes:</h5><div class="flex flex-wrap gap-1">${listSkills(softReport.missing, 'red')}</div></div>` : ''}</div></div></div></div><div class="mt-8 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg text-center">${recommendation}</div><div class="mt-8 flex justify-end gap-4"><button class="close-modal-btn bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-100 font-bold py-3 px-6 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500">Fermer</button><button id="view-route-from-report" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700">Voir l'itinéraire</button></div>`; document.getElementById('match-report-content').innerHTML = content; document.getElementById('view-route-from-report').onclick = () => { closeAllModals(); calculateRoute(candidate.location, job.location); }; openModal('matchReport-modal'); }
+                function toggleFavorite(id) { if (state.favorites.has(id)) { state.favorites.delete(id); showToast('Retiré des favoris.', 'info'); } else { state.favorites.add(id); showToast('Ajouté aux favoris !', 'success'); } ui.favoritesCount.textContent = state.favorites.size; ui.favoritesCount.classList.toggle('hidden', state.favorites.size === 0); ui.favoritesBtn.classList.toggle('has-favorites', state.favorites.size > 0); performSearch(); }
+                function showDetailsModal(itemId) { /* Unchanged but necessary */ }
+
+                function handleMatchClick(item) {
+                    if (!state.isMatchModeActive) return;
+                    if (!state.matchStartPoint) {
+                        if (item.type === 'candidate') {
+                            state.matchStartPoint = item; state.markers.get(item.id)?._icon.classList.add('pulsing'); showToast(`${item.name} sélectionné. Choisissez une offre.`, 'info');
+                        } else { showToast("Veuillez d'abord sélectionner un candidat.", 'error'); }
+                    } else {
+                        if (item.type === 'job') { calculateAndShowMatchReport(state.matchStartPoint, item); toggleMatchMode(); } 
+                        else if (item.id === state.matchStartPoint.id) { toggleMatchMode(); } 
+                        else { showToast("Veuillez sélectionner une offre d'emploi.", 'error'); }
+                    }
+                }
+
+                function performSearch() {
+                    state.firstInteraction = true;
+                    const query = ui.searchInput.value.toLowerCase();
+                    const filteredData = data.filter(item => {
+                        const typeMatch = state.filters.type === 'all' || item.type === state.filters.type;
+                        const expMatch = state.filters.experience === 'all' || (item.experience && item.experience === state.filters.experience);
+                        const salaryMatch = item.type === 'candidate' || (item.salary && item.salary <= state.filters.salary);
+                        const contractMatch = state.filters.contract === 'all' || (item.type === 'candidate' || (item.contract && item.contract === state.filters.contract));
+                        const workArrangementMatch = state.filters.workArrangement === 'all' || (item.type === 'candidate' || (item.workArrangement && (item.workArrangement.includes(state.filters.workArrangement))));
+                        const queryMatch = !query || Object.values(item).some(val => String(val).toLowerCase().includes(query)) || (item.tags && item.tags.some(tag => tag.toLowerCase().includes(query)));
+                        return typeMatch && expMatch && salaryMatch && contractMatch && workArrangementMatch && queryMatch;
+                    });
+                    displayData(filteredData);
+                }
+
+                function displayData(filteredData) {
+                    markerClusters.clearLayers(); state.markers.clear(); ui.resultsList.innerHTML = '';
+                    const showList = state.firstInteraction;
+                    ui.resultsHeader.classList.toggle('hidden', !showList); ui.resultsList.classList.toggle('hidden', !showList);
+                    ui.resultsCount.textContent = `${filteredData.length} résultat(s)`;
+                    if (filteredData.length === 0 && showList) { ui.resultsList.innerHTML = `<p class="text-center text-gray-500 p-4">Aucun résultat trouvé.</p>`; return; }
+                    filteredData.forEach(item => {
+                        const markerHtml = `<div class="custom-marker-icon w-8 h-8 ${item.type === 'job' ? 'bg-blue-500' : 'bg-emerald-500'}"><i class="fas ${item.type === 'job' ? 'fa-briefcase' : 'fa-user'}"></i></div>`;
+                        const icon = L.divIcon({ className: '', html: markerHtml, iconSize: [32, 32], iconAnchor: [16, 16] });
+                        const marker = L.marker([item.location.lat, item.location.lon], { icon: icon });
+                        marker.on('click', () => handleMatchClick(item));
+                        marker.bindPopup(`<div class="popup-title">${item.title}</div><div class="popup-company">${item.type === 'job' ? item.company : item.name}</div><button class="view-details-btn bg-blue-500 text-white text-xs font-bold py-1 px-3 rounded-full w-full" data-id="${item.id}">Voir détails</button>`);
+                        markerClusters.addLayer(marker); state.markers.set(item.id, marker);
+                        if(showList) {
+                            const isFav = state.favorites.has(item.id);
+                            ui.resultsList.innerHTML += `<div class="result-card bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md dark:hover:bg-gray-700 transition flex justify-between items-start ${item.type === 'job' ? 'border-l-4 border-blue-500' : 'border-l-4 border-emerald-500'}"><div class="cursor-pointer flex-grow" data-id="${item.id}" data-lat="${item.location.lat}" data-lon="${item.location.lon}"><h3 class="text-gray-800 dark:text-gray-100">${item.title}</h3><p class="text-gray-600 dark:text-gray-300">${item.type === 'job' ? item.company : item.name}</p><p class="text-gray-400 mt-1"><i class="fas fa-map-marker-alt mr-1"></i>${item.city}</p></div><button class="favorite-icon p-2 text-gray-300 dark:text-gray-500 hover:text-pink-500 ${isFav ? 'is-favorite' : ''}" data-id="${item.id}"><i class="fas fa-heart"></i></button></div>`;
+                        }
+                    });
+                }
+                
+                // --- EVENT LISTENERS ---
+                document.addEventListener('click', e => {
+                    const closeModalBtn = e.target.closest('.close-modal-btn');
+                    if (closeModalBtn) { e.preventDefault(); closeAllModals(); return; }
+                    const actionTarget = e.target.closest('[data-action]');
+                    if (actionTarget) {
+                        e.preventDefault(); const { action } = actionTarget.dataset;
+                        switch(action) {
+                            case 'login': openModal('login-modal'); break;
+                            case 'signup-candidate': openModal('signupCandidate-modal'); break;
+                            case 'signup-recruiter': openModal('signupRecruiter-modal'); break;
+                            case 'signup-employer': openModal('signupEmployer-modal'); break;
+                            case 'post-job': openModal('postJob-modal'); break;
+                            case 'edit-profile': 
+                                const form = document.getElementById('edit-profile-form');
+                                const user = data.find(u => u.id === state.currentUser.id);
+                                form.innerHTML = `<input name="title" value="${user.title}" class="w-full p-2 border rounded dark:bg-gray-700"><button type="submit" class="w-full bg-blue-600 text-white p-2 rounded">Sauvegarder</button>`;
+                                openModal('editProfile-modal'); 
+                                break;
+                            case 'logout': state.currentUser = null; updateAuthUI(); showToast('Déconnecté.', 'info'); break;
+                            case 'dashboard': openModal('dashboard-modal'); break;
+                            case 'show-company': openModal('company-modal'); break;
+                        }
+                        return;
+                    }
+                    if (e.target.closest('.favorite-icon')) { toggleFavorite(parseInt(e.target.closest('.favorite-icon').dataset.id)); }
+                });
+                
+                document.getElementById('login-form').addEventListener('submit', e => { e.preventDefault(); state.currentUser = {id: 99, name: "Recruteur Test", email: e.target.email.value, type: 'recruiter'}; closeAllModals(); updateAuthUI(); showToast('Connexion réussie !', 'success'); });
+                document.getElementById('signup-candidate-form').addEventListener('submit', e => { e.preventDefault(); const name = e.target.name.value; state.currentUser = {id: data.length + 1, name, email: e.target.email.value, type: 'candidate'}; data.push({id: state.currentUser.id, type:'candidate', name, title: e.target.title.value, tags: e.target.tags.value.split(','), location: {lat: 48.85, lon: 2.35}, city: 'Paris'}); closeAllModals(); updateAuthUI(); showToast(`Bienvenue, ${name} !`, 'success'); performSearch(); });
+                document.getElementById('post-job-form').addEventListener('submit', e => { e.preventDefault(); const newJob = {id: data.length + 1, type: 'job', title: e.target.title.value, company: e.target.company.value, city: e.target.city.value, description: e.target.description.value, tags: e.target.tags.value.split(','), softSkills: e.target.softSkills.value.split(','), experience: e.target.experience.value, salary: parseInt(e.target.salary.value), location: { lat: 48.85, lon: 2.35 }, contract: 'CDI', workArrangement: 'Hybride' }; data.push(newJob); closeAllModals(); showToast('Offre publiée !', 'success'); performSearch(); });
+                
+                ui.darkModeToggle.addEventListener('click', () => { document.documentElement.classList.toggle('dark'); const icon = ui.darkModeToggle.querySelector('i'); if (document.documentElement.classList.contains('dark')) { icon.classList.replace('fa-moon', 'fa-sun'); localStorage.setItem('theme', 'dark'); } else { icon.classList.replace('fa-sun', 'fa-moon'); localStorage.setItem('theme', 'light'); } });
+                if (localStorage.getItem('theme') === 'dark') { document.documentElement.classList.add('dark'); ui.darkModeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun'); }
+                
+                ui.userMenuButton.addEventListener('click', e => { e.stopPropagation(); ui.userMenu.classList.toggle('hidden'); ui.userMenu.classList.toggle('opacity-0'); ui.userMenu.classList.toggle('scale-95');});
+                document.addEventListener('click', e => { if (!e.target.closest('#user-menu-button') && !e.target.closest('#user-menu')) { ui.userMenu.classList.add('hidden', 'opacity-0', 'scale-95'); }});
+                ui.togglePanelBtn.addEventListener('click', () => ui.searchPanel.classList.toggle('collapsed'));
+                ui.matchModeBtn.addEventListener('click', toggleMatchMode);
+                ui.searchInput.addEventListener('keyup', performSearch);
+                ui.filterContainer.addEventListener('click', e => { const target = e.target.closest('button'); if(target) { ui.filterContainer.querySelector('.active').classList.remove('active'); target.classList.add('active'); state.filters.type = target.dataset.filter; performSearch(); } });
+                
+                [ui.expFilterContainer, ui.contractFilterContainer, ui.workArrangementFilterContainer].forEach(container => {
+                    container.addEventListener('click', e => {
+                        const target = e.target.closest('.sub-filter-btn');
+                        if (target) {
+                            container.querySelector('.active').classList.remove('active'); target.classList.add('active');
+                            if (target.dataset.exp) state.filters.experience = target.dataset.exp;
+                            if (target.dataset.contract) state.filters.contract = target.dataset.contract;
+                            if (target.dataset.work) state.filters.workArrangement = target.dataset.work;
+                            performSearch();
+                        }
+                    });
+                });
+                
+                ui.salarySlider.addEventListener('input', e => { state.filters.salary = parseInt(e.target.value); ui.salaryValue.textContent = `${state.filters.salary.toLocaleString('fr-FR')} €`; });
+                ui.salarySlider.addEventListener('change', performSearch);
+                ui.resultsList.addEventListener('click', e => { const card = e.target.closest('[data-id][data-lat]'); if (card) showDetailsModal(parseInt(card.dataset.id)); });
+                map.on('popupopen', e => e.popup.getElement().querySelector('.view-details-btn')?.addEventListener('click', ev => showDetailsModal(ev.currentTarget.dataset.id)));
+                
+                ui.toggleResultsBtn.addEventListener('click', () => { ui.resultsList.classList.toggle('expanded'); const icon = ui.toggleResultsBtn.querySelector('i'); icon.classList.toggle('fa-chevron-up'); icon.classList.toggle('fa-chevron-down'); });
+                ui.toggleFiltersBtn.addEventListener('click', () => { ui.advancedFilters.classList.toggle('collapsed'); const icon = ui.toggleFiltersBtn.querySelector('i'); icon.classList.toggle('fa-chevron-up'); icon.classList.toggle('fa-chevron-down'); });
+                
+                updateAuthUI(); performSearch();
+            }
+        });
+    </script>
+</body>
+</html>
+
+
