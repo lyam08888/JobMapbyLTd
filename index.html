@@ -222,7 +222,10 @@
                     company: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-3xl m-4 p-8 transform hidden relative max-h-[90vh] flex flex-col"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><div id="company-profile-content" class="overflow-y-auto"></div></div>',
                     spontaneousApplication: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl m-4 transform hidden relative max-h-[90vh] flex flex-col"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10"><i class="fas fa-times fa-2x"></i></button><div class="overflow-y-auto p-8"><h2 class="text-2xl font-bold text-center mb-6 dark:text-white"><i class="fas fa-paper-plane text-blue-500 mr-2"></i>Candidature Spontanée</h2><form id="spontaneous-application-form" class="space-y-4"><div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg mb-4"><p class="text-sm text-gray-700 dark:text-gray-300"><i class="fas fa-info-circle mr-2"></i>Envoyez votre candidature spontanée aux entreprises qui acceptent ce type de candidature.</p></div><input name="company" placeholder="Nom de l\'entreprise" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required><textarea name="message" placeholder="Votre message de motivation..." class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" rows="6" required></textarea><div class="flex items-center gap-2 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="text-sm text-gray-600 dark:text-gray-300">CV à joindre (simulation)</span></div><button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition"><i class="fas fa-paper-plane mr-2"></i>Envoyer la candidature</button></form></div></div>',
                     messages: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-3xl m-4 p-8 transform hidden relative max-h-[90vh] flex flex-col"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-2xl font-bold text-center mb-6 dark:text-white"><i class="fas fa-envelope mr-2"></i>Messages</h2><div id="messages-content" class="overflow-y-auto"></div></div>',
-                    jobAlerts: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl m-4 p-8 transform hidden relative max-h-[90vh] flex flex-col"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-2xl font-bold text-center mb-6 dark:text-white"><i class="fas fa-bell mr-2"></i>Alertes Emploi</h2><div id="job-alerts-content" class="overflow-y-auto"></div></div>'
+                    jobAlerts: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl m-4 p-8 transform hidden relative max-h-[90vh] flex flex-col"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-2xl font-bold text-center mb-6 dark:text-white"><i class="fas fa-bell mr-2"></i>Alertes Emploi</h2><div id="job-alerts-content" class="overflow-y-auto"></div></div>',
+                    calendar: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-4xl m-4 p-8 transform hidden relative max-h-[90vh] flex flex-col"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-2xl font-bold text-center mb-6 dark:text-white"><i class="fas fa-calendar-alt mr-2"></i>Calendrier d\'entretiens</h2><div id="calendar-content" class="overflow-y-auto"></div></div>',
+                    jobComparator: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-5xl m-4 p-8 transform hidden relative max-h-[90vh] flex flex-col"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-2xl font-bold text-center mb-6 dark:text-white"><i class="fas fa-balance-scale mr-2"></i>Comparateur d\'offres</h2><div id="comparator-content" class="overflow-y-auto"></div></div>',
+                    careerCoach: '<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-3xl m-4 p-8 transform hidden relative max-h-[90vh] flex flex-col"><button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times fa-2x"></i></button><h2 class="text-2xl font-bold text-center mb-6 dark:text-white"><i class="fas fa-user-tie mr-2"></i>Coach Carrière</h2><div id="career-coach-content" class="overflow-y-auto"></div></div>'
                 };
                 for(const [key, value] of Object.entries(modals)) { createModal(key + '-modal', value); }
 
@@ -237,13 +240,18 @@
                         if(state.currentUser.type === 'recruiter' || state.currentUser.type === 'employer') {
                             html += `<a href="#" data-action="post-job" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-plus-circle w-5 text-blue-500"></i>Poster une offre</a>`;
                             html += `<a href="#" data-action="dashboard" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-chart-line w-5 text-green-500"></i>Tableau de bord</a>`;
+                            html += `<a href="#" data-action="calendar" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-calendar-alt w-5 text-red-500"></i>Calendrier d'entretiens</a>`;
+                            html += `<a href="#" data-action="show-company" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-building w-5 text-indigo-500"></i>Profil entreprise</a>`;
                             html += `<a href="#" data-action="messages" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-envelope w-5 text-purple-500"></i>Messages</a>`;
                         }
                         if(state.currentUser.type === 'candidate') {
                            html += `<a href="#" data-action="edit-profile" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-user-edit w-5 text-blue-500"></i>Mon Profil</a>`;
                            html += `<a href="#" data-action="dashboard" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-chart-line w-5 text-green-500"></i>Mes candidatures</a>`;
+                           html += `<a href="#" data-action="calendar" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-calendar-alt w-5 text-red-500"></i>Calendrier d'entretiens</a>`;
+                           html += `<a href="#" data-action="job-comparator" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-balance-scale w-5 text-cyan-500"></i>Comparateur d'offres</a>`;
                            html += `<a href="#" data-action="spontaneous-application" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-paper-plane w-5 text-indigo-500"></i>Candidature spontanée</a>`;
                            html += `<a href="#" data-action="salary-insights" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-chart-bar w-5 text-teal-500"></i>Baromètre des salaires</a>`;
+                           html += `<a href="#" data-action="career-coach" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-user-tie w-5 text-rose-500"></i>Coach Carrière</a>`;
                            html += `<a href="#" data-action="job-alerts" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-bell w-5 text-yellow-500"></i>Alertes emploi</a>`;
                            html += `<a href="#" data-action="messages" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-envelope w-5 text-purple-500"></i>Messages</a>`;
                         }
@@ -472,7 +480,191 @@
 
                 function calculateRoute(start, end) { if (state.routingControl) map.removeControl(state.routingControl); state.routingControl = L.Routing.control({ waypoints: [L.latLng(start.lat, start.lon), L.latLng(end.lat, end.lon)], router: L.Routing.osrmv1({ serviceUrl: `https://router.project-osrm.org/route/v1`, profile: 'car' }), createMarker: () => null, lineOptions: { styles: [{color: '#0ea5e9', opacity: 0.8, weight: 6}] } }).addTo(map); ui.routingControls.classList.remove('hidden'); }
                 function toggleMatchMode() { state.isMatchModeActive = !state.isMatchModeActive; ui.matchModeBtn.classList.toggle('active', state.isMatchModeActive); showToast(state.isMatchModeActive ? "Mode Association activé." : "Mode Association désactivé.", "info"); if (!state.isMatchModeActive && state.matchStartPoint) { state.markers.get(state.matchStartPoint.id)?._icon.classList.remove('pulsing'); state.matchStartPoint = null; } }
-                function calculateAndShowMatchReport(candidate, job) { const calculateScore = (jobSkills, candidateSkills) => { const common = [...jobSkills].filter(skill => candidateSkills.has(skill)); const missing = [...jobSkills].filter(skill => !candidateSkills.has(skill)); const score = jobSkills.size > 0 ? Math.round((common.length / jobSkills.size) * 100) : 0; return { common, missing, score }; }; const techReport = calculateScore(new Set(job.tags.map(t=>t.toLowerCase())), new Set(candidate.tags.map(t=>t.toLowerCase()))); const softReport = calculateScore(new Set(job.softSkills.map(t=>t.toLowerCase())), new Set(candidate.softSkills.map(t=>t.toLowerCase()))); const totalScore = Math.round((techReport.score * 0.7) + (softReport.score * 0.3)); let scoreColor, recommendation; if (totalScore >= 75) { scoreColor = 'bg-green-500 border-green-600'; recommendation = '<p class="text-lg font-semibold text-green-700"><i class="fas fa-check-circle mr-2"></i>Excellente compatibilité !</p>'; } else if (totalScore >= 40) { scoreColor = 'bg-yellow-500 border-yellow-600'; recommendation = '<p class="text-lg font-semibold text-yellow-700"><i class="fas fa-info-circle mr-2"></i>Bonne compatibilité.</p>'; } else { scoreColor = 'bg-red-500 border-red-600'; recommendation = '<p class="text-lg font-semibold text-red-700"><i class="fas fa-exclamation-triangle mr-2"></i>Compatibilité faible.</p>'; } const listSkills = (skills, color) => skills.map(s => `<span class="bg-${color}-100 dark:bg-${color}-900/40 text-${color}-800 dark:text-${color}-300 px-2 py-1 text-sm rounded">${s}</span>`).join(' ') || '<span>-</span>'; const content = `<div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center"><div class="md:col-span-1 flex flex-col items-center text-center"><div class="score-circle ${scoreColor}">${totalScore}%</div><h3 class="text-2xl font-bold mt-4 dark:text-white">Score Global</h3></div><div class="md:col-span-2"><div class="mb-4"><h4 class="font-bold text-lg dark:text-white">${candidate.name} (${candidate.experience})</h4><p class="text-gray-600 dark:text-gray-300">${candidate.title}</p></div><div class="text-center my-2"><i class="fas fa-arrows-alt-v text-gray-400 text-2xl"></i></div><div><h4 class="font-bold text-lg dark:text-white">${job.title} (${job.experience})</h4><p class="text-gray-600 dark:text-gray-300">${job.company}</p></div></div></div><hr class="my-6 dark:border-gray-600"><div><h3 class="font-bold text-xl mb-4 dark:text-white">Analyse des Compétences</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="space-y-4"><div><h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Techniques (${techReport.common.length}/${job.tags.length})</h4><div class="flex flex-wrap gap-2">${listSkills(techReport.common, 'green')}</div>${techReport.missing.length > 0 ? `<div class="mt-2"><h5 class="text-xs text-red-500">Manquantes:</h5><div class="flex flex-wrap gap-1">${listSkills(techReport.missing, 'red')}</div></div>` : ''}</div></div><div class="space-y-4"><div><h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Comportementales (${softReport.common.length}/${job.softSkills.length})</h4><div class="flex flex-wrap gap-2">${listSkills(softReport.common, 'green')}</div>${softReport.missing.length > 0 ? `<div class="mt-2"><h5 class="text-xs text-red-500">Manquantes:</h5><div class="flex flex-wrap gap-1">${listSkills(softReport.missing, 'red')}</div></div>` : ''}</div></div></div></div><div class="mt-8 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg text-center">${recommendation}</div><div class="mt-8 flex justify-end gap-4"><button class="close-modal-btn bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-100 font-bold py-3 px-6 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500">Fermer</button><button id="view-route-from-report" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700">Voir l'itinéraire</button></div>`; document.getElementById('match-report-content').innerHTML = content; document.getElementById('view-route-from-report').onclick = () => { closeAllModals(); calculateRoute(candidate.location, job.location); }; openModal('matchReport-modal'); }
+                function calculateAndShowMatchReport(candidate, job) { 
+                    const calculateScore = (jobSkills, candidateSkills) => { 
+                        const common = [...jobSkills].filter(skill => candidateSkills.has(skill)); 
+                        const missing = [...jobSkills].filter(skill => !candidateSkills.has(skill)); 
+                        const score = jobSkills.size > 0 ? Math.round((common.length / jobSkills.size) * 100) : 0; 
+                        return { common, missing, score }; 
+                    }; 
+                    
+                    const techReport = calculateScore(new Set(job.tags.map(t=>t.toLowerCase())), new Set(candidate.tags.map(t=>t.toLowerCase()))); 
+                    const softReport = calculateScore(new Set(job.softSkills.map(t=>t.toLowerCase())), new Set(candidate.softSkills.map(t=>t.toLowerCase()))); 
+                    
+                    const expLevels = { 'Junior': 1, 'Confirmé': 2, 'Senior': 3 };
+                    const candidateExpLevel = expLevels[candidate.experience] || 1;
+                    const jobExpLevel = expLevels[job.experience] || 1;
+                    const expScore = Math.max(0, 100 - Math.abs(candidateExpLevel - jobExpLevel) * 25);
+                    
+                    const calculateDistance = (lat1, lon1, lat2, lon2) => {
+                        const R = 6371;
+                        const dLat = (lat2 - lat1) * Math.PI / 180;
+                        const dLon = (lon2 - lon1) * Math.PI / 180;
+                        const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+                        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                        return R * c;
+                    };
+                    const distance = calculateDistance(candidate.location.lat, candidate.location.lon, job.location.lat, job.location.lon);
+                    const locationScore = Math.max(0, 100 - (distance / 100) * 100);
+                    
+                    const totalScore = Math.round((techReport.score * 0.5) + (softReport.score * 0.2) + (expScore * 0.2) + (locationScore * 0.1)); 
+                    
+                    let scoreColor, recommendation, actionText; 
+                    if (totalScore >= 75) { 
+                        scoreColor = 'bg-green-500 border-green-600'; 
+                        recommendation = '<p class="text-lg font-semibold text-green-700 dark:text-green-400"><i class="fas fa-check-circle mr-2"></i>Excellente compatibilité ! Ce candidat correspond très bien au profil recherché.</p>'; 
+                        actionText = 'Excellent match';
+                    } else if (totalScore >= 60) { 
+                        scoreColor = 'bg-blue-500 border-blue-600'; 
+                        recommendation = '<p class="text-lg font-semibold text-blue-700 dark:text-blue-400"><i class="fas fa-thumbs-up mr-2"></i>Bonne compatibilité. Quelques compétences à développer mais le profil est prometteur.</p>'; 
+                        actionText = 'Bon match';
+                    } else if (totalScore >= 40) { 
+                        scoreColor = 'bg-yellow-500 border-yellow-600'; 
+                        recommendation = '<p class="text-lg font-semibold text-yellow-700 dark:text-yellow-400"><i class="fas fa-info-circle mr-2"></i>Compatibilité moyenne. Certaines compétences clés manquent mais une formation peut combler les lacunes.</p>'; 
+                        actionText = 'Match partiel';
+                    } else { 
+                        scoreColor = 'bg-red-500 border-red-600'; 
+                        recommendation = '<p class="text-lg font-semibold text-red-700 dark:text-red-400"><i class="fas fa-exclamation-triangle mr-2"></i>Compatibilité faible. Le profil ne correspond pas aux exigences principales du poste.</p>'; 
+                        actionText = 'Match faible';
+                    } 
+                    
+                    const listSkills = (skills, color) => skills.map(s => \`<span class="bg-\${color}-100 dark:bg-\${color}-900/40 text-\${color}-800 dark:text-\${color}-300 px-2 py-1 text-sm rounded">\${s}</span>\`).join(' ') || '<span class="text-gray-500">Aucune</span>'; 
+                    
+                    const content = \`<div class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                            <div class="md:col-span-1 flex flex-col items-center text-center">
+                                <div class="score-circle \${scoreColor} shadow-lg mb-3">\${totalScore}%</div>
+                                <h3 class="text-2xl font-bold dark:text-white">Score Global</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">\${actionText}</p>
+                            </div>
+                            <div class="md:col-span-2">
+                                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-4 rounded-lg mb-3">
+                                    <div class="flex items-start gap-3 mb-3">
+                                        \${candidate.avatar ? \`<img src="\${candidate.avatar}" class="w-16 h-16 rounded-full border-2 border-blue-500">\` : ''}
+                                        <div class="flex-1">
+                                            <h4 class="font-bold text-lg dark:text-white">\${candidate.name}</h4>
+                                            <p class="text-gray-600 dark:text-gray-300 text-sm">\${candidate.title}</p>
+                                            <p class="text-xs text-gray-500 mt-1"><i class="fas fa-briefcase mr-1"></i>\${candidate.experience} • <i class="fas fa-map-marker-alt mr-1"></i>\${candidate.city}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center my-3">
+                                    <i class="fas fa-arrows-alt-v text-gray-400 text-2xl"></i>
+                                </div>
+                                <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-4 rounded-lg">
+                                    <div class="flex items-start gap-3">
+                                        \${job.logo ? \`<img src="\${job.logo}" class="w-16 h-16 rounded-lg">\` : ''}
+                                        <div class="flex-1">
+                                            <h4 class="font-bold text-lg dark:text-white">\${job.title}</h4>
+                                            <p class="text-gray-600 dark:text-gray-300 text-sm">\${job.company}</p>
+                                            <p class="text-xs text-gray-500 mt-1"><i class="fas fa-briefcase mr-1"></i>\${job.experience} • <i class="fas fa-map-marker-alt mr-1"></i>\${job.city}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr class="dark:border-gray-600">
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg text-center">
+                                <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">\${techReport.score}%</div>
+                                <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Compétences tech.</div>
+                            </div>
+                            <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg text-center">
+                                <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">\${softReport.score}%</div>
+                                <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Soft skills</div>
+                            </div>
+                            <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg text-center">
+                                <div class="text-3xl font-bold text-green-600 dark:text-green-400">\${expScore}%</div>
+                                <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Expérience</div>
+                            </div>
+                            <div class="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg text-center">
+                                <div class="text-3xl font-bold text-orange-600 dark:text-orange-400">\${Math.round(locationScore)}%</div>
+                                <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Proximité (\${Math.round(distance)}km)</div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-bold text-xl mb-4 dark:text-white"><i class="fas fa-chart-bar mr-2"></i>Analyse détaillée</h3>
+                            <div class="space-y-4">
+                                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-4 rounded-lg">
+                                    <h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+                                        <i class="fas fa-code text-blue-600"></i>
+                                        Compétences techniques (\${techReport.common.length}/\${job.tags.length})
+                                    </h4>
+                                    <div class="space-y-2">
+                                        \${techReport.common.length > 0 ? \`<div>
+                                            <p class="text-xs text-green-700 dark:text-green-400 font-semibold mb-1"><i class="fas fa-check mr-1"></i>Compétences maîtrisées:</p>
+                                            <div class="flex flex-wrap gap-2">\${listSkills(techReport.common, 'green')}</div>
+                                        </div>\` : ''}
+                                        \${techReport.missing.length > 0 ? \`<div>
+                                            <p class="text-xs text-red-600 dark:text-red-400 font-semibold mb-1"><i class="fas fa-times mr-1"></i>Compétences à acquérir:</p>
+                                            <div class="flex flex-wrap gap-2">\${listSkills(techReport.missing, 'red')}</div>
+                                        </div>\` : ''}
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-4 rounded-lg">
+                                    <h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+                                        <i class="fas fa-user-check text-purple-600"></i>
+                                        Compétences comportementales (\${softReport.common.length}/\${job.softSkills.length})
+                                    </h4>
+                                    <div class="space-y-2">
+                                        \${softReport.common.length > 0 ? \`<div>
+                                            <p class="text-xs text-green-700 dark:text-green-400 font-semibold mb-1"><i class="fas fa-check mr-1"></i>Qualités présentes:</p>
+                                            <div class="flex flex-wrap gap-2">\${listSkills(softReport.common, 'green')}</div>
+                                        </div>\` : ''}
+                                        \${softReport.missing.length > 0 ? \`<div>
+                                            <p class="text-xs text-red-600 dark:text-red-400 font-semibold mb-1"><i class="fas fa-times mr-1"></i>Qualités recherchées:</p>
+                                            <div class="flex flex-wrap gap-2">\${listSkills(softReport.missing, 'red')}</div>
+                                        </div>\` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 p-5 rounded-lg">
+                            <h3 class="font-bold text-lg mb-3 dark:text-white"><i class="fas fa-lightbulb mr-2"></i>Recommandations</h3>
+                            \${recommendation}
+                            \${totalScore >= 60 ? \`
+                                <div class="mt-4 space-y-2">
+                                    <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Points forts:</p>
+                                    <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                        \${techReport.common.length > 0 ? \`<li><i class="fas fa-check text-green-600 mr-2"></i>Maîtrise \${techReport.common.length} compétences techniques clés</li>\` : ''}
+                                        \${softReport.common.length > 0 ? \`<li><i class="fas fa-check text-green-600 mr-2"></i>Possède \${softReport.common.length} soft skills recherchées</li>\` : ''}
+                                        \${expScore >= 75 ? \`<li><i class="fas fa-check text-green-600 mr-2"></i>Niveau d'expérience adapté</li>\` : ''}
+                                        \${locationScore >= 75 ? \`<li><i class="fas fa-check text-green-600 mr-2"></i>Proximité géographique favorable</li>\` : ''}
+                                    </ul>
+                                </div>
+                            \` : ''}
+                            \${techReport.missing.length > 0 && totalScore >= 40 ? \`
+                                <div class="mt-4 space-y-2">
+                                    <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Axes d'amélioration:</p>
+                                    <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                        <li><i class="fas fa-arrow-right text-orange-600 mr-2"></i>Formation sur: \${techReport.missing.slice(0, 3).join(', ')}</li>
+                                    </ul>
+                                </div>
+                            \` : ''}
+                        </div>
+                        
+                        <div class="flex gap-4 justify-end pt-4">
+                            <button class="close-modal-btn bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-100 font-bold py-3 px-6 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500">
+                                Fermer
+                            </button>
+                            <button id="view-route-from-report" class="bg-emerald-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-emerald-700">
+                                <i class="fas fa-route mr-2"></i>Voir l'itinéraire
+                            </button>
+                            \${state.currentUser?.type === 'recruiter' ? \`<button onclick="contactCandidate(\${candidate.id}); closeAllModals();" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700">
+                                <i class="fas fa-envelope mr-2"></i>Contacter le candidat
+                            </button>\` : ''}
+                        </div>
+                    </div>\`; 
+                    
+                    document.getElementById('match-report-content').innerHTML = content; 
+                    document.getElementById('view-route-from-report').onclick = () => { closeAllModals(); calculateRoute(candidate.location, job.location); }; 
+                    openModal('matchReport-modal'); 
+                }
                 function toggleFavorite(id) { if (state.favorites.has(id)) { state.favorites.delete(id); showToast('Retiré des favoris.', 'info'); } else { state.favorites.add(id); showToast('Ajouté aux favoris !', 'success'); } ui.favoritesCount.textContent = state.favorites.size; ui.favoritesCount.classList.toggle('hidden', state.favorites.size === 0); ui.favoritesBtn.classList.toggle('has-favorites', state.favorites.size > 0); performSearch(); }
                 
                 function showDetailsModal(itemId) {
@@ -488,18 +680,30 @@
                     let content = '';
                     if (item.type === 'job') {
                         const isFav = state.favorites.has(item.id);
+                        const matchingCandidates = data.filter(c => c.type === 'candidate').slice(0, 3);
+                        const applications = state.applications ? state.applications.filter(a => a.jobId === item.id).length : Math.floor(Math.random() * 30);
+                        const publishedDays = Math.floor(Math.random() * 15) + 1;
+                        
                         content = `<div class="p-6">
                             <div class="flex items-start gap-4 mb-6">
                                 ${item.logo ? `<img src="${item.logo}" alt="${item.company}" class="w-20 h-20 rounded-lg shadow">` : ''}
                                 <div class="flex-1">
-                                    <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">${item.title}</h2>
-                                    <p class="text-xl text-gray-600 dark:text-gray-300">${item.company}</p>
-                                    <div class="flex items-center gap-4 mt-2 text-sm text-gray-500 dark:text-gray-400 flex-wrap">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">${item.title}</h2>
+                                        <span class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs rounded-full">Actif</span>
+                                    </div>
+                                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-2">${item.company}</p>
+                                    <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 flex-wrap">
                                         <span><i class="fas fa-map-marker-alt mr-1"></i>${item.city}</span>
                                         <span><i class="fas fa-briefcase mr-1"></i>${item.contract}</span>
                                         <span><i class="fas fa-laptop-house mr-1"></i>${item.workArrangement}</span>
                                         <span><i class="fas fa-euro-sign mr-1"></i>${item.salary?.toLocaleString('fr-FR')} €/an</span>
                                         ${item.industry ? `<span class="bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 px-2 py-1 rounded text-xs"><i class="fas fa-industry mr-1"></i>${item.industry}</span>` : ''}
+                                    </div>
+                                    <div class="flex items-center gap-4 mt-2 text-xs text-gray-500">
+                                        <span><i class="fas fa-clock mr-1"></i>Publié il y a ${publishedDays} jour${publishedDays > 1 ? 's' : ''}</span>
+                                        <span><i class="fas fa-users mr-1"></i>${applications} candidature${applications > 1 ? 's' : ''}</span>
+                                        <span><i class="fas fa-eye mr-1"></i>${Math.floor(Math.random() * 200) + 50} vues</span>
                                     </div>
                                 </div>
                                 <button class="favorite-icon p-3 text-2xl ${isFav ? 'text-pink-500' : 'text-gray-300'} hover:text-pink-500" data-id="${item.id}">
@@ -508,43 +712,131 @@
                             </div>
                             
                             ${item.companyDescription ? `<div class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                                <h3 class="font-semibold text-lg mb-2 dark:text-white">À propos de l'entreprise</h3>
-                                <p class="text-gray-700 dark:text-gray-300">${item.companyDescription}</p>
+                                <h3 class="font-semibold text-lg mb-2 dark:text-white"><i class="fas fa-building mr-2"></i>À propos de l'entreprise</h3>
+                                <p class="text-gray-700 dark:text-gray-300 mb-3">${item.companyDescription}</p>
+                                <button onclick="showCompanyProfile('${item.company}')" class="text-blue-600 dark:text-blue-400 hover:underline text-sm">
+                                    <i class="fas fa-arrow-right mr-1"></i>Voir le profil complet de l'entreprise
+                                </button>
                             </div>` : ''}
                             
                             <div class="mb-6">
-                                <h3 class="font-semibold text-lg mb-2 dark:text-white">Description du poste</h3>
-                                <p class="text-gray-700 dark:text-gray-300">${item.description}</p>
+                                <h3 class="font-semibold text-lg mb-3 dark:text-white"><i class="fas fa-file-alt mr-2"></i>Description du poste</h3>
+                                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                    <p class="text-gray-700 dark:text-gray-300 mb-3">${item.description}</p>
+                                    <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">
+                                        <h4 class="font-semibold mb-2 dark:text-white">Missions principales:</h4>
+                                        <ul class="list-disc list-inside space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                                            <li>Développer et maintenir les fonctionnalités de l'application</li>
+                                            <li>Collaborer avec l'équipe pour définir les besoins techniques</li>
+                                            <li>Assurer la qualité du code et la documentation</li>
+                                            <li>Participer aux revues de code et au mentorat</li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                                <div>
-                                    <h3 class="font-semibold text-lg mb-2 dark:text-white">Compétences techniques requises</h3>
+                                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-4 rounded-lg">
+                                    <h3 class="font-semibold text-lg mb-3 dark:text-white"><i class="fas fa-code mr-2"></i>Compétences techniques requises</h3>
                                     <div class="flex flex-wrap gap-2">
-                                        ${item.tags.map(tag => `<span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">${tag}</span>`).join('')}
+                                        ${item.tags.map(tag => `<span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-medium">${tag}</span>`).join('')}
                                     </div>
                                 </div>
-                                <div>
-                                    <h3 class="font-semibold text-lg mb-2 dark:text-white">Compétences comportementales</h3>
+                                <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-4 rounded-lg">
+                                    <h3 class="font-semibold text-lg mb-3 dark:text-white"><i class="fas fa-user-check mr-2"></i>Compétences comportementales</h3>
                                     <div class="flex flex-wrap gap-2">
-                                        ${item.softSkills?.map(skill => `<span class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm">${skill}</span>`).join('') || '<span class="text-gray-500">Non spécifié</span>'}
+                                        ${item.softSkills?.map(skill => `<span class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm font-medium">${skill}</span>`).join('') || '<span class="text-gray-500">Non spécifié</span>'}
                                     </div>
                                 </div>
                             </div>
+                            
+                            <div class="mb-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-5 rounded-lg">
+                                <h3 class="font-semibold text-lg mb-3 dark:text-white"><i class="fas fa-gift mr-2"></i>Avantages</h3>
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                    <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                                        <i class="fas fa-check-circle text-green-500"></i>
+                                        <span>Télétravail partiel</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                                        <i class="fas fa-check-circle text-green-500"></i>
+                                        <span>Tickets restaurant</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                                        <i class="fas fa-check-circle text-green-500"></i>
+                                        <span>Mutuelle santé</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                                        <i class="fas fa-check-circle text-green-500"></i>
+                                        <span>RTT</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                                        <i class="fas fa-check-circle text-green-500"></i>
+                                        <span>Formation continue</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                                        <i class="fas fa-check-circle text-green-500"></i>
+                                        <span>Équipement fourni</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-6 bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
+                                <h3 class="font-semibold text-lg mb-3 dark:text-white"><i class="fas fa-clipboard-list mr-2"></i>Processus de recrutement</h3>
+                                <div class="space-y-2">
+                                    <div class="flex items-center gap-3 text-sm">
+                                        <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
+                                        <span class="text-gray-700 dark:text-gray-300">Entretien téléphonique (30 min)</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 text-sm">
+                                        <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
+                                        <span class="text-gray-700 dark:text-gray-300">Test technique (2h)</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 text-sm">
+                                        <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                                        <span class="text-gray-700 dark:text-gray-300">Entretien technique avec l'équipe (1h30)</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 text-sm">
+                                        <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">4</div>
+                                        <span class="text-gray-700 dark:text-gray-300">Entretien RH et décision (45 min)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            ${matchingCandidates.length > 0 ? `<div class="mb-6 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 p-5 rounded-lg">
+                                <h3 class="font-semibold text-lg mb-3 dark:text-white"><i class="fas fa-users-cog mr-2"></i>Candidats recommandés</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                    ${matchingCandidates.map(candidate => {
+                                        const matchScore = Math.floor(Math.random() * 30) + 70;
+                                        return `<div class="bg-white dark:bg-gray-700 p-3 rounded-lg cursor-pointer hover:shadow-md transition" onclick="showDetailsModal(${candidate.id})">
+                                            <div class="flex items-center gap-2 mb-2">
+                                                <img src="${candidate.avatar}" class="w-10 h-10 rounded-full">
+                                                <div class="flex-1">
+                                                    <p class="font-semibold text-sm dark:text-white">${candidate.name}</p>
+                                                    <p class="text-xs text-gray-500 dark:text-gray-400">${candidate.title}</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center justify-between mt-2">
+                                                <span class="text-xs text-gray-600 dark:text-gray-400">${matchScore}% match</span>
+                                                <span class="text-xs text-blue-600 dark:text-blue-400 hover:underline">Voir profil</span>
+                                            </div>
+                                        </div>`;
+                                    }).join('')}
+                                </div>
+                            </div>` : ''}
                             
                             ${item.acceptsSpontaneous ? `<div class="mb-4 p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg border border-indigo-200 dark:border-indigo-700">
                                 <p class="text-sm text-indigo-700 dark:text-indigo-300"><i class="fas fa-star mr-2"></i>Cette entreprise accepte les <strong>candidatures spontanées</strong></p>
                             </div>` : ''}
                             
                             <div class="flex gap-3 mt-6">
-                                ${state.currentUser?.type === 'candidate' ? `<button onclick="applyToJob(${item.id})" class="flex-1 bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition">
-                                    <i class="fas fa-paper-plane mr-2"></i>Postuler
+                                ${state.currentUser?.type === 'candidate' ? `<button onclick="applyToJob(${item.id})" class="flex-1 bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition shadow-lg">
+                                    <i class="fas fa-paper-plane mr-2"></i>Postuler maintenant
                                 </button>` : ''}
                                 <button onclick="showCompanyProfile('${item.company}')" class="flex-1 bg-purple-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-purple-700 transition">
                                     <i class="fas fa-building mr-2"></i>Entreprise
                                 </button>
                                 <button onclick="calculateRoute({lat: ${state.userLocation.lat}, lon: ${state.userLocation.lon}}, {lat: ${item.location.lat}, lon: ${item.location.lon}}); closeAllModals();" class="flex-1 bg-emerald-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-emerald-700 transition">
-                                    <i class="fas fa-route mr-2"></i>Voir l'itinéraire
+                                    <i class="fas fa-route mr-2"></i>Itinéraire
                                 </button>
                                 <button class="bg-gray-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition" onclick="shareItem(${item.id})">
                                     <i class="fas fa-share-alt"></i>
@@ -553,16 +845,27 @@
                         </div>`;
                     } else if (item.type === 'candidate') {
                         const isFav = state.favorites.has(item.id);
+                        const matchingJobs = data.filter(j => j.type === 'job').slice(0, 3);
+                        const profileStrength = Math.floor(Math.random() * 20) + 80;
+                        const profileViews = Math.floor(Math.random() * 100) + 20;
+                        
                         content = `<div class="p-6">
                             <div class="flex items-start gap-4 mb-6">
-                                ${item.avatar ? `<img src="${item.avatar}" alt="${item.name}" class="w-20 h-20 rounded-full shadow">` : ''}
+                                ${item.avatar ? `<img src="${item.avatar}" alt="${item.name}" class="w-20 h-20 rounded-full shadow-lg border-2 border-blue-500">` : ''}
                                 <div class="flex-1">
-                                    <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">${item.name}</h2>
-                                    <p class="text-xl text-gray-600 dark:text-gray-300">${item.title}</p>
-                                    <div class="flex items-center gap-4 mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">${item.name}</h2>
+                                        ${item.certifications && item.certifications.length > 0 ? '<span class="bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-2 py-1 text-xs rounded-full"><i class="fas fa-certificate mr-1"></i>Certifié</span>' : ''}
+                                    </div>
+                                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-2">${item.title}</p>
+                                    <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 flex-wrap">
                                         <span><i class="fas fa-map-marker-alt mr-1"></i>${item.city}</span>
                                         <span><i class="fas fa-briefcase mr-1"></i>${item.experience}</span>
-                                        <span><i class="fas fa-clock mr-1"></i>Disponibilité: ${item.availability || 'À négocier'}</span>
+                                        <span><i class="fas fa-clock mr-1"></i>Dispo: ${item.availability || 'À négocier'}</span>
+                                    </div>
+                                    <div class="flex items-center gap-4 mt-2 text-xs text-gray-500">
+                                        <span><i class="fas fa-eye mr-1"></i>${profileViews} vues</span>
+                                        <span><i class="fas fa-chart-line mr-1"></i>Profil ${profileStrength}% complet</span>
                                     </div>
                                 </div>
                                 <button class="favorite-icon p-3 text-2xl ${isFav ? 'text-pink-500' : 'text-gray-300'} hover:text-pink-500" data-id="${item.id}">
@@ -570,55 +873,114 @@
                                 </button>
                             </div>
                             
-                            <div class="mb-6">
-                                <h3 class="font-semibold text-lg mb-2 dark:text-white">À propos</h3>
-                                <p class="text-gray-700 dark:text-gray-300">${item.description}</p>
+                            <div class="mb-6 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                                <h3 class="font-semibold text-lg mb-2 dark:text-white"><i class="fas fa-user mr-2"></i>Présentation</h3>
+                                <p class="text-gray-700 dark:text-gray-300 mb-3">${item.description}</p>
+                                <div class="grid grid-cols-2 gap-3 mt-3">
+                                    <div class="bg-white dark:bg-gray-700 p-2 rounded text-center">
+                                        <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">${item.background ? item.background.length : 0}</p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">Expériences</p>
+                                    </div>
+                                    <div class="bg-white dark:bg-gray-700 p-2 rounded text-center">
+                                        <p class="text-2xl font-bold text-green-600 dark:text-green-400">${item.certifications ? item.certifications.length : 0}</p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">Certifications</p>
+                                    </div>
+                                </div>
                             </div>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                                <div>
-                                    <h3 class="font-semibold text-lg mb-2 dark:text-white">Compétences techniques</h3>
+                                <div class="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 p-4 rounded-lg">
+                                    <h3 class="font-semibold text-lg mb-3 dark:text-white"><i class="fas fa-code mr-2"></i>Compétences techniques</h3>
                                     <div class="flex flex-wrap gap-2">
-                                        ${item.tags.map(tag => `<span class="bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-3 py-1 rounded-full text-sm">${tag}</span>`).join('')}
+                                        ${item.tags.map(tag => `<span class="bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-3 py-1 rounded-full text-sm font-medium">${tag}</span>`).join('')}
                                     </div>
                                 </div>
-                                <div>
-                                    <h3 class="font-semibold text-lg mb-2 dark:text-white">Compétences comportementales</h3>
+                                <div class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-4 rounded-lg">
+                                    <h3 class="font-semibold text-lg mb-3 dark:text-white"><i class="fas fa-user-check mr-2"></i>Soft Skills</h3>
                                     <div class="flex flex-wrap gap-2">
-                                        ${item.softSkills?.map(skill => `<span class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full text-sm">${skill}</span>`).join('') || '<span class="text-gray-500">Non spécifié</span>'}
+                                        ${item.softSkills?.map(skill => `<span class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full text-sm font-medium">${skill}</span>`).join('') || '<span class="text-gray-500">Non spécifié</span>'}
                                     </div>
                                 </div>
                             </div>
                             
                             ${item.background ? `<div class="mb-6">
-                                <h3 class="font-semibold text-lg mb-2 dark:text-white">Parcours professionnel</h3>
+                                <h3 class="font-semibold text-lg mb-3 dark:text-white"><i class="fas fa-briefcase mr-2"></i>Parcours professionnel</h3>
                                 <div class="space-y-3">
-                                    ${item.background.map(bg => `<div class="border-l-4 border-blue-500 pl-4 py-2 bg-gray-50 dark:bg-gray-700 rounded-r">
-                                        <p class="font-semibold dark:text-white">${bg.role}</p>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400">${bg.company} • ${bg.year}</p>
+                                    ${item.background.map(bg => `<div class="border-l-4 border-blue-500 pl-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-r hover:shadow-md transition">
+                                        <p class="font-semibold text-lg dark:text-white">${bg.role}</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">${bg.company}</p>
+                                        <p class="text-xs text-gray-500"><i class="fas fa-calendar mr-1"></i>${bg.year}</p>
                                     </div>`).join('')}
                                 </div>
                             </div>` : ''}
                             
                             ${item.education ? `<div class="mb-6">
-                                <h3 class="font-semibold text-lg mb-2 dark:text-white"><i class="fas fa-graduation-cap mr-2"></i>Formation</h3>
+                                <h3 class="font-semibold text-lg mb-3 dark:text-white"><i class="fas fa-graduation-cap mr-2"></i>Formation</h3>
                                 <div class="space-y-3">
-                                    ${item.education.map(edu => `<div class="border-l-4 border-green-500 pl-4 py-2 bg-gray-50 dark:bg-gray-700 rounded-r">
-                                        <p class="font-semibold dark:text-white">${edu.degree}</p>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400">${edu.school} • ${edu.year}</p>
+                                    ${item.education.map(edu => `<div class="border-l-4 border-green-500 pl-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-r hover:shadow-md transition">
+                                        <p class="font-semibold text-lg dark:text-white">${edu.degree}</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">${edu.school}</p>
+                                        <p class="text-xs text-gray-500"><i class="fas fa-calendar mr-1"></i>${edu.year}</p>
                                     </div>`).join('')}
                                 </div>
                             </div>` : ''}
                             
                             ${item.certifications && item.certifications.length > 0 ? `<div class="mb-6">
-                                <h3 class="font-semibold text-lg mb-2 dark:text-white"><i class="fas fa-certificate mr-2"></i>Certifications</h3>
-                                <div class="flex flex-wrap gap-2">
-                                    ${item.certifications.map(cert => `<span class="bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-3 py-2 rounded-lg text-sm flex items-center gap-2"><i class="fas fa-award"></i>${cert}</span>`).join('')}
+                                <h3 class="font-semibold text-lg mb-3 dark:text-white"><i class="fas fa-certificate mr-2"></i>Certifications</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    ${item.certifications.map(cert => `<div class="bg-yellow-50 dark:bg-yellow-900/20 px-3 py-2 rounded-lg text-sm flex items-center gap-2 border border-yellow-200 dark:border-yellow-800">
+                                        <i class="fas fa-award text-yellow-600 dark:text-yellow-400"></i>
+                                        <span class="text-gray-700 dark:text-gray-300">${cert}</span>
+                                    </div>`).join('')}
                                 </div>
                             </div>` : ''}
                             
+                            ${matchingJobs.length > 0 ? `<div class="mb-6 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 p-5 rounded-lg">
+                                <h3 class="font-semibold text-lg mb-3 dark:text-white"><i class="fas fa-lightbulb mr-2"></i>Offres recommandées</h3>
+                                <div class="space-y-3">
+                                    ${matchingJobs.map(job => {
+                                        const matchScore = Math.floor(Math.random() * 30) + 70;
+                                        return `<div class="bg-white dark:bg-gray-700 p-4 rounded-lg cursor-pointer hover:shadow-md transition" onclick="showDetailsModal(${job.id})">
+                                            <div class="flex items-start justify-between">
+                                                <div class="flex-1">
+                                                    <div class="flex items-center gap-2 mb-1">
+                                                        <h4 class="font-semibold dark:text-white">${job.title}</h4>
+                                                        <span class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs rounded-full">${matchScore}% match</span>
+                                                    </div>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-300">${job.company} • ${job.city}</p>
+                                                    <p class="text-xs text-gray-500 mt-1">${job.salary?.toLocaleString('fr-FR')} €/an • ${job.contract}</p>
+                                                </div>
+                                                <button onclick="event.stopPropagation(); applyToJob(${job.id})" class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">Postuler</button>
+                                            </div>
+                                        </div>`;
+                                    }).join('')}
+                                </div>
+                            </div>` : ''}
+                            
+                            <div class="mb-6 bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 p-5 rounded-lg">
+                                <h3 class="font-semibold text-lg mb-3 dark:text-white"><i class="fas fa-star mr-2"></i>Points forts</h3>
+                                <div class="space-y-2">
+                                    <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                                        <i class="fas fa-check-circle text-green-500"></i>
+                                        <span>Expérience confirmée dans le domaine</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                                        <i class="fas fa-check-circle text-green-500"></i>
+                                        <span>Portfolio et projets personnels disponibles</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                                        <i class="fas fa-check-circle text-green-500"></i>
+                                        <span>Disponibilité rapide</span>
+                                    </div>
+                                    ${item.certifications && item.certifications.length > 0 ? `<div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                                        <i class="fas fa-check-circle text-green-500"></i>
+                                        <span>Certifié par des organismes reconnus</span>
+                                    </div>` : ''}
+                                </div>
+                            </div>
+                            
                             <div class="flex gap-3 mt-6">
-                                ${state.currentUser?.type === 'recruiter' ? `<button onclick="contactCandidate(${item.id})" class="flex-1 bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition">
+                                ${state.currentUser?.type === 'recruiter' ? `<button onclick="contactCandidate(${item.id})" class="flex-1 bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition shadow-lg">
                                     <i class="fas fa-envelope mr-2"></i>Contacter
                                 </button>` : ''}
                                 ${item.portfolioLink ? `<a href="${item.portfolioLink}" target="_blank" class="flex-1 bg-purple-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-purple-700 transition text-center">
@@ -938,32 +1300,107 @@
                     const company = companyJobs[0];
                     const rating = 4.5;
                     const reviews = Math.floor(Math.random() * 50) + 20;
+                    const employees = Math.floor(Math.random() * 500) + 50;
+                    const foundedYear = 2015 + Math.floor(Math.random() * 8);
                     
                     const content = `<div class="space-y-6">
-                        <div class="text-center">
-                            ${company.logo ? `<img src="${company.logo}" class="w-24 h-24 mx-auto rounded-lg shadow-lg mb-4">` : ''}
-                            <h2 class="text-3xl font-bold dark:text-white">${companyName}</h2>
-                            <div class="flex items-center justify-center gap-2 mt-2">
+                        <div class="text-center bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-6 rounded-lg">
+                            ${company.logo ? `<img src="${company.logo}" class="w-32 h-32 mx-auto rounded-lg shadow-lg mb-4 border-4 border-white dark:border-gray-700">` : ''}
+                            <h2 class="text-3xl font-bold dark:text-white mb-2">${companyName}</h2>
+                            <p class="text-gray-600 dark:text-gray-400 mb-3">${company.industry || 'Technologie'}</p>
+                            <div class="flex items-center justify-center gap-2 mb-2">
                                 ${[1,2,3,4,5].map(i => `<i class="fas fa-star ${i <= Math.floor(rating) ? 'text-yellow-400' : 'text-gray-300'}"></i>`).join('')}
                                 <span class="text-gray-600 dark:text-gray-400 ml-2">${rating.toFixed(1)} (${reviews} avis)</span>
                             </div>
+                            <div class="flex items-center justify-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                                <span><i class="fas fa-users mr-1"></i>${employees} employés</span>
+                                <span><i class="fas fa-calendar mr-1"></i>Fondée en ${foundedYear}</span>
+                                <span><i class="fas fa-map-marker-alt mr-1"></i>${company.city}</span>
+                            </div>
                         </div>
                         
-                        <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
-                            <h3 class="font-semibold text-lg mb-2 dark:text-white">À propos</h3>
-                            <p class="text-gray-700 dark:text-gray-300">${company.companyDescription}</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg text-center">
+                                <i class="fas fa-briefcase text-3xl text-blue-600 dark:text-blue-400 mb-2"></i>
+                                <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">${companyJobs.length}</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Offres actives</p>
+                            </div>
+                            <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg text-center">
+                                <i class="fas fa-chart-line text-3xl text-green-600 dark:text-green-400 mb-2"></i>
+                                <p class="text-2xl font-bold text-green-600 dark:text-green-400">+${Math.floor(Math.random() * 30) + 10}%</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Croissance annuelle</p>
+                            </div>
+                            <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg text-center">
+                                <i class="fas fa-trophy text-3xl text-purple-600 dark:text-purple-400 mb-2"></i>
+                                <p class="text-2xl font-bold text-purple-600 dark:text-purple-400">${Math.floor(Math.random() * 5) + 1}</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Prix reçus</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 p-6 rounded-lg">
+                            <h3 class="font-semibold text-lg mb-3 dark:text-white"><i class="fas fa-info-circle mr-2"></i>À propos</h3>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">${company.companyDescription}</p>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+                                <div class="flex items-center gap-2 text-sm">
+                                    <i class="fas fa-check-circle text-green-500"></i>
+                                    <span class="text-gray-700 dark:text-gray-300">Télétravail</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-sm">
+                                    <i class="fas fa-check-circle text-green-500"></i>
+                                    <span class="text-gray-700 dark:text-gray-300">Horaires flexibles</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-sm">
+                                    <i class="fas fa-check-circle text-green-500"></i>
+                                    <span class="text-gray-700 dark:text-gray-300">Formation</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-sm">
+                                    <i class="fas fa-check-circle text-green-500"></i>
+                                    <span class="text-gray-700 dark:text-gray-300">Avantages sociaux</span>
+                                </div>
+                            </div>
                         </div>
                         
                         <div>
-                            <h3 class="font-semibold text-lg mb-4 dark:text-white">Offres d'emploi actives (${companyJobs.length})</h3>
+                            <h3 class="font-semibold text-lg mb-4 dark:text-white"><i class="fas fa-heart mr-2"></i>Culture d'entreprise</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                <div class="bg-pink-50 dark:bg-pink-900/20 p-3 rounded-lg">
+                                    <i class="fas fa-users text-pink-600 dark:text-pink-400 text-xl mb-2"></i>
+                                    <p class="font-semibold text-sm dark:text-white">Esprit d'équipe</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">Collaboration et entraide</p>
+                                </div>
+                                <div class="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg">
+                                    <i class="fas fa-lightbulb text-yellow-600 dark:text-yellow-400 text-xl mb-2"></i>
+                                    <p class="font-semibold text-sm dark:text-white">Innovation</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">Créativité encouragée</p>
+                                </div>
+                                <div class="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg">
+                                    <i class="fas fa-balance-scale text-green-600 dark:text-green-400 text-xl mb-2"></i>
+                                    <p class="font-semibold text-sm dark:text-white">Équilibre vie pro/perso</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">Respect du temps personnel</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-semibold text-lg mb-4 dark:text-white"><i class="fas fa-briefcase mr-2"></i>Offres d'emploi actives (${companyJobs.length})</h3>
                             <div class="space-y-3">
                                 ${companyJobs.map(job => `
-                                    <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:shadow-md transition" onclick="showDetailsModal(${job.id})">
-                                        <h4 class="font-semibold dark:text-white">${job.title}</h4>
-                                        <div class="flex items-center gap-4 mt-2 text-sm text-gray-600 dark:text-gray-300">
-                                            <span><i class="fas fa-map-marker-alt mr-1"></i>${job.city}</span>
-                                            <span><i class="fas fa-briefcase mr-1"></i>${job.contract}</span>
-                                            <span><i class="fas fa-euro-sign mr-1"></i>${job.salary?.toLocaleString('fr-FR')} €</span>
+                                    <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:shadow-lg transition border-l-4 border-blue-500" onclick="showDetailsModal(${job.id})">
+                                        <div class="flex items-start justify-between">
+                                            <div class="flex-1">
+                                                <h4 class="font-semibold text-lg dark:text-white mb-1">${job.title}</h4>
+                                                <div class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300">
+                                                    <span><i class="fas fa-map-marker-alt mr-1"></i>${job.city}</span>
+                                                    <span><i class="fas fa-briefcase mr-1"></i>${job.contract}</span>
+                                                    <span><i class="fas fa-euro-sign mr-1"></i>${job.salary?.toLocaleString('fr-FR')} €</span>
+                                                </div>
+                                                <div class="flex flex-wrap gap-1 mt-2">
+                                                    ${job.tags.slice(0, 3).map(tag => `<span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded text-xs">${tag}</span>`).join('')}
+                                                </div>
+                                            </div>
+                                            <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-semibold">
+                                                Voir détails
+                                            </button>
                                         </div>
                                     </div>
                                 `).join('')}
@@ -971,32 +1408,60 @@
                         </div>
                         
                         <div>
-                            <h3 class="font-semibold text-lg mb-4 dark:text-white">Avis des employés</h3>
+                            <h3 class="font-semibold text-lg mb-4 dark:text-white"><i class="fas fa-comments mr-2"></i>Avis des employés</h3>
                             <div class="space-y-3">
                                 ${[
-                                    { author: 'Sophie M.', rating: 5, comment: 'Excellente ambiance de travail, équipe dynamique et projets stimulants.', date: '2024-01-15' },
-                                    { author: 'Marc D.', rating: 4, comment: 'Bonne entreprise avec de belles opportunités d\'évolution.', date: '2023-12-20' },
-                                    { author: 'Julie R.', rating: 5, comment: 'Management à l\'écoute et très bons avantages sociaux.', date: '2023-11-10' }
+                                    { author: 'Sophie M.', role: 'Développeuse Full-Stack', rating: 5, comment: 'Excellente ambiance de travail, équipe dynamique et projets stimulants. Les managers sont à l\'écoute et les opportunités d\'évolution sont réelles.', date: '2024-01-15', helpful: 24 },
+                                    { author: 'Marc D.', role: 'Product Manager', rating: 4, comment: 'Bonne entreprise avec de belles opportunités d\'évolution. Le télétravail est bien organisé et la culture d\'entreprise est saine.', date: '2023-12-20', helpful: 18 },
+                                    { author: 'Julie R.', role: 'UX Designer', rating: 5, comment: 'Management à l\'écoute et très bons avantages sociaux. Les projets sont intéressants et on a vraiment la possibilité de proposer des idées.', date: '2023-11-10', helpful: 31 }
                                 ].map(review => `
-                                    <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                                        <div class="flex items-center justify-between mb-2">
-                                            <span class="font-semibold dark:text-white">${review.author}</span>
+                                    <div class="p-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
+                                                    ${review.author.charAt(0)}
+                                                </div>
+                                                <div>
+                                                    <span class="font-semibold dark:text-white">${review.author}</span>
+                                                    <p class="text-xs text-gray-600 dark:text-gray-400">${review.role}</p>
+                                                </div>
+                                            </div>
                                             <div class="flex items-center gap-1">
-                                                ${[1,2,3,4,5].map(i => `<i class="fas fa-star text-xs ${i <= review.rating ? 'text-yellow-400' : 'text-gray-300'}"></i>`).join('')}
+                                                ${[1,2,3,4,5].map(i => `<i class="fas fa-star text-sm ${i <= review.rating ? 'text-yellow-400' : 'text-gray-300'}"></i>`).join('')}
                                             </div>
                                         </div>
-                                        <p class="text-sm text-gray-700 dark:text-gray-300">${review.comment}</p>
-                                        <p class="text-xs text-gray-500 mt-2">${new Date(review.date).toLocaleDateString('fr-FR')}</p>
+                                        <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">${review.comment}</p>
+                                        <div class="flex items-center justify-between text-xs text-gray-500">
+                                            <span>${new Date(review.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                                            <button class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
+                                                <i class="fas fa-thumbs-up mr-1"></i>${review.helpful} personnes ont trouvé cet avis utile
+                                            </button>
+                                        </div>
                                     </div>
                                 `).join('')}
                             </div>
                         </div>
                         
-                        ${state.currentUser ? `<div class="text-center">
-                            <button onclick="leaveReview('${companyName}')" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-semibold">
+                        <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-5 rounded-lg">
+                            <h3 class="font-semibold text-lg mb-3 dark:text-white"><i class="fas fa-images mr-2"></i>Vie de l'entreprise</h3>
+                            <div class="grid grid-cols-3 gap-2">
+                                ${[1,2,3,4,5,6].map(i => `
+                                    <div class="aspect-square bg-gray-200 dark:bg-gray-600 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-image text-gray-400 text-2xl"></i>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <p class="text-xs text-gray-600 dark:text-gray-400 mt-2 text-center">Photos et vidéos de l'entreprise</p>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            ${state.currentUser ? `<button onclick="leaveReview('${companyName}')" class="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-semibold shadow-lg">
                                 <i class="fas fa-comment-dots mr-2"></i>Laisser un avis
+                            </button>` : ''}
+                            <button onclick="closeAllModals()" class="flex-1 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-100 px-6 py-3 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 font-semibold">
+                                Fermer
                             </button>
-                        </div>` : ''}
+                        </div>
                     </div>`;
                     
                     document.getElementById('company-profile-content').innerHTML = content;
@@ -1124,6 +1589,9 @@
                             case 'messages': showMessages(); break;
                             case 'job-alerts': showJobAlerts(); break;
                             case 'salary-insights': showSalaryInsights(); break;
+                            case 'calendar': showCalendar(); break;
+                            case 'job-comparator': showJobComparator(); break;
+                            case 'career-coach': showCareerCoach(); break;
                         }
                         return;
                     }
@@ -1323,6 +1791,239 @@
                     </div>`;
                     ui.modalContainer.appendChild(modal);
                     setTimeout(() => modal.querySelector('.modal-panel').classList.remove('hidden'), 10);
+                }
+                
+                function showCalendar() {
+                    if (!state.currentUser) { showToast('Connectez-vous pour accéder au calendrier.', 'error'); openModal('login-modal'); return; }
+                    
+                    const interviews = [
+                        { id: 1, date: new Date(Date.now() + 86400000 * 2).toISOString(), time: '10:00', type: 'Technique', company: 'Tech Solutions Inc.', position: 'Développeur Full-Stack', format: 'Visio', duration: '1h30' },
+                        { id: 2, date: new Date(Date.now() + 86400000 * 5).toISOString(), time: '14:30', type: 'RH', company: 'DataCorp', position: 'Data Scientist', format: 'Présentiel', duration: '45 min' },
+                        { id: 3, date: new Date(Date.now() + 86400000 * 8).toISOString(), time: '11:00', type: 'Présentation', company: 'AppFactory', position: 'Développeur Mobile', format: 'Téléphone', duration: '30 min' }
+                    ];
+                    
+                    const content = `<div class="space-y-6">
+                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-6 rounded-lg">
+                            <h3 class="text-xl font-bold mb-2 dark:text-white"><i class="fas fa-calendar-check mr-2"></i>Entretiens à venir</h3>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">Vous avez ${interviews.length} entretien(s) planifié(s)</p>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            ${interviews.map(interview => {
+                                const dateObj = new Date(interview.date);
+                                const typeColors = { 'Technique': 'blue', 'RH': 'purple', 'Présentation': 'green' };
+                                const color = typeColors[interview.type] || 'gray';
+                                return `<div class="p-5 bg-gradient-to-r from-${color}-50 to-${color}-100 dark:from-${color}-900/20 dark:to-${color}-900/30 rounded-lg border-l-4 border-${color}-500 hover:shadow-lg transition">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <div class="flex items-center gap-2 mb-2">
+                                                <span class="px-3 py-1 bg-${color}-600 text-white text-xs rounded-full font-semibold">${interview.type}</span>
+                                                <span class="px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded-full">${interview.format}</span>
+                                            </div>
+                                            <h4 class="text-lg font-bold dark:text-white mb-1">${interview.position}</h4>
+                                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">${interview.company}</p>
+                                            <div class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                                                <span><i class="fas fa-calendar mr-1"></i>${dateObj.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}</span>
+                                                <span><i class="fas fa-clock mr-1"></i>${interview.time}</span>
+                                                <span><i class="fas fa-hourglass-half mr-1"></i>${interview.duration}</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col gap-2">
+                                            <button class="bg-${color}-600 text-white px-4 py-2 rounded-lg hover:bg-${color}-700 text-sm font-semibold">
+                                                <i class="fas fa-edit mr-1"></i>Modifier
+                                            </button>
+                                            <button class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 text-sm">
+                                                <i class="fas fa-times mr-1"></i>Annuler
+                                            </button>
+                                        </div>
+                                    </div>
+                                    ${interview.format === 'Visio' ? `<div class="mt-3 p-3 bg-white dark:bg-gray-800 rounded-lg">
+                                        <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">Lien de visio:</p>
+                                        <div class="flex items-center gap-2">
+                                            <input type="text" value="https://meet.example.com/xyz-abc-123" readonly class="flex-1 text-sm bg-gray-100 dark:bg-gray-700 p-2 rounded">
+                                            <button class="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 text-sm">
+                                                <i class="fas fa-copy"></i>
+                                            </button>
+                                        </div>
+                                    </div>` : ''}
+                                </div>`;
+                            }).join('')}
+                        </div>
+                        
+                        <div class="bg-yellow-50 dark:bg-yellow-900/20 p-5 rounded-lg">
+                            <h4 class="font-semibold mb-3 dark:text-white"><i class="fas fa-lightbulb mr-2 text-yellow-500"></i>Conseils pour vos entretiens</h4>
+                            <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                                <li><i class="fas fa-check text-green-500 mr-2"></i>Préparez des questions sur l'entreprise et le poste</li>
+                                <li><i class="fas fa-check text-green-500 mr-2"></i>Testez votre matériel technique pour les visios</li>
+                                <li><i class="fas fa-check text-green-500 mr-2"></i>Arrivez 5-10 minutes en avance</li>
+                                <li><i class="fas fa-check text-green-500 mr-2"></i>Préparez des exemples concrets de votre expérience</li>
+                            </ul>
+                        </div>
+                    </div>`;
+                    
+                    document.getElementById('calendar-content').innerHTML = content;
+                    openModal('calendar-modal');
+                }
+                
+                function showJobComparator() {
+                    if (!state.currentUser?.type === 'candidate') { showToast('Cette fonctionnalité est réservée aux candidats.', 'error'); return; }
+                    
+                    const favoriteJobs = data.filter(item => state.favorites.has(item.id) && item.type === 'job').slice(0, 3);
+                    if (favoriteJobs.length < 2) {
+                        showToast('Ajoutez au moins 2 offres à vos favoris pour les comparer.', 'info');
+                        return;
+                    }
+                    
+                    const criteria = ['Salaire', 'Type de contrat', 'Mode de travail', 'Expérience requise', 'Compétences techniques', 'Distance'];
+                    
+                    const content = `<div class="space-y-6">
+                        <div class="bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 p-6 rounded-lg">
+                            <h3 class="text-xl font-bold mb-2 dark:text-white"><i class="fas fa-balance-scale mr-2"></i>Comparaison d'offres</h3>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">Comparez jusqu'à 3 offres d'emploi côte à côte</p>
+                        </div>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-100 dark:bg-gray-700">
+                                        <th class="p-3 text-left text-sm font-semibold dark:text-white sticky left-0 bg-gray-100 dark:bg-gray-700">Critère</th>
+                                        ${favoriteJobs.map(job => `<th class="p-3 text-center text-sm font-semibold dark:text-white min-w-[200px]">${job.title}</th>`).join('')}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b dark:border-gray-600">
+                                        <td class="p-3 font-medium dark:text-white sticky left-0 bg-white dark:bg-gray-800">Entreprise</td>
+                                        ${favoriteJobs.map(job => `<td class="p-3 text-center text-sm dark:text-gray-300">${job.company}</td>`).join('')}
+                                    </tr>
+                                    <tr class="border-b dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50">
+                                        <td class="p-3 font-medium dark:text-white sticky left-0 bg-gray-50 dark:bg-gray-700/50">Salaire</td>
+                                        ${favoriteJobs.map(job => `<td class="p-3 text-center text-sm font-bold text-green-600 dark:text-green-400">${job.salary?.toLocaleString('fr-FR')} €/an</td>`).join('')}
+                                    </tr>
+                                    <tr class="border-b dark:border-gray-600">
+                                        <td class="p-3 font-medium dark:text-white sticky left-0 bg-white dark:bg-gray-800">Type de contrat</td>
+                                        ${favoriteJobs.map(job => `<td class="p-3 text-center text-sm dark:text-gray-300">${job.contract}</td>`).join('')}
+                                    </tr>
+                                    <tr class="border-b dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50">
+                                        <td class="p-3 font-medium dark:text-white sticky left-0 bg-gray-50 dark:bg-gray-700/50">Mode de travail</td>
+                                        ${favoriteJobs.map(job => `<td class="p-3 text-center text-sm dark:text-gray-300">${job.workArrangement}</td>`).join('')}
+                                    </tr>
+                                    <tr class="border-b dark:border-gray-600">
+                                        <td class="p-3 font-medium dark:text-white sticky left-0 bg-white dark:bg-gray-800">Localisation</td>
+                                        ${favoriteJobs.map(job => `<td class="p-3 text-center text-sm dark:text-gray-300">${job.city}</td>`).join('')}
+                                    </tr>
+                                    <tr class="border-b dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50">
+                                        <td class="p-3 font-medium dark:text-white sticky left-0 bg-gray-50 dark:bg-gray-700/50">Expérience</td>
+                                        ${favoriteJobs.map(job => `<td class="p-3 text-center text-sm dark:text-gray-300">${job.experience}</td>`).join('')}
+                                    </tr>
+                                    <tr class="border-b dark:border-gray-600">
+                                        <td class="p-3 font-medium dark:text-white sticky left-0 bg-white dark:bg-gray-800">Compétences clés</td>
+                                        ${favoriteJobs.map(job => `<td class="p-3 text-center text-xs dark:text-gray-300">${job.tags.slice(0, 3).join(', ')}</td>`).join('')}
+                                    </tr>
+                                    <tr class="bg-gray-50 dark:bg-gray-700/50">
+                                        <td class="p-3 font-medium dark:text-white sticky left-0 bg-gray-50 dark:bg-gray-700/50">Actions</td>
+                                        ${favoriteJobs.map(job => `<td class="p-3 text-center">
+                                            <button onclick="showDetailsModal(${job.id}); closeAllModals();" class="bg-blue-600 text-white px-3 py-1 rounded text-xs hover:bg-blue-700">
+                                                Voir détails
+                                            </button>
+                                        </td>`).join('')}
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                            <p class="text-sm text-gray-700 dark:text-gray-300"><i class="fas fa-info-circle mr-2 text-blue-500"></i>Ajoutez des offres à vos favoris <i class="fas fa-heart text-pink-500"></i> pour les comparer ici</p>
+                        </div>
+                    </div>`;
+                    
+                    document.getElementById('comparator-content').innerHTML = content;
+                    openModal('jobComparator-modal');
+                }
+                
+                function showCareerCoach() {
+                    if (!state.currentUser?.type === 'candidate') { showToast('Cette fonctionnalité est réservée aux candidats.', 'error'); return; }
+                    
+                    const tips = [
+                        { category: 'CV', icon: 'fa-file-alt', color: 'blue', title: 'Optimisez votre CV', description: 'Utilisez des mots-clés pertinents et quantifiez vos réalisations', progress: 75 },
+                        { category: 'Profil', icon: 'fa-user', color: 'green', title: 'Complétez votre profil', description: 'Un profil complet augmente vos chances de 40%', progress: 85 },
+                        { category: 'Compétences', icon: 'fa-graduation-cap', color: 'purple', title: 'Développez vos compétences', description: 'Suivez des formations en ligne pour rester compétitif', progress: 60 },
+                        { category: 'Réseau', icon: 'fa-users', color: 'orange', title: 'Élargissez votre réseau', description: 'Connectez-vous avec des professionnels de votre secteur', progress: 45 }
+                    ];
+                    
+                    const content = `<div class="space-y-6">
+                        <div class="bg-gradient-to-r from-rose-50 to-pink-50 dark:from-rose-900/20 dark:to-pink-900/20 p-6 rounded-lg">
+                            <h3 class="text-xl font-bold mb-2 dark:text-white"><i class="fas fa-rocket mr-2"></i>Boostez votre carrière</h3>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">Conseils personnalisés pour réussir votre recherche d'emploi</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${tips.map(tip => `<div class="bg-gradient-to-br from-${tip.color}-50 to-${tip.color}-100 dark:from-${tip.color}-900/20 dark:to-${tip.color}-900/30 p-5 rounded-lg border-l-4 border-${tip.color}-500">
+                                <div class="flex items-start gap-3 mb-3">
+                                    <div class="w-12 h-12 bg-${tip.color}-600 text-white rounded-full flex items-center justify-center flex-shrink-0">
+                                        <i class="fas ${tip.icon}"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="font-bold text-lg dark:text-white mb-1">${tip.title}</h4>
+                                        <p class="text-sm text-gray-700 dark:text-gray-300">${tip.description}</p>
+                                    </div>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                    <div class="bg-${tip.color}-600 h-2 rounded-full" style="width: ${tip.progress}%"></div>
+                                </div>
+                                <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">${tip.progress}% complété</p>
+                            </div>`).join('')}
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-lg mb-4 dark:text-white"><i class="fas fa-chart-line mr-2 text-teal-500"></i>Votre progression</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-sm font-medium dark:text-gray-300">Force du profil</span>
+                                        <span class="text-sm font-bold text-teal-600 dark:text-teal-400">66%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3">
+                                        <div class="bg-teal-600 h-3 rounded-full" style="width: 66%"></div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-3 mt-4">
+                                    <div class="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
+                                        <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">12</p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">Candidatures</p>
+                                    </div>
+                                    <div class="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded">
+                                        <p class="text-2xl font-bold text-green-600 dark:text-green-400">3</p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">Entretiens</p>
+                                    </div>
+                                    <div class="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded">
+                                        <p class="text-2xl font-bold text-purple-600 dark:text-purple-400">87</p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">Vues profil</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 p-5 rounded-lg">
+                            <h4 class="font-bold mb-3 dark:text-white"><i class="fas fa-trophy mr-2 text-yellow-500"></i>Prochaines étapes recommandées</h4>
+                            <ul class="space-y-2 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-arrow-right text-orange-500 mt-1"></i>
+                                    <span class="text-gray-700 dark:text-gray-300">Ajoutez au moins 3 projets à votre portfolio</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-arrow-right text-orange-500 mt-1"></i>
+                                    <span class="text-gray-700 dark:text-gray-300">Obtenez une certification dans votre domaine</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-arrow-right text-orange-500 mt-1"></i>
+                                    <span class="text-gray-700 dark:text-gray-300">Postulez à au moins 5 offres cette semaine</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>`;
+                    
+                    document.getElementById('career-coach-content').innerHTML = content;
+                    openModal('careerCoach-modal');
                 }
                 
                 
