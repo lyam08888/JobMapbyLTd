@@ -2775,7 +2775,7 @@
                 ui.distanceSlider.addEventListener('change', performSearch);
                 ui.exportDataBtn.addEventListener('click', exportData);
                 ui.resultsList.addEventListener('click', e => { const card = e.target.closest('[data-id][data-lat]'); if (card) showDetailsModal(parseInt(card.dataset.id)); });
-                map.on('popupopen', e => e.popup.getElement().querySelector('.view-details-btn')?.addEventListener('click', ev => showDetailsModal(ev.currentTarget.dataset.id)));
+                map.on('popupopen', e => e.popup.getElement().querySelector('.view-details-btn')?.addEventListener('click', ev => showDetailsModal(parseInt(ev.currentTarget.dataset.id))));
                 
                 ui.toggleResultsBtn.addEventListener('click', () => { ui.resultsList.classList.toggle('expanded'); const icon = ui.toggleResultsBtn.querySelector('i'); icon.classList.toggle('fa-chevron-up'); icon.classList.toggle('fa-chevron-down'); });
                 ui.toggleFiltersBtn.addEventListener('click', () => { ui.advancedFilters.classList.toggle('collapsed'); const icon = ui.toggleFiltersBtn.querySelector('i'); icon.classList.toggle('fa-chevron-up'); icon.classList.toggle('fa-chevron-down'); });
