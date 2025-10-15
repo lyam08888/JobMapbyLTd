@@ -783,10 +783,46 @@
                             ${item.companyDescription ? `<div class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                                 <h3 class="font-semibold text-lg mb-2 dark:text-white"><i class="fas fa-building mr-2"></i>À propos de l'entreprise</h3>
                                 <p class="text-gray-700 dark:text-gray-300 mb-3">${item.companyDescription}</p>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3 mb-3">
+                                    <div class="bg-white dark:bg-gray-700 p-3 rounded text-center">
+                                        <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">${Math.floor(Math.random() * 5000) + 100}</p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">Employés</p>
+                                    </div>
+                                    <div class="bg-white dark:bg-gray-700 p-3 rounded text-center">
+                                        <p class="text-2xl font-bold text-green-600 dark:text-green-400">${Math.floor(Math.random() * 30) + 5}</p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">Années</p>
+                                    </div>
+                                    <div class="bg-white dark:bg-gray-700 p-3 rounded text-center">
+                                        <p class="text-2xl font-bold text-purple-600 dark:text-purple-400">${Math.floor(Math.random() * 15) + 3}</p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">Bureaux</p>
+                                    </div>
+                                    <div class="bg-white dark:bg-gray-700 p-3 rounded text-center">
+                                        <p class="text-2xl font-bold text-orange-600 dark:text-orange-400">4.${Math.floor(Math.random() * 5) + 3}</p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">Glassdoor</p>
+                                    </div>
+                                </div>
                                 <button onclick="showCompanyProfile('${item.company}')" class="text-blue-600 dark:text-blue-400 hover:underline text-sm">
                                     <i class="fas fa-arrow-right mr-1"></i>Voir le profil complet de l'entreprise
                                 </button>
                             </div>` : ''}
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                <div class="bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 p-4 rounded-lg">
+                                    <h3 class="font-semibold mb-2 dark:text-white"><i class="fas fa-users mr-2"></i>Équipe</h3>
+                                    <p class="text-2xl font-bold text-cyan-600 dark:text-cyan-400">${Math.floor(Math.random() * 20) + 5}</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">personnes</p>
+                                </div>
+                                <div class="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 p-4 rounded-lg">
+                                    <h3 class="font-semibold mb-2 dark:text-white"><i class="fas fa-chart-line mr-2"></i>Croissance</h3>
+                                    <p class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">+${Math.floor(Math.random() * 50) + 10}%</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">cette année</p>
+                                </div>
+                                <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-4 rounded-lg">
+                                    <h3 class="font-semibold mb-2 dark:text-white"><i class="fas fa-rocket mr-2"></i>Projets</h3>
+                                    <p class="text-2xl font-bold text-green-600 dark:text-green-400">${Math.floor(Math.random() * 10) + 3}</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">en cours</p>
+                                </div>
+                            </div>
                             
                             <div class="mb-6">
                                 <h3 class="font-semibold text-lg mb-3 dark:text-white"><i class="fas fa-file-alt mr-2"></i>Description du poste</h3>
@@ -799,6 +835,17 @@
                                             <li>Collaborer avec l'équipe pour définir les besoins techniques</li>
                                             <li>Assurer la qualité du code et la documentation</li>
                                             <li>Participer aux revues de code et au mentorat</li>
+                                            <li>Contribuer à l'amélioration continue des processus</li>
+                                        </ul>
+                                    </div>
+                                    <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">
+                                        <h4 class="font-semibold mb-2 dark:text-white">Profil recherché:</h4>
+                                        <ul class="list-disc list-inside space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                                            <li>Expérience de ${item.experience === 'Senior' ? '5+' : item.experience === 'Confirmé' ? '2-5' : '0-2'} ans dans un poste similaire</li>
+                                            <li>Maîtrise des technologies mentionnées</li>
+                                            <li>Capacité à travailler en équipe</li>
+                                            <li>Excellent sens de la communication</li>
+                                            <li>Passion pour les nouvelles technologies</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -846,7 +893,61 @@
                                         <i class="fas fa-check-circle text-green-500"></i>
                                         <span>Équipement fourni</span>
                                     </div>
+                                    <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                                        <i class="fas fa-check-circle text-green-500"></i>
+                                        <span>Primes sur objectifs</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                                        <i class="fas fa-check-circle text-green-500"></i>
+                                        <span>Salle de sport</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                                        <i class="fas fa-check-circle text-green-500"></i>
+                                        <span>Events d'équipe</span>
+                                    </div>
                                 </div>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <h3 class="font-semibold text-lg mb-3 dark:text-white"><i class="fas fa-clipboard-list mr-2"></i>Processus de recrutement</h3>
+                                <div class="space-y-3">
+                                    <div class="flex items-start gap-3 bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                        <div class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">1</div>
+                                        <div class="flex-1">
+                                            <p class="font-semibold dark:text-white">Présélection CV</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Analyse de votre profil par notre équipe RH</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3 bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                        <div class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">2</div>
+                                        <div class="flex-1">
+                                            <p class="font-semibold dark:text-white">Entretien RH</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">30 min - Échange sur votre parcours et motivations</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3 bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                        <div class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">3</div>
+                                        <div class="flex-1">
+                                            <p class="font-semibold dark:text-white">Test technique</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">1-2h - Évaluation de vos compétences techniques</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3 bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                        <div class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">4</div>
+                                        <div class="flex-1">
+                                            <p class="font-semibold dark:text-white">Entretien équipe</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">1h - Rencontre avec votre futur manager et l'équipe</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3 bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                        <div class="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">5</div>
+                                        <div class="flex-1">
+                                            <p class="font-semibold dark:text-white">Proposition</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Offre d'emploi et négociation des conditions</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-3 italic">⏱️ Durée totale du processus: 2-3 semaines</p>
                             </div>
                             
                             <div class="mb-6 bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
@@ -1003,6 +1104,42 @@
                                     </div>`).join('')}
                                 </div>
                             </div>` : ''}
+                            
+                            <div class="mb-6">
+                                <h3 class="font-semibold text-lg mb-3 dark:text-white"><i class="fas fa-language mr-2"></i>Langues</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <span class="font-semibold text-sm dark:text-white">Français</span>
+                                            <span class="text-xs text-gray-500">Natif</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-2">
+                                            <div class="bg-green-500 h-2 rounded-full" style="width: 100%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <span class="font-semibold text-sm dark:text-white">Anglais</span>
+                                            <span class="text-xs text-gray-500">${['Courant', 'Professionnel', 'Intermédiaire'][Math.floor(Math.random() * 3)]}</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-2">
+                                            <div class="bg-blue-500 h-2 rounded-full" style="width: ${Math.floor(Math.random() * 30) + 70}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-6 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 p-5 rounded-lg">
+                                <h3 class="font-semibold text-lg mb-3 dark:text-white"><i class="fas fa-lightbulb mr-2"></i>Centres d'intérêt</h3>
+                                <div class="flex flex-wrap gap-2">
+                                    ${['Open Source', 'Conférences Tech', 'Veille Technologique', 'Mentorat', 'Blogging'][Math.floor(Math.random() * 3)].split(',').map(interest => 
+                                        `<span class="bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 px-3 py-1 rounded-full text-sm">${interest}</span>`
+                                    ).join('')}
+                                    <span class="bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 px-3 py-1 rounded-full text-sm">Open Source</span>
+                                    <span class="bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 px-3 py-1 rounded-full text-sm">Conférences</span>
+                                    <span class="bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 px-3 py-1 rounded-full text-sm">Veille Tech</span>
+                                </div>
+                            </div>
                             
                             ${matchingJobs.length > 0 ? `<div class="mb-6 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 p-5 rounded-lg">
                                 <h3 class="font-semibold text-lg mb-3 dark:text-white"><i class="fas fa-lightbulb mr-2"></i>Offres recommandées</h3>
