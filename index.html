@@ -119,6 +119,14 @@
                             <i class="fas fa-bookmark"></i>
                         </button>
                     </div>
+                    <div class="relative py-2 flex-shrink-0">
+                        <input type="text" id="city-search-input" placeholder="Rechercher par ville..." class="w-full pl-10 pr-10 py-2 text-sm bg-gray-100 dark:bg-gray-700 border-2 border-transparent dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                        <i class="fas fa-map-marker-alt absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <button id="clear-city-btn" title="Effacer le filtre ville" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 transition hidden">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <div id="city-suggestions" class="absolute z-10 w-full bg-white dark:bg-gray-700 rounded-lg shadow-lg mt-1 max-h-48 overflow-y-auto hidden"></div>
+                    </div>
                     <div class="mb-3 flex-shrink-0"><div id="filter-container" class="w-full flex bg-gray-200 dark:bg-gray-700 rounded-lg p-1"><button class="filter-btn active w-1/3 text-center py-2 px-2 rounded-md font-semibold text-sm text-gray-700 dark:text-gray-300" data-filter="all">Tous</button><button class="filter-btn w-1/3 text-center py-2 px-2 rounded-md font-semibold text-sm text-gray-700 dark:text-gray-300" data-filter="job">Emplois</button><button class="filter-btn w-1/3 text-center py-2 px-2 rounded-md font-semibold text-sm text-gray-700 dark:text-gray-300" data-filter="candidate">Profils</button></div></div>
                     
                     <div id="toggle-filters-btn" class="flex justify-between items-center py-2 cursor-pointer flex-shrink-0">
@@ -166,10 +174,22 @@
                 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { attribution: '&copy; OSM &copy; CARTO', maxZoom: 20 }).addTo(map);
 
                 const ui = {
-                    userMenuButton: document.getElementById('user-menu-button'), userMenu: document.getElementById('user-menu'), helpBtn: document.getElementById('help-btn'), saveSearchBtn: document.getElementById('save-search-btn'), locateMeBtn: document.getElementById('locate-me-btn'), matchModeBtn: document.getElementById('match-mode-btn'), favoritesBtn: document.getElementById('favorites-btn'), favoritesCount: document.getElementById('favorites-count'), searchInput: document.getElementById('search-input'), resultsList: document.getElementById('results-list'), resultsHeader: document.getElementById('results-header'), resultsCount: document.getElementById('results-count'), toggleResultsBtn: document.getElementById('toggle-results-btn'), filterContainer: document.getElementById('filter-container'), advancedFilters: document.getElementById('advanced-filters'), toggleFiltersBtn: document.getElementById('toggle-filters-btn'), expFilterContainer: document.getElementById('experience-filter-container'), contractFilterContainer: document.getElementById('contract-filter-container'), workArrangementFilterContainer: document.getElementById('work-arrangement-filter-container'), industryFilter: document.getElementById('industry-filter'), salarySlider: document.getElementById('salary-slider'), salaryValue: document.getElementById('salary-value'), distanceSlider: document.getElementById('distance-slider'), distanceValue: document.getElementById('distance-value'), exportDataBtn: document.getElementById('export-data-btn'), routingControls: document.getElementById('routing-controls'), clearRouteBtn: document.getElementById('clear-route-btn'), searchPanel: document.getElementById('search-panel'), dragHandle: document.getElementById('drag-handle'), darkModeToggle: document.getElementById('dark-mode-toggle'), modalContainer: document.getElementById('modal-container'), togglePanelBtn: document.getElementById('toggle-panel-btn'),
+                    userMenuButton: document.getElementById('user-menu-button'), userMenu: document.getElementById('user-menu'), helpBtn: document.getElementById('help-btn'), saveSearchBtn: document.getElementById('save-search-btn'), locateMeBtn: document.getElementById('locate-me-btn'), matchModeBtn: document.getElementById('match-mode-btn'), favoritesBtn: document.getElementById('favorites-btn'), favoritesCount: document.getElementById('favorites-count'), searchInput: document.getElementById('search-input'), citySearchInput: document.getElementById('city-search-input'), citySuggestions: document.getElementById('city-suggestions'), clearCityBtn: document.getElementById('clear-city-btn'), resultsList: document.getElementById('results-list'), resultsHeader: document.getElementById('results-header'), resultsCount: document.getElementById('results-count'), toggleResultsBtn: document.getElementById('toggle-results-btn'), filterContainer: document.getElementById('filter-container'), advancedFilters: document.getElementById('advanced-filters'), toggleFiltersBtn: document.getElementById('toggle-filters-btn'), expFilterContainer: document.getElementById('experience-filter-container'), contractFilterContainer: document.getElementById('contract-filter-container'), workArrangementFilterContainer: document.getElementById('work-arrangement-filter-container'), industryFilter: document.getElementById('industry-filter'), salarySlider: document.getElementById('salary-slider'), salaryValue: document.getElementById('salary-value'), distanceSlider: document.getElementById('distance-slider'), distanceValue: document.getElementById('distance-value'), exportDataBtn: document.getElementById('export-data-btn'), routingControls: document.getElementById('routing-controls'), clearRouteBtn: document.getElementById('clear-route-btn'), searchPanel: document.getElementById('search-panel'), dragHandle: document.getElementById('drag-handle'), darkModeToggle: document.getElementById('dark-mode-toggle'), modalContainer: document.getElementById('modal-container'), togglePanelBtn: document.getElementById('toggle-panel-btn'),
                 };
                 
-                let state = { currentUser: null, routingControl: null, userLocation: { lat: 48.85884, lon: 2.29435 }, userLocationMarker: null, firstInteraction: false, isMatchModeActive: false, matchStartPoint: null, markers: new Map(), favorites: new Set(), filters: { type: 'all', experience: 'all', salary: 120000, contract: 'all', workArrangement: 'all', industry: 'all', distance: 50 }, viewHistory: [], savedSearches: [] };
+                let state = { currentUser: null, routingControl: null, userLocation: { lat: 48.85884, lon: 2.29435 }, userLocationMarker: null, firstInteraction: false, isMatchModeActive: false, matchStartPoint: null, markers: new Map(), favorites: new Set(), filters: { type: 'all', experience: 'all', salary: 120000, contract: 'all', workArrangement: 'all', industry: 'all', distance: 50, city: '' }, viewHistory: [], savedSearches: [], routeHistory: [] };
+                
+                // Load saved data from localStorage
+                try {
+                    const savedSearches = localStorage.getItem('jobmap_saved_searches');
+                    if (savedSearches) state.savedSearches = JSON.parse(savedSearches);
+                    const routeHistory = localStorage.getItem('jobmap_route_history');
+                    if (routeHistory) state.routeHistory = JSON.parse(routeHistory);
+                    const favorites = localStorage.getItem('jobmap_favorites');
+                    if (favorites) state.favorites = new Set(JSON.parse(favorites));
+                } catch (e) {
+                    console.error('Error loading saved data:', e);
+                }
 
                 const markerClusters = L.markerClusterGroup();
                 map.addLayer(markerClusters);
@@ -344,6 +364,7 @@
                            html += `<a href="#" data-action="messages" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-envelope w-5 text-purple-500"></i>Messages</a>`;
                         }
                         html += `<a href="#" data-action="saved-searches" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-bookmark w-5 text-orange-500"></i>Recherches sauvegardées</a>`;
+                        html += `<a href="#" data-action="route-history" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-route w-5 text-blue-500"></i>Historique des trajets</a>`;
                         html += `<a href="#" data-action="view-history" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-history w-5 text-gray-500"></i>Historique</a>`;
                         html += `<a href="#" data-action="statistics" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-chart-area w-5 text-emerald-500"></i>Statistiques</a>`;
                         html += `<a href="#" data-action="notifications" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"><i class="fas fa-bell w-5 text-red-500"></i>Notifications<span class="ml-auto bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">3</span></a>`;
@@ -756,10 +777,20 @@
                 }
                 
                 function saveRoute(routeData) {
-                    if (!state.savedRoutes) state.savedRoutes = [];
-                    routeData.id = state.savedRoutes.length + 1;
+                    routeData.id = Date.now();
                     routeData.date = new Date().toISOString();
-                    state.savedRoutes.push(routeData);
+                    state.routeHistory.push(routeData);
+                    
+                    // Keep only last 50 routes
+                    if (state.routeHistory.length > 50) {
+                        state.routeHistory = state.routeHistory.slice(-50);
+                    }
+                    
+                    try {
+                        localStorage.setItem('jobmap_route_history', JSON.stringify(state.routeHistory));
+                    } catch (e) {
+                        console.error('Error saving route:', e);
+                    }
                     showToast('Itinéraire sauvegardé !', 'success');
                 }
                 
@@ -957,7 +988,27 @@
                     document.getElementById('view-route-from-report').onclick = () => { closeAllModals(); calculateRoute(candidate.location, job.location); }; 
                     openModal('matchReport-modal'); 
                 }
-                function toggleFavorite(id) { if (state.favorites.has(id)) { state.favorites.delete(id); showToast('Retiré des favoris.', 'info'); } else { state.favorites.add(id); showToast('Ajouté aux favoris !', 'success'); } ui.favoritesCount.textContent = state.favorites.size; ui.favoritesCount.classList.toggle('hidden', state.favorites.size === 0); ui.favoritesBtn.classList.toggle('has-favorites', state.favorites.size > 0); performSearch(); }
+                function toggleFavorite(id) { 
+                    if (state.favorites.has(id)) { 
+                        state.favorites.delete(id); 
+                        showToast('Retiré des favoris.', 'info'); 
+                    } else { 
+                        state.favorites.add(id); 
+                        showToast('Ajouté aux favoris !', 'success'); 
+                    } 
+                    ui.favoritesCount.textContent = state.favorites.size; 
+                    ui.favoritesCount.classList.toggle('hidden', state.favorites.size === 0); 
+                    ui.favoritesBtn.classList.toggle('has-favorites', state.favorites.size > 0); 
+                    
+                    // Save to localStorage
+                    try {
+                        localStorage.setItem('jobmap_favorites', JSON.stringify([...state.favorites]));
+                    } catch (e) {
+                        console.error('Error saving favorites:', e);
+                    }
+                    
+                    performSearch(); 
+                }
                 
                 function showDetailsModal(itemId) {
                     const item = data.find(d => d.id === itemId);
@@ -1526,12 +1577,18 @@
                     const searchName = prompt('Nom de la recherche :');
                     if (!searchName) return;
                     state.savedSearches.push({
-                        id: state.savedSearches.length + 1,
+                        id: Date.now(),
                         name: searchName,
                         query: ui.searchInput.value,
+                        city: ui.citySearchInput.value,
                         filters: { ...state.filters },
                         date: new Date().toISOString()
                     });
+                    try {
+                        localStorage.setItem('jobmap_saved_searches', JSON.stringify(state.savedSearches));
+                    } catch (e) {
+                        console.error('Error saving search:', e);
+                    }
                     showToast('Recherche sauvegardée !', 'success');
                 }
                 
@@ -1552,14 +1609,19 @@
                                         <div class="flex-1">
                                             <h4 class="font-semibold dark:text-white">${search.name}</h4>
                                             <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
-                                                ${search.query ? `Recherche: "${search.query}"` : 'Tous les résultats'} • 
+                                                ${search.query ? `Recherche: "${search.query}"` : 'Tous les résultats'}${search.city ? ` • Ville: "${search.city}"` : ''} • 
                                                 Type: ${search.filters.type === 'all' ? 'Tous' : search.filters.type === 'job' ? 'Emplois' : 'Candidats'}
                                             </p>
                                             <p class="text-xs text-gray-500 mt-1">${new Date(search.date).toLocaleDateString('fr-FR')}</p>
                                         </div>
-                                        <button onclick="loadSavedSearch(${search.id})" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm">
-                                            <i class="fas fa-search mr-1"></i>Charger
-                                        </button>
+                                        <div class="flex gap-2">
+                                            <button onclick="loadSavedSearch(${search.id})" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm">
+                                                <i class="fas fa-search mr-1"></i>Charger
+                                            </button>
+                                            <button onclick="deleteSavedSearch(${search.id})" class="bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-700 text-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             `).join('')}
@@ -1589,10 +1651,118 @@
                     const search = state.savedSearches.find(s => s.id === searchId);
                     if (!search) return;
                     ui.searchInput.value = search.query || '';
+                    ui.citySearchInput.value = search.city || '';
+                    ui.clearCityBtn.classList.toggle('hidden', !search.city);
                     state.filters = { ...search.filters };
+                    
+                    // Update UI to reflect loaded filters
+                    document.querySelectorAll('.filter-btn').forEach(btn => {
+                        btn.classList.toggle('active', btn.dataset.filter === state.filters.type);
+                    });
+                    document.querySelectorAll('.sub-filter-btn[data-exp]').forEach(btn => {
+                        btn.classList.toggle('active', btn.dataset.exp === state.filters.experience);
+                    });
+                    document.querySelectorAll('.sub-filter-btn[data-contract]').forEach(btn => {
+                        btn.classList.toggle('active', btn.dataset.contract === state.filters.contract);
+                    });
+                    document.querySelectorAll('.sub-filter-btn[data-work]').forEach(btn => {
+                        btn.classList.toggle('active', btn.dataset.work === state.filters.workArrangement);
+                    });
+                    ui.industryFilter.value = state.filters.industry;
+                    ui.salarySlider.value = state.filters.salary;
+                    ui.salaryValue.textContent = `${state.filters.salary.toLocaleString('fr-FR')} €`;
+                    ui.distanceSlider.value = state.filters.distance;
+                    ui.distanceValue.textContent = `${state.filters.distance} km`;
+                    
                     performSearch();
                     closeAllModals();
                     showToast('Recherche chargée !', 'success');
+                }
+                
+                function deleteSavedSearch(searchId) {
+                    if (!confirm('Supprimer cette recherche sauvegardée ?')) return;
+                    state.savedSearches = state.savedSearches.filter(s => s.id !== searchId);
+                    try {
+                        localStorage.setItem('jobmap_saved_searches', JSON.stringify(state.savedSearches));
+                    } catch (e) {
+                        console.error('Error deleting search:', e);
+                    }
+                    closeAllModals();
+                    showSavedSearches();
+                    showToast('Recherche supprimée !', 'success');
+                }
+                
+                function showRouteHistory() {
+                    let content = '';
+                    if (state.routeHistory.length === 0) {
+                        content = '<p class="text-center text-gray-500 py-8">Aucun itinéraire sauvegardé.</p>';
+                    } else {
+                        const transportIcons = {
+                            car: { icon: 'fa-car', name: 'Voiture', color: 'blue' },
+                            bicycle: { icon: 'fa-bicycle', name: 'Vélo', color: 'green' },
+                            foot: { icon: 'fa-walking', name: 'À pied', color: 'orange' }
+                        };
+                        
+                        content = `<div class="space-y-3 mb-4">
+                            ${state.routeHistory.slice().reverse().map(route => {
+                                const modeInfo = transportIcons[route.mode] || transportIcons.car;
+                                return `<div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <div class="flex items-center gap-2 mb-2">
+                                                <i class="fas ${modeInfo.icon} text-${modeInfo.color}-600"></i>
+                                                <h4 class="font-semibold dark:text-white">${modeInfo.name}</h4>
+                                            </div>
+                                            <p class="text-sm text-gray-600 dark:text-gray-300">
+                                                Distance: ${route.distance} km • Durée: ${route.duration}
+                                            </p>
+                                            <p class="text-xs text-gray-500 mt-1">${new Date(route.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <button onclick="reloadRoute({lat: ${route.start.lat}, lon: ${route.start.lon}}, {lat: ${route.end.lat}, lon: ${route.end.lon}}, '${route.mode}')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm">
+                                                <i class="fas fa-redo mr-1"></i>Recharger
+                                            </button>
+                                            <button onclick="deleteRoute(${route.id})" class="bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-700 text-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>`;
+                            }).join('')}
+                        </div>`;
+                    }
+                    
+                    const modal = document.createElement('div');
+                    modal.id = 'route-history-modal';
+                    modal.className = 'modal-backdrop fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-70 z-[1050] flex items-center justify-center';
+                    modal.innerHTML = `<div class="modal-panel bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl m-4 transform max-h-[90vh] flex flex-col">
+                        <button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10"><i class="fas fa-times fa-2x"></i></button>
+                        <div class="overflow-y-auto p-8">
+                            <h2 class="text-2xl font-bold text-center mb-6 dark:text-white"><i class="fas fa-route mr-2"></i>Historique des trajets</h2>
+                            ${content}
+                        </div>
+                    </div>`;
+                    ui.modalContainer.appendChild(modal);
+                    openModal('route-history-modal');
+                }
+                
+                function reloadRoute(start, end, mode) {
+                    closeAllModals();
+                    calculateRoute(start, end, mode);
+                    showToast('Itinéraire rechargé !', 'success');
+                }
+                
+                function deleteRoute(routeId) {
+                    if (!confirm('Supprimer cet itinéraire ?')) return;
+                    state.routeHistory = state.routeHistory.filter(r => r.id !== routeId);
+                    try {
+                        localStorage.setItem('jobmap_route_history', JSON.stringify(state.routeHistory));
+                    } catch (e) {
+                        console.error('Error deleting route:', e);
+                    }
+                    closeAllModals();
+                    showRouteHistory();
+                    showToast('Itinéraire supprimé !', 'success');
                 }
                 
                 function showViewHistory() {
@@ -1909,6 +2079,7 @@
                 function performSearch() {
                     state.firstInteraction = true;
                     const query = ui.searchInput.value.toLowerCase();
+                    const cityQuery = ui.citySearchInput.value.toLowerCase().trim();
                     
                     const calculateDistance = (lat1, lon1, lat2, lon2) => {
                         const R = 6371; // Earth radius in km
@@ -1929,7 +2100,8 @@
                         const distance = calculateDistance(state.userLocation.lat, state.userLocation.lon, item.location.lat, item.location.lon);
                         const distanceMatch = distance <= state.filters.distance;
                         const queryMatch = !query || Object.values(item).some(val => String(val).toLowerCase().includes(query)) || (item.tags && item.tags.some(tag => tag.toLowerCase().includes(query)));
-                        return typeMatch && expMatch && salaryMatch && contractMatch && workArrangementMatch && industryMatch && distanceMatch && queryMatch;
+                        const cityMatch = !cityQuery || item.city.toLowerCase().includes(cityQuery);
+                        return typeMatch && expMatch && salaryMatch && contractMatch && workArrangementMatch && industryMatch && distanceMatch && queryMatch && cityMatch;
                     });
                     displayData(filteredData);
                 }
@@ -2012,6 +2184,7 @@
                             case 'dashboard': showDashboard(); break;
                             case 'notifications': showNotifications(); break;
                             case 'saved-searches': showSavedSearches(); break;
+                            case 'route-history': showRouteHistory(); break;
                             case 'view-history': showViewHistory(); break;
                             case 'show-company': openModal('company-modal'); break;
                             case 'spontaneous-application': openModal('spontaneousApplication-modal'); break;
@@ -2975,6 +3148,67 @@
                 ui.togglePanelBtn.addEventListener('click', () => ui.searchPanel.classList.toggle('collapsed'));
                 ui.matchModeBtn.addEventListener('click', toggleMatchMode);
                 ui.searchInput.addEventListener('keyup', performSearch);
+                
+                // City search functionality
+                ui.citySearchInput.addEventListener('input', e => {
+                    const value = e.target.value.toLowerCase().trim();
+                    ui.clearCityBtn.classList.toggle('hidden', !value);
+                    
+                    if (value.length >= 2) {
+                        // Get unique cities from data
+                        const cities = [...new Set(data.map(item => item.city))].filter(city => 
+                            city.toLowerCase().includes(value)
+                        ).sort();
+                        
+                        if (cities.length > 0) {
+                            ui.citySuggestions.innerHTML = cities.map(city => 
+                                `<div class="city-suggestion px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer text-sm dark:text-white" data-city="${city}">
+                                    <i class="fas fa-map-marker-alt mr-2 text-emerald-500"></i>${city}
+                                </div>`
+                            ).join('');
+                            ui.citySuggestions.classList.remove('hidden');
+                        } else {
+                            ui.citySuggestions.classList.add('hidden');
+                        }
+                    } else {
+                        ui.citySuggestions.classList.add('hidden');
+                    }
+                    
+                    performSearch();
+                });
+                
+                ui.citySearchInput.addEventListener('keyup', e => {
+                    if (e.key === 'Escape') {
+                        ui.citySearchInput.value = '';
+                        ui.clearCityBtn.classList.add('hidden');
+                        ui.citySuggestions.classList.add('hidden');
+                        performSearch();
+                    }
+                });
+                
+                ui.clearCityBtn.addEventListener('click', () => {
+                    ui.citySearchInput.value = '';
+                    ui.clearCityBtn.classList.add('hidden');
+                    ui.citySuggestions.classList.add('hidden');
+                    performSearch();
+                });
+                
+                ui.citySuggestions.addEventListener('click', e => {
+                    const suggestion = e.target.closest('.city-suggestion');
+                    if (suggestion) {
+                        ui.citySearchInput.value = suggestion.dataset.city;
+                        ui.citySuggestions.classList.add('hidden');
+                        performSearch();
+                    }
+                });
+                
+                // Click outside to close suggestions
+                document.addEventListener('click', e => {
+                    if (!e.target.closest('#city-search-input') && !e.target.closest('#city-suggestions')) {
+                        ui.citySuggestions.classList.add('hidden');
+                    }
+                });
+                
                 ui.filterContainer.addEventListener('click', e => { const target = e.target.closest('button'); if(target) { ui.filterContainer.querySelector('.active').classList.remove('active'); target.classList.add('active'); state.filters.type = target.dataset.filter; performSearch(); } });
                 
                 [ui.expFilterContainer, ui.contractFilterContainer, ui.workArrangementFilterContainer].forEach(container => {
