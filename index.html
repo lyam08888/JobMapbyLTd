@@ -1798,6 +1798,13 @@
                             case 'calendar': showCalendar(); break;
                             case 'job-comparator': showJobComparator(); break;
                             case 'career-coach': showCareerCoach(); break;
+                            case 'recruitment-analytics': showRecruitmentAnalytics(); break;
+                            case 'candidate-pool': showCandidatePool(); break;
+                            case 'job-performance': showJobPerformance(); break;
+                            case 'team-collaboration': showTeamCollaboration(); break;
+                            case 'statistics': showStatistics(); break;
+                            case 'settings': showSettings(); break;
+                            case 'help-center': showHelpCenter(); break;
                         }
                         return;
                     }
@@ -2232,6 +2239,498 @@
                     openModal('careerCoach-modal');
                 }
                 
+                function showRecruitmentAnalytics() {
+                    if (!state.currentUser || (state.currentUser.type !== 'recruiter' && state.currentUser.type !== 'employer')) {
+                        showToast('Cette fonctionnalité est réservée aux recruteurs et employeurs.', 'error');
+                        return;
+                    }
+                    
+                    const myJobs = data.filter(j => j.type === 'job').slice(0, 5);
+                    const totalApplications = state.applications ? state.applications.length : Math.floor(Math.random() * 150) + 50;
+                    const interviewsScheduled = Math.floor(totalApplications * 0.3);
+                    const hiredCount = Math.floor(totalApplications * 0.1);
+                    const averageTime = Math.floor(Math.random() * 20) + 15;
+                    
+                    const content = `<div class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-900/30 p-5 rounded-lg">
+                                <i class="fas fa-file-alt text-3xl text-blue-600 dark:text-blue-400 mb-2"></i>
+                                <p class="text-3xl font-bold text-blue-600 dark:text-blue-400">${totalApplications}</p>
+                                <p class="text-sm text-gray-700 dark:text-gray-300">Candidatures reçues</p>
+                            </div>
+                            <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-900/30 p-5 rounded-lg">
+                                <i class="fas fa-calendar-check text-3xl text-green-600 dark:text-green-400 mb-2"></i>
+                                <p class="text-3xl font-bold text-green-600 dark:text-green-400">${interviewsScheduled}</p>
+                                <p class="text-sm text-gray-700 dark:text-gray-300">Entretiens planifiés</p>
+                            </div>
+                            <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-900/30 p-5 rounded-lg">
+                                <i class="fas fa-user-check text-3xl text-purple-600 dark:text-purple-400 mb-2"></i>
+                                <p class="text-3xl font-bold text-purple-600 dark:text-purple-400">${hiredCount}</p>
+                                <p class="text-sm text-gray-700 dark:text-gray-300">Recrutements réussis</p>
+                            </div>
+                            <div class="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-900/30 p-5 rounded-lg">
+                                <i class="fas fa-clock text-3xl text-orange-600 dark:text-orange-400 mb-2"></i>
+                                <p class="text-3xl font-bold text-orange-600 dark:text-orange-400">${averageTime}j</p>
+                                <p class="text-sm text-gray-700 dark:text-gray-300">Délai moyen d'embauche</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
+                            <h3 class="font-bold text-lg mb-4 dark:text-white"><i class="fas fa-chart-line mr-2 text-blue-500"></i>Performance des offres</h3>
+                            <div class="space-y-3">
+                                ${myJobs.map(job => {
+                                    const applications = Math.floor(Math.random() * 50) + 10;
+                                    const views = Math.floor(Math.random() * 200) + 50;
+                                    return `<div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-600 rounded-lg">
+                                        <div class="flex-1">
+                                            <p class="font-semibold dark:text-white">${job.title}</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-300">${job.city} • ${job.contract}</p>
+                                        </div>
+                                        <div class="flex gap-4 text-sm">
+                                            <div class="text-center">
+                                                <p class="font-bold text-blue-600 dark:text-blue-400">${views}</p>
+                                                <p class="text-xs text-gray-500">vues</p>
+                                            </div>
+                                            <div class="text-center">
+                                                <p class="font-bold text-green-600 dark:text-green-400">${applications}</p>
+                                                <p class="text-xs text-gray-500">candidatures</p>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                                }).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 p-5 rounded-lg">
+                            <h4 class="font-bold mb-3 dark:text-white"><i class="fas fa-lightbulb mr-2 text-yellow-500"></i>Recommandations</h4>
+                            <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                                <li><i class="fas fa-arrow-right text-blue-500 mr-2"></i>Augmentez la visibilité de vos offres en améliorant les descriptions</li>
+                                <li><i class="fas fa-arrow-right text-blue-500 mr-2"></i>Répondez rapidement aux candidatures pour améliorer votre taux de conversion</li>
+                                <li><i class="fas fa-arrow-right text-blue-500 mr-2"></i>Utilisez la fonctionnalité de matching pour trouver les meilleurs profils</li>
+                            </ul>
+                        </div>
+                    </div>`;
+                    
+                    document.getElementById('recruitment-analytics-content').innerHTML = content;
+                    openModal('recruitmentAnalytics-modal');
+                }
+                
+                function showCandidatePool() {
+                    if (!state.currentUser || (state.currentUser.type !== 'recruiter' && state.currentUser.type !== 'employer')) {
+                        showToast('Cette fonctionnalité est réservée aux recruteurs et employeurs.', 'error');
+                        return;
+                    }
+                    
+                    const candidates = data.filter(c => c.type === 'candidate').slice(0, 10);
+                    
+                    const content = `<div class="space-y-6">
+                        <div class="bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 p-6 rounded-lg">
+                            <h3 class="text-xl font-bold mb-2 dark:text-white"><i class="fas fa-users mr-2"></i>Vivier de candidats</h3>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">Parcourez et gérez votre base de candidats</p>
+                        </div>
+                        
+                        <div class="flex gap-2 mb-4">
+                            <input type="text" placeholder="Rechercher un candidat..." class="flex-1 px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            ${candidates.map(candidate => `<div class="bg-white dark:bg-gray-700 p-5 rounded-lg shadow hover:shadow-lg transition cursor-pointer" onclick="showDetailsModal(${candidate.id})">
+                                <div class="flex items-start gap-4">
+                                    <img src="${candidate.avatar}" class="w-16 h-16 rounded-full" alt="${candidate.name}">
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <h4 class="font-bold text-lg dark:text-white">${candidate.name}</h4>
+                                            <button onclick="event.stopPropagation(); contactCandidate(${candidate.id})" class="bg-blue-600 text-white px-4 py-1 rounded text-sm hover:bg-blue-700">
+                                                Contacter
+                                            </button>
+                                        </div>
+                                        <p class="text-gray-600 dark:text-gray-300 mb-2">${candidate.title}</p>
+                                        <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                                            <span><i class="fas fa-map-marker-alt mr-1"></i>${candidate.city}</span>
+                                            <span><i class="fas fa-briefcase mr-1"></i>${candidate.experience}</span>
+                                            <span><i class="fas fa-clock mr-1"></i>${candidate.availability}</span>
+                                        </div>
+                                        <div class="flex flex-wrap gap-2 mt-3">
+                                            ${candidate.tags.slice(0, 4).map(tag => `<span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded text-xs">${tag}</span>`).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`).join('')}
+                        </div>
+                    </div>`;
+                    
+                    document.getElementById('candidate-pool-content').innerHTML = content;
+                    openModal('candidatePool-modal');
+                }
+                
+                function showJobPerformance() {
+                    if (!state.currentUser || (state.currentUser.type !== 'recruiter' && state.currentUser.type !== 'employer')) {
+                        showToast('Cette fonctionnalité est réservée aux recruteurs et employeurs.', 'error');
+                        return;
+                    }
+                    
+                    const myJobs = data.filter(j => j.type === 'job').slice(0, 8);
+                    
+                    const content = `<div class="space-y-6">
+                        <div class="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 p-6 rounded-lg">
+                            <h3 class="text-xl font-bold mb-2 dark:text-white"><i class="fas fa-trophy mr-2"></i>Performance des offres d'emploi</h3>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">Analysez la performance de vos offres publiées</p>
+                        </div>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-100 dark:bg-gray-700">
+                                    <tr>
+                                        <th class="p-3 text-left text-sm font-semibold dark:text-white">Poste</th>
+                                        <th class="p-3 text-center text-sm font-semibold dark:text-white">Vues</th>
+                                        <th class="p-3 text-center text-sm font-semibold dark:text-white">Candidatures</th>
+                                        <th class="p-3 text-center text-sm font-semibold dark:text-white">Taux conversion</th>
+                                        <th class="p-3 text-center text-sm font-semibold dark:text-white">Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${myJobs.map(job => {
+                                        const views = Math.floor(Math.random() * 300) + 100;
+                                        const applications = Math.floor(Math.random() * 50) + 10;
+                                        const conversionRate = ((applications / views) * 100).toFixed(1);
+                                        const score = Math.floor(Math.random() * 30) + 70;
+                                        const scoreColor = score >= 85 ? 'text-green-600 dark:text-green-400' : score >= 70 ? 'text-yellow-600 dark:text-yellow-400' : 'text-red-600 dark:text-red-400';
+                                        
+                                        return `<tr class="border-b dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                            <td class="p-3">
+                                                <p class="font-semibold dark:text-white">${job.title}</p>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">${job.city} • ${job.contract}</p>
+                                            </td>
+                                            <td class="p-3 text-center font-bold text-blue-600 dark:text-blue-400">${views}</td>
+                                            <td class="p-3 text-center font-bold text-green-600 dark:text-green-400">${applications}</td>
+                                            <td class="p-3 text-center font-bold text-purple-600 dark:text-purple-400">${conversionRate}%</td>
+                                            <td class="p-3 text-center">
+                                                <div class="flex items-center justify-center gap-2">
+                                                    <span class="font-bold ${scoreColor}">${score}</span>
+                                                    <i class="fas ${score >= 85 ? 'fa-arrow-up' : score >= 70 ? 'fa-minus' : 'fa-arrow-down'} ${scoreColor}"></i>
+                                                </div>
+                                            </td>
+                                        </tr>`;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Offre la plus vue</p>
+                                <p class="font-bold text-lg dark:text-white">${myJobs[0]?.title || 'N/A'}</p>
+                            </div>
+                            <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Meilleur taux de conversion</p>
+                                <p class="font-bold text-lg dark:text-white">${myJobs[1]?.title || 'N/A'}</p>
+                            </div>
+                            <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Plus de candidatures</p>
+                                <p class="font-bold text-lg dark:text-white">${myJobs[2]?.title || 'N/A'}</p>
+                            </div>
+                        </div>
+                    </div>`;
+                    
+                    document.getElementById('job-performance-content').innerHTML = content;
+                    openModal('jobPerformance-modal');
+                }
+                
+                function showTeamCollaboration() {
+                    if (!state.currentUser || (state.currentUser.type !== 'recruiter' && state.currentUser.type !== 'employer')) {
+                        showToast('Cette fonctionnalité est réservée aux recruteurs et employeurs.', 'error');
+                        return;
+                    }
+                    
+                    const teamMembers = [
+                        { id: 1, name: 'Sophie Martin', role: 'Recruteur Senior', avatar: 'https://placehold.co/100x100/3b82f6/ffffff?text=SM', active: true, tasks: 12 },
+                        { id: 2, name: 'Marc Dubois', role: 'RH Manager', avatar: 'https://placehold.co/100x100/10b981/ffffff?text=MD', active: true, tasks: 8 },
+                        { id: 3, name: 'Julie Roux', role: 'Recruteur', avatar: 'https://placehold.co/100x100/ec4899/ffffff?text=JR', active: false, tasks: 15 },
+                        { id: 4, name: 'Thomas Blanc', role: 'Talent Acquisition', avatar: 'https://placehold.co/100x100/f59e0b/ffffff?text=TB', active: true, tasks: 6 }
+                    ];
+                    
+                    const content = `<div class="space-y-6">
+                        <div class="bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 p-6 rounded-lg">
+                            <h3 class="text-xl font-bold mb-2 dark:text-white"><i class="fas fa-users-cog mr-2"></i>Collaboration d'équipe</h3>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">Gérez votre équipe de recrutement et leurs tâches</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${teamMembers.map(member => `<div class="bg-white dark:bg-gray-700 p-5 rounded-lg shadow">
+                                <div class="flex items-start gap-4">
+                                    <div class="relative">
+                                        <img src="${member.avatar}" class="w-16 h-16 rounded-full" alt="${member.name}">
+                                        <span class="absolute bottom-0 right-0 w-4 h-4 ${member.active ? 'bg-green-500' : 'bg-gray-400'} border-2 border-white rounded-full"></span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="font-bold dark:text-white">${member.name}</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">${member.role}</p>
+                                        <div class="flex items-center gap-4 mt-2 text-sm">
+                                            <span class="text-gray-500 dark:text-gray-400">
+                                                <i class="fas fa-tasks mr-1"></i>${member.tasks} tâches
+                                            </span>
+                                            <span class="${member.active ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}">
+                                                <i class="fas fa-circle mr-1 text-xs"></i>${member.active ? 'En ligne' : 'Hors ligne'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`).join('')}
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
+                            <h4 class="font-bold mb-4 dark:text-white"><i class="fas fa-clipboard-list mr-2"></i>Tâches en cours</h4>
+                            <div class="space-y-3">
+                                ${['Révision CV - Développeur Full-Stack', 'Planifier entretien - Data Scientist', 'Feedback candidat - Designer UX', 'Suivi candidature - DevOps Engineer'].map((task, i) => `<div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-600 rounded-lg">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" class="w-5 h-5 text-blue-600 rounded" ${i === 0 ? 'checked' : ''}>
+                                        <span class="dark:text-white ${i === 0 ? 'line-through text-gray-500' : ''}">${task}</span>
+                                    </div>
+                                    <span class="text-xs text-gray-500 dark:text-gray-400">${teamMembers[i % teamMembers.length].name}</span>
+                                </div>`).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <button class="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-semibold">
+                                <i class="fas fa-plus mr-2"></i>Ajouter une tâche
+                            </button>
+                            <button class="flex-1 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 py-3 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 font-semibold">
+                                <i class="fas fa-user-plus mr-2"></i>Inviter un membre
+                            </button>
+                        </div>
+                    </div>`;
+                    
+                    document.getElementById('team-collaboration-content').innerHTML = content;
+                    openModal('teamCollaboration-modal');
+                }
+                
+                function showStatistics() {
+                    const content = `<div class="space-y-6">
+                        <div class="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 p-6 rounded-lg">
+                            <h3 class="text-xl font-bold mb-2 dark:text-white"><i class="fas fa-chart-area mr-2"></i>Statistiques d'utilisation</h3>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">Analysez votre activité sur la plateforme</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="bg-white dark:bg-gray-700 p-5 rounded-lg shadow text-center">
+                                <i class="fas fa-search text-3xl text-blue-600 dark:text-blue-400 mb-2"></i>
+                                <p class="text-3xl font-bold dark:text-white">${Math.floor(Math.random() * 200) + 50}</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Recherches</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-700 p-5 rounded-lg shadow text-center">
+                                <i class="fas fa-eye text-3xl text-green-600 dark:text-green-400 mb-2"></i>
+                                <p class="text-3xl font-bold dark:text-white">${Math.floor(Math.random() * 500) + 100}</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Vues de profil</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-700 p-5 rounded-lg shadow text-center">
+                                <i class="fas fa-heart text-3xl text-pink-600 dark:text-pink-400 mb-2"></i>
+                                <p class="text-3xl font-bold dark:text-white">${state.favorites.size}</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Favoris</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-700 p-5 rounded-lg shadow text-center">
+                                <i class="fas fa-paper-plane text-3xl text-purple-600 dark:text-purple-400 mb-2"></i>
+                                <p class="text-3xl font-bold dark:text-white">${state.applications ? state.applications.length : 0}</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Candidatures</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
+                            <h4 class="font-bold mb-4 dark:text-white"><i class="fas fa-clock mr-2"></i>Activité récente</h4>
+                            <div class="space-y-3">
+                                ${state.viewHistory.slice(0, 5).map(view => {
+                                    const item = view.item;
+                                    const timeAgo = Math.floor((Date.now() - new Date(view.date).getTime()) / 60000);
+                                    return `<div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-600 rounded-lg">
+                                        <div>
+                                            <p class="font-semibold dark:text-white">${item.type === 'job' ? item.title : item.name}</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-300">${item.type === 'job' ? item.company : item.title}</p>
+                                        </div>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400">Il y a ${timeAgo} min</span>
+                                    </div>`;
+                                }).join('') || '<p class="text-gray-500 dark:text-gray-400 text-center">Aucune activité récente</p>'}
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-50 dark:bg-blue-900/20 p-5 rounded-lg">
+                            <h4 class="font-bold mb-3 dark:text-white"><i class="fas fa-trophy mr-2 text-yellow-500"></i>Vos accomplissements</h4>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                ${[
+                                    { icon: 'fa-star', name: 'Premier Favori', color: 'yellow' },
+                                    { icon: 'fa-fire', name: 'Utilisateur Actif', color: 'orange' },
+                                    { icon: 'fa-search', name: 'Explorateur', color: 'blue' },
+                                    { icon: 'fa-heart', name: 'Super Fan', color: 'pink' }
+                                ].map(badge => `<div class="bg-white dark:bg-gray-700 p-3 rounded-lg text-center">
+                                    <i class="fas ${badge.icon} text-2xl text-${badge.color}-600 dark:text-${badge.color}-400 mb-2"></i>
+                                    <p class="text-xs font-semibold dark:text-white">${badge.name}</p>
+                                </div>`).join('')}
+                            </div>
+                        </div>
+                    </div>`;
+                    
+                    document.getElementById('statistics-content').innerHTML = content;
+                    openModal('statistics-modal');
+                }
+                
+                function showSettings() {
+                    const content = `<div class="space-y-6">
+                        <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 p-6 rounded-lg">
+                            <h3 class="text-xl font-bold mb-2 dark:text-white"><i class="fas fa-cog mr-2"></i>Paramètres</h3>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">Gérez vos préférences et paramètres de compte</p>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white dark:bg-gray-700 p-5 rounded-lg shadow">
+                                <h4 class="font-bold mb-4 dark:text-white"><i class="fas fa-bell mr-2"></i>Notifications</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="font-semibold dark:text-white">Nouvelles offres</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Recevoir des alertes pour les nouvelles offres correspondantes</p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" class="sr-only peer" checked>
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="font-semibold dark:text-white">Messages</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Notifications de nouveaux messages</p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" class="sr-only peer" checked>
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="font-semibold dark:text-white">Emails hebdomadaires</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Résumé hebdomadaire de votre activité</p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" class="sr-only peer">
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-700 p-5 rounded-lg shadow">
+                                <h4 class="font-bold mb-4 dark:text-white"><i class="fas fa-lock mr-2"></i>Confidentialité</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="font-semibold dark:text-white">Profil public</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Rendre mon profil visible aux recruteurs</p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" class="sr-only peer" checked>
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="font-semibold dark:text-white">Statistiques anonymisées</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Partager des données anonymes pour améliorer le service</p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" class="sr-only peer" checked>
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-700 p-5 rounded-lg shadow">
+                                <h4 class="font-bold mb-4 dark:text-white"><i class="fas fa-paint-brush mr-2"></i>Apparence</h4>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <button class="p-4 border-2 border-blue-500 rounded-lg bg-white hover:bg-gray-50">
+                                        <i class="fas fa-sun text-2xl text-yellow-500 mb-2"></i>
+                                        <p class="text-sm font-semibold">Clair</p>
+                                    </button>
+                                    <button class="p-4 border-2 border-gray-300 rounded-lg bg-gray-800 hover:bg-gray-700">
+                                        <i class="fas fa-moon text-2xl text-blue-400 mb-2"></i>
+                                        <p class="text-sm font-semibold text-white">Sombre</p>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-3">
+                                <button class="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-semibold">
+                                    <i class="fas fa-save mr-2"></i>Sauvegarder les modifications
+                                </button>
+                                <button class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 font-semibold">
+                                    <i class="fas fa-trash mr-2"></i>Supprimer le compte
+                                </button>
+                            </div>
+                        </div>
+                    </div>`;
+                    
+                    document.getElementById('settings-content').innerHTML = content;
+                    openModal('settings-modal');
+                }
+                
+                function showHelpCenter() {
+                    const content = `<div class="space-y-6">
+                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-6 rounded-lg">
+                            <h3 class="text-xl font-bold mb-2 dark:text-white"><i class="fas fa-question-circle mr-2"></i>Centre d'aide</h3>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">Trouvez des réponses à vos questions</p>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <input type="text" placeholder="Rechercher dans l'aide..." class="w-full px-4 py-3 border-2 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:border-blue-500 focus:outline-none">
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${[
+                                { icon: 'fa-user-circle', title: 'Créer un compte', desc: 'Comment créer et configurer votre profil', color: 'blue' },
+                                { icon: 'fa-search', title: 'Rechercher des offres', desc: 'Utilisez les filtres pour trouver l\'emploi idéal', color: 'green' },
+                                { icon: 'fa-paper-plane', title: 'Postuler', desc: 'Comment envoyer votre candidature', color: 'purple' },
+                                { icon: 'fa-heart', title: 'Gérer les favoris', desc: 'Organisez vos offres favorites', color: 'pink' }
+                            ].map(topic => `<div class="bg-white dark:bg-gray-700 p-5 rounded-lg shadow hover:shadow-lg transition cursor-pointer">
+                                <i class="fas ${topic.icon} text-3xl text-${topic.color}-600 dark:text-${topic.color}-400 mb-3"></i>
+                                <h4 class="font-bold mb-2 dark:text-white">${topic.title}</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">${topic.desc}</p>
+                            </div>`).join('')}
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
+                            <h4 class="font-bold mb-4 dark:text-white"><i class="fas fa-question mr-2"></i>Questions fréquentes</h4>
+                            <div class="space-y-3">
+                                ${[
+                                    { q: 'Comment modifier mon profil ?', a: 'Cliquez sur le menu utilisateur puis "Mon Profil" pour accéder aux paramètres de votre compte.' },
+                                    { q: 'Comment postuler à une offre ?', a: 'Cliquez sur "Voir détails" puis sur le bouton "Postuler maintenant" dans la fiche de l\'offre.' },
+                                    { q: 'Comment ajouter des favoris ?', a: 'Cliquez sur l\'icône de cœur sur n\'importe quelle offre ou profil pour l\'ajouter à vos favoris.' },
+                                    { q: 'Comment utiliser le mode association ?', a: 'Activez le mode association, sélectionnez un candidat puis une offre pour voir la compatibilité.' }
+                                ].map(faq => `<details class="bg-gray-50 dark:bg-gray-600 p-4 rounded-lg cursor-pointer">
+                                    <summary class="font-semibold dark:text-white">${faq.q}</summary>
+                                    <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">${faq.a}</p>
+                                </details>`).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-50 dark:bg-blue-900/20 p-5 rounded-lg">
+                            <h4 class="font-bold mb-3 dark:text-white"><i class="fas fa-headset mr-2"></i>Besoin d'aide supplémentaire ?</h4>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-4">Notre équipe support est disponible du lundi au vendredi de 9h à 18h</p>
+                            <div class="flex gap-3">
+                                <button class="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+                                    <i class="fas fa-envelope mr-2"></i>Nous contacter
+                                </button>
+                                <button class="flex-1 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500">
+                                    <i class="fas fa-comments mr-2"></i>Chat en direct
+                                </button>
+                            </div>
+                        </div>
+                    </div>`;
+                    
+                    document.getElementById('help-center-content').innerHTML = content;
+                    openModal('helpCenter-modal');
+                }
+                
                 
                 document.getElementById('login-form').addEventListener('submit', e => { e.preventDefault(); state.currentUser = {id: 99, name: "Recruteur Test", email: e.target.email.value, type: 'recruiter'}; closeAllModals(); updateAuthUI(); showToast('Connexion réussie !', 'success'); });
                 document.getElementById('signup-candidate-form').addEventListener('submit', e => { e.preventDefault(); const name = e.target.name.value; state.currentUser = {id: data.length + 1, name, email: e.target.email.value, type: 'candidate'}; data.push({id: state.currentUser.id, type:'candidate', name, title: e.target.title.value, tags: e.target.tags.value.split(','), softSkills: [], location: {lat: 48.85, lon: 2.35}, city: 'Paris', experience: 'Junior', availability: 'Immédiate', description: 'Nouveau candidat'}); closeAllModals(); updateAuthUI(); showToast(`Bienvenue, ${name} !`, 'success'); performSearch(); });
@@ -2276,7 +2775,7 @@
                 ui.distanceSlider.addEventListener('change', performSearch);
                 ui.exportDataBtn.addEventListener('click', exportData);
                 ui.resultsList.addEventListener('click', e => { const card = e.target.closest('[data-id][data-lat]'); if (card) showDetailsModal(parseInt(card.dataset.id)); });
-                map.on('popupopen', e => e.popup.getElement().querySelector('.view-details-btn')?.addEventListener('click', ev => showDetailsModal(ev.currentTarget.dataset.id)));
+                map.on('popupopen', e => e.popup.getElement().querySelector('.view-details-btn')?.addEventListener('click', ev => showDetailsModal(parseInt(ev.currentTarget.dataset.id))));
                 
                 ui.toggleResultsBtn.addEventListener('click', () => { ui.resultsList.classList.toggle('expanded'); const icon = ui.toggleResultsBtn.querySelector('i'); icon.classList.toggle('fa-chevron-up'); icon.classList.toggle('fa-chevron-down'); });
                 ui.toggleFiltersBtn.addEventListener('click', () => { ui.advancedFilters.classList.toggle('collapsed'); const icon = ui.toggleFiltersBtn.querySelector('i'); icon.classList.toggle('fa-chevron-up'); icon.classList.toggle('fa-chevron-down'); });
