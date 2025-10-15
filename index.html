@@ -597,23 +597,23 @@
                         actionText = 'Match faible';
                     } 
                     
-                    const listSkills = (skills, color) => skills.map(s => \`<span class="bg-\${color}-100 dark:bg-\${color}-900/40 text-\${color}-800 dark:text-\${color}-300 px-2 py-1 text-sm rounded">\${s}</span>\`).join(' ') || '<span class="text-gray-500">Aucune</span>'; 
+                    const listSkills = (skills, color) => skills.map(s => `<span class="bg-${color}-100 dark:bg-${color}-900/40 text-${color}-800 dark:text-${color}-300 px-2 py-1 text-sm rounded">${s}</span>`).join(' ') || '<span class="text-gray-500">Aucune</span>'; 
                     
-                    const content = \`<div class="space-y-6">
+                    const content = `<div class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
                             <div class="md:col-span-1 flex flex-col items-center text-center">
-                                <div class="score-circle \${scoreColor} shadow-lg mb-3">\${totalScore}%</div>
+                                <div class="score-circle ${scoreColor} shadow-lg mb-3">${totalScore}%</div>
                                 <h3 class="text-2xl font-bold dark:text-white">Score Global</h3>
-                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">\${actionText}</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">${actionText}</p>
                             </div>
                             <div class="md:col-span-2">
                                 <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-4 rounded-lg mb-3">
                                     <div class="flex items-start gap-3 mb-3">
-                                        \${candidate.avatar ? \`<img src="\${candidate.avatar}" class="w-16 h-16 rounded-full border-2 border-blue-500">\` : ''}
+                                        ${candidate.avatar ? `<img src="${candidate.avatar}" class="w-16 h-16 rounded-full border-2 border-blue-500">` : ''}
                                         <div class="flex-1">
-                                            <h4 class="font-bold text-lg dark:text-white">\${candidate.name}</h4>
-                                            <p class="text-gray-600 dark:text-gray-300 text-sm">\${candidate.title}</p>
-                                            <p class="text-xs text-gray-500 mt-1"><i class="fas fa-briefcase mr-1"></i>\${candidate.experience} • <i class="fas fa-map-marker-alt mr-1"></i>\${candidate.city}</p>
+                                            <h4 class="font-bold text-lg dark:text-white">${candidate.name}</h4>
+                                            <p class="text-gray-600 dark:text-gray-300 text-sm">${candidate.title}</p>
+                                            <p class="text-xs text-gray-500 mt-1"><i class="fas fa-briefcase mr-1"></i>${candidate.experience} • <i class="fas fa-map-marker-alt mr-1"></i>${candidate.city}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -622,11 +622,11 @@
                                 </div>
                                 <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-4 rounded-lg">
                                     <div class="flex items-start gap-3">
-                                        \${job.logo ? \`<img src="\${job.logo}" class="w-16 h-16 rounded-lg">\` : ''}
+                                        ${job.logo ? `<img src="${job.logo}" class="w-16 h-16 rounded-lg">` : ''}
                                         <div class="flex-1">
-                                            <h4 class="font-bold text-lg dark:text-white">\${job.title}</h4>
-                                            <p class="text-gray-600 dark:text-gray-300 text-sm">\${job.company}</p>
-                                            <p class="text-xs text-gray-500 mt-1"><i class="fas fa-briefcase mr-1"></i>\${job.experience} • <i class="fas fa-map-marker-alt mr-1"></i>\${job.city}</p>
+                                            <h4 class="font-bold text-lg dark:text-white">${job.title}</h4>
+                                            <p class="text-gray-600 dark:text-gray-300 text-sm">${job.company}</p>
+                                            <p class="text-xs text-gray-500 mt-1"><i class="fas fa-briefcase mr-1"></i>${job.experience} • <i class="fas fa-map-marker-alt mr-1"></i>${job.city}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -637,20 +637,20 @@
                         
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg text-center">
-                                <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">\${techReport.score}%</div>
+                                <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">${techReport.score}%</div>
                                 <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Compétences tech.</div>
                             </div>
                             <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg text-center">
-                                <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">\${softReport.score}%</div>
+                                <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">${softReport.score}%</div>
                                 <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Soft skills</div>
                             </div>
                             <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg text-center">
-                                <div class="text-3xl font-bold text-green-600 dark:text-green-400">\${expScore}%</div>
+                                <div class="text-3xl font-bold text-green-600 dark:text-green-400">${expScore}%</div>
                                 <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Expérience</div>
                             </div>
                             <div class="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg text-center">
-                                <div class="text-3xl font-bold text-orange-600 dark:text-orange-400">\${Math.round(locationScore)}%</div>
-                                <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Proximité (\${Math.round(distance)}km)</div>
+                                <div class="text-3xl font-bold text-orange-600 dark:text-orange-400">${Math.round(locationScore)}%</div>
+                                <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Proximité (${Math.round(distance)}km)</div>
                             </div>
                         </div>
                         
@@ -660,34 +660,34 @@
                                 <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-4 rounded-lg">
                                     <h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
                                         <i class="fas fa-code text-blue-600"></i>
-                                        Compétences techniques (\${techReport.common.length}/\${job.tags.length})
+                                        Compétences techniques (${techReport.common.length}/${job.tags.length})
                                     </h4>
                                     <div class="space-y-2">
-                                        \${techReport.common.length > 0 ? \`<div>
+                                        ${techReport.common.length > 0 ? `<div>
                                             <p class="text-xs text-green-700 dark:text-green-400 font-semibold mb-1"><i class="fas fa-check mr-1"></i>Compétences maîtrisées:</p>
-                                            <div class="flex flex-wrap gap-2">\${listSkills(techReport.common, 'green')}</div>
-                                        </div>\` : ''}
-                                        \${techReport.missing.length > 0 ? \`<div>
+                                            <div class="flex flex-wrap gap-2">${listSkills(techReport.common, 'green')}</div>
+                                        </div>` : ''}
+                                        ${techReport.missing.length > 0 ? `<div>
                                             <p class="text-xs text-red-600 dark:text-red-400 font-semibold mb-1"><i class="fas fa-times mr-1"></i>Compétences à acquérir:</p>
-                                            <div class="flex flex-wrap gap-2">\${listSkills(techReport.missing, 'red')}</div>
-                                        </div>\` : ''}
+                                            <div class="flex flex-wrap gap-2">${listSkills(techReport.missing, 'red')}</div>
+                                        </div>` : ''}
                                     </div>
                                 </div>
                                 
                                 <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-4 rounded-lg">
                                     <h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
                                         <i class="fas fa-user-check text-purple-600"></i>
-                                        Compétences comportementales (\${softReport.common.length}/\${job.softSkills.length})
+                                        Compétences comportementales (${softReport.common.length}/${job.softSkills.length})
                                     </h4>
                                     <div class="space-y-2">
-                                        \${softReport.common.length > 0 ? \`<div>
+                                        ${softReport.common.length > 0 ? `<div>
                                             <p class="text-xs text-green-700 dark:text-green-400 font-semibold mb-1"><i class="fas fa-check mr-1"></i>Qualités présentes:</p>
-                                            <div class="flex flex-wrap gap-2">\${listSkills(softReport.common, 'green')}</div>
-                                        </div>\` : ''}
-                                        \${softReport.missing.length > 0 ? \`<div>
+                                            <div class="flex flex-wrap gap-2">${listSkills(softReport.common, 'green')}</div>
+                                        </div>` : ''}
+                                        ${softReport.missing.length > 0 ? `<div>
                                             <p class="text-xs text-red-600 dark:text-red-400 font-semibold mb-1"><i class="fas fa-times mr-1"></i>Qualités recherchées:</p>
-                                            <div class="flex flex-wrap gap-2">\${listSkills(softReport.missing, 'red')}</div>
-                                        </div>\` : ''}
+                                            <div class="flex flex-wrap gap-2">${listSkills(softReport.missing, 'red')}</div>
+                                        </div>` : ''}
                                     </div>
                                 </div>
                             </div>
@@ -695,26 +695,26 @@
                         
                         <div class="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 p-5 rounded-lg">
                             <h3 class="font-bold text-lg mb-3 dark:text-white"><i class="fas fa-lightbulb mr-2"></i>Recommandations</h3>
-                            \${recommendation}
-                            \${totalScore >= 60 ? \`
+                            ${recommendation}
+                            ${totalScore >= 60 ? `
                                 <div class="mt-4 space-y-2">
                                     <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Points forts:</p>
                                     <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                                        \${techReport.common.length > 0 ? \`<li><i class="fas fa-check text-green-600 mr-2"></i>Maîtrise \${techReport.common.length} compétences techniques clés</li>\` : ''}
-                                        \${softReport.common.length > 0 ? \`<li><i class="fas fa-check text-green-600 mr-2"></i>Possède \${softReport.common.length} soft skills recherchées</li>\` : ''}
-                                        \${expScore >= 75 ? \`<li><i class="fas fa-check text-green-600 mr-2"></i>Niveau d'expérience adapté</li>\` : ''}
-                                        \${locationScore >= 75 ? \`<li><i class="fas fa-check text-green-600 mr-2"></i>Proximité géographique favorable</li>\` : ''}
+                                        ${techReport.common.length > 0 ? `<li><i class="fas fa-check text-green-600 mr-2"></i>Maîtrise ${techReport.common.length} compétences techniques clés</li>` : ''}
+                                        ${softReport.common.length > 0 ? `<li><i class="fas fa-check text-green-600 mr-2"></i>Possède ${softReport.common.length} soft skills recherchées</li>` : ''}
+                                        ${expScore >= 75 ? `<li><i class="fas fa-check text-green-600 mr-2"></i>Niveau d'expérience adapté</li>` : ''}
+                                        ${locationScore >= 75 ? `<li><i class="fas fa-check text-green-600 mr-2"></i>Proximité géographique favorable</li>` : ''}
                                     </ul>
                                 </div>
-                            \` : ''}
-                            \${techReport.missing.length > 0 && totalScore >= 40 ? \`
+                            ` : ''}
+                            ${techReport.missing.length > 0 && totalScore >= 40 ? `
                                 <div class="mt-4 space-y-2">
                                     <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Axes d'amélioration:</p>
                                     <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                                        <li><i class="fas fa-arrow-right text-orange-600 mr-2"></i>Formation sur: \${techReport.missing.slice(0, 3).join(', ')}</li>
+                                        <li><i class="fas fa-arrow-right text-orange-600 mr-2"></i>Formation sur: ${techReport.missing.slice(0, 3).join(', ')}</li>
                                     </ul>
                                 </div>
-                            \` : ''}
+                            ` : ''}
                         </div>
                         
                         <div class="flex gap-4 justify-end pt-4">
@@ -724,11 +724,11 @@
                             <button id="view-route-from-report" class="bg-emerald-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-emerald-700">
                                 <i class="fas fa-route mr-2"></i>Voir l'itinéraire
                             </button>
-                            \${state.currentUser?.type === 'recruiter' ? \`<button onclick="contactCandidate(\${candidate.id}); closeAllModals();" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700">
+                            ${state.currentUser?.type === 'recruiter' ? `<button onclick="contactCandidate(${candidate.id}); closeAllModals();" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700">
                                 <i class="fas fa-envelope mr-2"></i>Contacter le candidat
-                            </button>\` : ''}
+                            </button>` : ''}
                         </div>
-                    </div>\`; 
+                    </div>`; 
                     
                     document.getElementById('match-report-content').innerHTML = content; 
                     document.getElementById('view-route-from-report').onclick = () => { closeAllModals(); calculateRoute(candidate.location, job.location); }; 
