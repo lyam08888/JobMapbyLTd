@@ -30,9 +30,10 @@
         .leaflet-tile-pane { filter: brightness(1); transition: filter 0.3s ease-in-out; }
         .dark .leaflet-tile-pane { filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7); }
         #ui-overlay { z-index: 1001; }
-        .leaflet-popup-content-wrapper { border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .leaflet-popup-content-wrapper { border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: popupFadeIn 0.3s ease-out; }
         .dark .leaflet-popup-content-wrapper { background: #1f2937; color: #d1d5db; }
         .leaflet-popup-content { margin: 15px; font-size: 14px; line-height: 1.5; }
+        @keyframes popupFadeIn { from { opacity: 0; transform: translateY(-10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
         .popup-title { font-weight: 700; font-size: 16px; margin-bottom: 5px; color: #1a202c; }
         .dark .popup-title, .dark .popup-company { color: #f9fafb; }
         .popup-company { font-weight: 500; color: #4a5568; margin-bottom: 10px; }
@@ -43,11 +44,16 @@
         .search-container.collapsed #panel-header { padding: 0; height: 100%; border-bottom: none; display:flex; align-items:center; justify-content:center; }
         #toggle-panel-btn i { transition: transform 0.3s ease; }
         .search-container.collapsed #toggle-panel-btn i { transform: rotate(180deg); }
-        .custom-marker-icon { display: flex; align-items: center; justify-content: center; color: white; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: transform 0.2s ease; }
-        .custom-marker-icon:hover { transform: scale(1.2); }
-        .user-location-icon { background-color: #f59e0b; border: 3px solid white; border-radius: 50%; width: 18px !important; height: 18px !important; box-shadow: 0 0 10px #f59e0b; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 50% { transform: scale(1.2); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } }
+        .custom-marker-icon { display: flex; align-items: center; justify-content: center; color: white; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: all 0.3s ease; animation: markerAppear 0.4s ease-out; }
+        .custom-marker-icon:hover { transform: scale(1.3) rotate(5deg); box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+        .user-location-icon { background-color: #f59e0b; border: 3px solid white; border-radius: 50%; width: 18px !important; height: 18px !important; box-shadow: 0 0 10px #f59e0b; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7), 0 0 10px #f59e0b; } 50% { transform: scale(1.15); box-shadow: 0 0 0 15px rgba(245, 158, 11, 0), 0 0 20px #f59e0b; } }
+        @keyframes markerAppear { from { opacity: 0; transform: translateY(-20px) scale(0.5); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.3); } 50% { opacity: 1; transform: scale(1.05); } 70% { transform: scale(0.9); } 100% { transform: scale(1); } }
+        @keyframes ripple { 0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7), 0 0 0 0 rgba(59, 130, 246, 0.7); } 100% { box-shadow: 0 0 0 20px rgba(59, 130, 246, 0), 0 0 0 40px rgba(59, 130, 246, 0); } }
         .pulsing { animation: pulse 1.5s infinite; }
+        .bouncing { animation: bounceIn 0.6s ease-out; }
+        .rippling { animation: ripple 1.5s infinite; }
         .modal-backdrop.hidden { display: none; }
         .modal-panel.hidden { transform: scale(0.95); opacity: 0; }
         .modal-panel { transition: all 0.2s ease-out; }
@@ -68,13 +74,25 @@
         #match-mode-btn.active { color: #a855f7; box-shadow: 0 0 10px #a855f750; }
         .score-circle { width: 120px; height: 120px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; color: white; border: 6px solid; }
         .favorite-icon.is-favorite { color: #ec4899; }
-        .result-card { padding: 0.75rem; margin-bottom: 0.5rem; }
+        .result-card { padding: 0.75rem; margin-bottom: 0.5rem; animation: slideInRight 0.3s ease-out; transition: all 0.2s ease; }
+        .result-card:hover { transform: translateX(5px); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
         .result-card h3 { font-size: 0.95rem; font-weight: 600; }
         .result-card p { font-size: 0.8rem; }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
         #results-list { transition: max-height 0.3s ease-in-out; max-height: 200px; /* Hauteur réduite par défaut */ overflow-y: auto; }
         #results-list.expanded { max-height: 45vh; /* Hauteur étendue */ }
         #advanced-filters { transition: all 0.3s ease-in-out; max-height: 500px; overflow: hidden; }
         #advanced-filters.collapsed { max-height: 0; padding-top: 0; padding-bottom: 0; margin-bottom: 0; }
+        @keyframes shimmer { 0% { background-position: -1000px 0; } 100% { background-position: 1000px 0; } }
+        .loading-shimmer { background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 20%, #f0f0f0 40%, #f0f0f0 100%); background-size: 1000px 100%; animation: shimmer 2s infinite linear; }
+        .dark .loading-shimmer { background: linear-gradient(90deg, #374151 0%, #4b5563 20%, #374151 40%, #374151 100%); }
+        button { transition: all 0.2s ease; }
+        button:active { transform: scale(0.95); }
+        .marker-cluster { animation: clusterPop 0.3s ease-out; }
+        @keyframes clusterPop { 0% { transform: scale(0); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .leaflet-marker-icon { transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+        @keyframes glow { 0%, 100% { filter: drop-shadow(0 0 5px currentColor); } 50% { filter: drop-shadow(0 0 15px currentColor); } }
+        .glow-animation { animation: glow 2s ease-in-out infinite; }
     </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900">
@@ -137,7 +155,7 @@
                         <div class="space-y-3 pt-2 mb-3">
                             <div><label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Type de contrat</label><div id="contract-filter-container" class="w-full flex bg-gray-200 dark:bg-gray-700 rounded-lg p-1 text-xs"><button class="sub-filter-btn active w-1/4 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-contract="all">Tous</button><button class="sub-filter-btn w-1/4 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-contract="CDI">CDI</button><button class="sub-filter-btn w-1/4 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-contract="CDD">CDD</button><button class="sub-filter-btn w-1/4 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-contract="Alternance">Alternance</button></div></div>
                             <div><label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Mode de travail</label><div id="work-arrangement-filter-container" class="w-full flex bg-gray-200 dark:bg-gray-700 rounded-lg p-1 text-xs"><button class="sub-filter-btn active w-1/3 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-work="all">Tous</button><button class="sub-filter-btn w-1/3 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-work="Sur site">Sur site</button><button class="sub-filter-btn w-1/3 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-work="Hybride">Hybride</button></div></div>
-                            <div><label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Secteur</label><select id="industry-filter" class="w-full p-2 text-xs bg-gray-200 dark:bg-gray-700 rounded-lg border-none text-gray-700 dark:text-gray-300"><option value="all">Tous les secteurs</option><option value="Tech">Tech</option><option value="Data">Data/IA</option><option value="Design">Design</option><option value="Marketing">Marketing</option><option value="Finance">Finance</option><option value="Conseil">Conseil</option><option value="E-Commerce">E-Commerce</option><option value="Blockchain">Blockchain</option><option value="Communication">Communication</option><option value="RH">RH</option><option value="IoT">IoT</option><option value="Sécurité">Sécurité</option><option value="Cloud">Cloud</option><option value="Mobile">Mobile</option><option value="IA">Intelligence Artificielle</option><option value="Web">Développement Web</option><option value="Digital">Digital/Agence</option><option value="QA">Qualité/Testing</option><option value="Infrastructure">Infrastructure</option></select></div>
+                            <div><label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Secteur</label><select id="industry-filter" class="w-full p-2 text-xs bg-gray-200 dark:bg-gray-700 rounded-lg border-none text-gray-700 dark:text-gray-300"><option value="all">Tous les secteurs</option><option value="BTP">BTP/Construction</option><option value="Bureau d'Études">Bureau d'Études</option><option value="Tech">Tech</option><option value="Data">Data/IA</option><option value="Design">Design</option><option value="Marketing">Marketing</option><option value="Finance">Finance</option><option value="Conseil">Conseil</option><option value="E-Commerce">E-Commerce</option><option value="Blockchain">Blockchain</option><option value="Communication">Communication</option><option value="RH">RH</option><option value="IoT">IoT</option><option value="Sécurité">Sécurité</option><option value="Cloud">Cloud</option><option value="Mobile">Mobile</option><option value="IA">Intelligence Artificielle</option><option value="Web">Développement Web</option><option value="Digital">Digital/Agence</option><option value="QA">Qualité/Testing</option><option value="Infrastructure">Infrastructure</option></select></div>
                             <div><label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Expérience</label><div id="experience-filter-container" class="w-full flex bg-gray-200 dark:bg-gray-700 rounded-lg p-1 text-xs"><button class="sub-filter-btn active w-1/4 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-exp="all">Tous</button><button class="sub-filter-btn w-1/4 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-exp="Junior">Junior</button><button class="sub-filter-btn w-1/4 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-exp="Confirmé">Confirmé</button><button class="sub-filter-btn w-1/4 py-1.5 rounded-md text-gray-700 dark:text-gray-300" data-exp="Senior">Senior</button></div></div>
                             <div><label for="salary-slider" class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Salaire max: <span id="salary-value" class="font-bold text-blue-600 dark:text-blue-400"></span></label><input type="range" id="salary-slider" min="30000" max="120000" step="5000" value="120000" class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer"></div>
                             <div><label for="distance-slider" class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Distance max: <span id="distance-value" class="font-bold text-emerald-600 dark:text-emerald-400">50 km</span></label><input type="range" id="distance-slider" min="5" max="100" step="5" value="50" class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer"></div>
@@ -2147,16 +2165,16 @@
                     ui.resultsHeader.classList.toggle('hidden', !showList); ui.resultsList.classList.toggle('hidden', !showList);
                     ui.resultsCount.textContent = `${filteredData.length} résultat(s)`;
                     if (filteredData.length === 0 && showList) { ui.resultsList.innerHTML = `<p class="text-center text-gray-500 p-4">Aucun résultat trouvé.</p>`; return; }
-                    filteredData.forEach(item => {
-                        const markerHtml = `<div class="custom-marker-icon w-8 h-8 ${item.type === 'job' ? 'bg-blue-500' : 'bg-emerald-500'}"><i class="fas ${item.type === 'job' ? 'fa-briefcase' : 'fa-user'}"></i></div>`;
+                    filteredData.forEach((item, index) => {
+                        const markerHtml = `<div class="custom-marker-icon w-8 h-8 ${item.type === 'job' ? 'bg-blue-500' : 'bg-emerald-500'}" style="animation-delay: ${index * 0.03}s;"><i class="fas ${item.type === 'job' ? 'fa-briefcase' : 'fa-user'}"></i></div>`;
                         const icon = L.divIcon({ className: '', html: markerHtml, iconSize: [32, 32], iconAnchor: [16, 16] });
                         const marker = L.marker([item.location.lat, item.location.lon], { icon: icon });
                         marker.on('click', () => handleMatchClick(item));
-                        marker.bindPopup(`<div class="popup-title">${item.title}</div><div class="popup-company">${item.type === 'job' ? item.company : item.name}</div><button class="view-details-btn bg-blue-500 text-white text-xs font-bold py-1 px-3 rounded-full w-full" data-id="${item.id}">Voir détails</button>`);
+                        marker.bindPopup(`<div class="popup-title">${item.title}</div><div class="popup-company">${item.type === 'job' ? item.company : item.name}</div><button class="view-details-btn bg-blue-500 text-white text-xs font-bold py-1 px-3 rounded-full w-full hover:bg-blue-600 transition" data-id="${item.id}">Voir détails</button>`);
                         markerClusters.addLayer(marker); state.markers.set(item.id, marker);
                         if(showList) {
                             const isFav = state.favorites.has(item.id);
-                            ui.resultsList.innerHTML += `<div class="result-card bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md dark:hover:bg-gray-700 transition flex justify-between items-start ${item.type === 'job' ? 'border-l-4 border-blue-500' : 'border-l-4 border-emerald-500'}"><div class="cursor-pointer flex-grow" data-id="${item.id}" data-lat="${item.location.lat}" data-lon="${item.location.lon}"><h3 class="text-gray-800 dark:text-gray-100">${item.title}</h3><p class="text-gray-600 dark:text-gray-300">${item.type === 'job' ? item.company : item.name}</p><p class="text-gray-400 mt-1"><i class="fas fa-map-marker-alt mr-1"></i>${item.city}</p></div><button class="favorite-icon p-2 text-gray-300 dark:text-gray-500 hover:text-pink-500 ${isFav ? 'is-favorite' : ''}" data-id="${item.id}"><i class="fas fa-heart"></i></button></div>`;
+                            ui.resultsList.innerHTML += `<div class="result-card bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md dark:hover:bg-gray-700 transition flex justify-between items-start ${item.type === 'job' ? 'border-l-4 border-blue-500' : 'border-l-4 border-emerald-500'}" style="animation-delay: ${index * 0.05}s;"><div class="cursor-pointer flex-grow" data-id="${item.id}" data-lat="${item.location.lat}" data-lon="${item.location.lon}"><h3 class="text-gray-800 dark:text-gray-100">${item.title}</h3><p class="text-gray-600 dark:text-gray-300">${item.type === 'job' ? item.company : item.name}</p><p class="text-gray-400 mt-1"><i class="fas fa-map-marker-alt mr-1"></i>${item.city}</p></div><button class="favorite-icon p-2 text-gray-300 dark:text-gray-500 hover:text-pink-500 transition ${isFav ? 'is-favorite' : ''}" data-id="${item.id}"><i class="fas fa-heart"></i></button></div>`;
                         }
                     });
                 }
